@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class Processes extends Model
+{
+    use HasFactory;
+
+    protected $table = 'processes';
+
+    protected $fillable = [
+        'process',
+        'description',
+        'add_visual_materials',
+        'product_id',
+    ];
+}
