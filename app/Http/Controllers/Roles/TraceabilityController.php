@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Roles;
 use App\Http\Controllers\Controller;
 use App\Models\Traceability;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class TraceabilityController extends Controller
 {

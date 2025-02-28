@@ -98,6 +98,9 @@
               </tr>
           </thead>
           <tbody>
+            @if ($traceabilityPackaging->count() > 0)
+                <script>document.addEventListener('DOMContentLoaded', () => document.getElementById('addNewRowBtn').style.display = 'none');</script>
+            @endif
               @foreach ($traceabilityPackaging as $traceabilityPackaging)
                   <tr>
                       <td class="px-6 py-4 border">{{ $traceabilityPackaging->datePackaging}}</td>
@@ -107,7 +110,7 @@
                       <form method="POST" action="{{ route('traceabilityPackaging.removePackagingTrace', $traceabilityPackaging->id) }}" style="display: inline-block;">
                               @csrf
                               @method('DELETE')
-                              <button type="submit" class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full">Delete</button>
+                              <button type="submit" class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full">Remove</button>
                           </form>
                       </td>
                   </tr>
@@ -234,7 +237,22 @@
   </div>
 
   <script>
-  function showModalProcess(modalId) {
+    document.addEventListener("DOMContentLoaded", function () {
+        checkRowExists();
+    });
+
+    function checkRowExists() {
+        let tbody = document.querySelector("#traceTable tbody");
+        let addNewRowBtn = document.getElementById("addNewRowBtn");
+
+        if (tbody.children.length > 0) {
+            addNewRowBtn.style.display = "none";
+        } else {
+            addNewRowBtn.style.display = "block";
+        }
+    }
+
+    function showModalProcess(modalId) {
         document.getElementById(modalId).classList.remove('hidden');
     }
 

@@ -72,6 +72,9 @@
                 </tr>
             </thead>
             <tbody>
+                @if ($traceabilityLaboratory->count() > 0)
+                    <script>document.addEventListener('DOMContentLoaded', () => document.getElementById('addNewRowBtn').style.display = 'none');</script>
+                @endif
                 @foreach ($traceabilityLaboratory as $traceabilityLaboratory)
                     <tr>
                         <td class="px-6 py-4 border">{{ $traceabilityLaboratory->dateLaboratory}}</td>
@@ -81,7 +84,7 @@
                         <form method="POST" action="{{ route('traceabilityLaboratory.removeLaboratoryTrace', $traceabilityLaboratory->id) }}" style="display: inline-block;">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full">Delete</button>
+                                <button type="submit" class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full">Remove</button>
                             </form>
                         </td>
                     </tr>
@@ -131,6 +134,21 @@
     </div>
     
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+        checkRowExists();
+    });
+
+    function checkRowExists() {
+        let tbody = document.querySelector("#traceTable tbody");
+        let addNewRowBtn = document.getElementById("addNewRowBtn");
+
+        if (tbody.children.length > 0) {
+            addNewRowBtn.style.display = "none";
+        } else {
+            addNewRowBtn.style.display = "block";
+        }
+    }
+
     function showModalTrace(modalId) {
         document.getElementById(modalId).classList.remove('hidden');
     }

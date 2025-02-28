@@ -156,10 +156,10 @@
     </div>
 
     <div class="overflow-x-auto shadow-md sm:rounded-lg w-full mb-6 mt-6">
-        <h3 class="text-lg font-semibold flex justify-center mt-4">Info about Produced Honey</h3>
-        <div class="flex justify-center mb-6">
+        <h3 class="text-lg font-semibold flex justify-center mb-6 mt-4">Info about Produced Honey</h3>
+        <!-- <div class="flex justify-center mb-6">
             <button id="showFormButton2" class="justify-center bg-gray-500 text-white px-4 py-2 rounded-full mt-4">Add New Row</button>
-        </div>
+        </div> -->
         <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
@@ -176,7 +176,7 @@
                     <td class="border border-gray-300 px-4 py-2">{{ $honeyInfo->honey_type }}</td>
                     <td class="border border-gray-300 px-4 py-2">{{ $honeyInfo->quantity }}</td>
                     <td class="border border-gray-300 px-4 py-2">
-                        <button class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full" onclick="editHoney({{ $honeyInfo->id }}, '{{ $honeyInfo->date_of_production }}', '{{ $honeyInfo->honey_type }}', {{ $honeyInfo->quantity }})">Edit</button>
+                        <button class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full" onclick="editHoney({{ $honeyInfo->id }}, '{{ $honeyInfo->date_of_production }}', '{{ $honeyInfo->honey_type }}', {{ $honeyInfo->quantity }})">Add product info</button>
                         <form action="{{ route('products.deleteProduct', $honeyInfo->id) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
@@ -220,49 +220,64 @@
         </div>
     </div>
 
-    <div class="overflow-x-auto shadow-md sm:rounded-lg w-full mb-6 mt-6">
-        <h1 class="flex justify-center text-lg font-semibold mb-4 mt-6">Results of honey analysis</h1>
-        <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                <tr>
-                    <th scope="col" class="px-6 py-3 border">View results</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if($honeyInfo)
+    <div class="flex flex-wrap justify-between gap-6 mt-6">
+        <div class="overflow-x-auto shadow-md sm:rounded-lg w-full md:w-1/2">
+            <h1 class="flex justify-center text-lg font-semibold mb-4 mt-6">
+                Results of honey analysis
+            </h1>
+            <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
-                        <td class="px-6 py-4 border">
-                            <a href="{{ asset('storage/' . $honeyInfo->add_analysis_results) }}" class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-white rounded-full" target="_blank">
+                        <th scope="col" class="px-6 py-3 border">View results</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if($honeyInfo)
+                        <tr>
+                            <td class="px-6 py-4 border">
+                                <a href="{{ asset('storage/' . $honeyInfo->add_analysis_results) }}" 
+                                class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-white rounded-full" 
+                                target="_blank">
+                                    View
+                                </a>
+                            </td>
+                        </tr>
+                    @else
+                        <tr>
+                            <td class="px-6 py-4 border text-gray-500">
+                                No analysis results available
+                            </td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+        </div>
+
+        <div class="overflow-x-auto shadow-md sm:rounded-lg w-full md:w-1/2">
+            <h1 class="flex justify-center text-lg font-semibold mb-4 mt-6">
+                QR code data
+            </h1>
+            <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3">QR Code</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="px-6 py-4">
+                            <a href="{{ route('qr_code', ['qr_code' => $honeyInfo->qr_code]) }}" 
+                            target="_blank" 
+                            class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-white rounded-full">
                                 View
                             </a>
                         </td>
                     </tr>
-                @else
-                    <tr>
-                        <td class="px-6 py-4 border text-gray-500">No analysis results available</td>
-                    </tr>
-                @endif
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <div class="overflow-x-auto shadow-md sm:rounded-lg w-full mb-6 mt-6">
-        <h1 class="flex justify-center text-lg font-semibold mb-4 mt-6">QR code data</h1>
-        <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3">QR Code</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="px-6 py-4">
-                        <a href="{{ route('qr_code', ['qr_code' => $honeyInfo->qr_code]) }}" target="_blank" class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-white rounded-full">View</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
 
     <div class="overflow-x-auto shadow-md sm:rounded-lg w-full mb-6 mt-6">
         <h1 class="flex justify-center text-lg font-semibold mb-4 mt-6">Honey tracing (buyer, location of product, packaging company who handles honey, honey blending)</h1>
