@@ -22,22 +22,22 @@
     <body class="min-h-screen flex flex-col">
     <div class="flex-grow flex flex-col">
         <div class="flex-grow flex flex-col items-center">
-            <div class="w-full max-w-2xl px-6 lg:max-w-7xl">
+            <div class="w-full">
                 <!-- Header -->
-                <header class="grid grid-cols-2 justify-items-center gap-2 py-10 lg:grid-cols-3 rounded-full shadow-md" style="background-color: #eef20a">
+                <header class="grid justify-items-center py-10 w-full shadow-md" style="background-color: #eef20a">
                     @if (Route::has('login'))
-                        <nav class="-mx-3 flex flex-1 justify-end">
+                        <nav class="flex flex-1 justify-end">
                             @auth
                                 <a href="{{ url('/dashboard') }}" class="text-xl">
                                     Dashboard
                                 </a>
                             @else
-                                <a href="{{ route('login') }}" class="text-xl">
+                                <a href="{{ route('login') }}" class="px-3 text-xl">
                                     Log in
                                 </a>
 
                                 @if (Route::has('register'))
-                                    <a href="{{ route('register') }}" class="px-3 text-xl">
+                                    <a href="{{ route('register') }}" class="px-2 text-xl">
                                         Register
                                     </a>
                                 @endif

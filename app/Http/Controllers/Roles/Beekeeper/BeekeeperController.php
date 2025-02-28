@@ -6,16 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Models\Apiary;
 use App\Models\Products;
 use App\Models\BeekeepingDocuments;
+use App\Models\Traceability;
 
 class BeekeeperController extends Controller
 {
     public function index($product_id)
     {
-        $latestAnalysis = Products::where('id', $product_id)->first();
         $honeyInfo = Products::where('id', $product_id)->first();
         $beekeepingDocuments = BeekeepingDocuments::where('product_id', $product_id)->get();
         $apiary = Apiary::where('product_id', $product_id)->get();
-
-        return view('roles.beekeeper', compact('apiary', 'beekeepingDocuments', 'honeyInfo', 'latestAnalysis'));
+        $traceability = Traceability::where('product_id', $product_id)->get();
+        
+        return view('roles.beekeeper', compact('apiary', 'beekeepingDocuments', 'honeyInfo', 'traceability'));
     }
 }

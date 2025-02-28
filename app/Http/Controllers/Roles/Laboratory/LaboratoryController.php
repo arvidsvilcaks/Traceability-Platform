@@ -10,9 +10,9 @@ class LaboratoryController extends Controller
 {
     public function index($product_id)
     {
-        $analysis = Products::where('id', $product_id)->latest()->first();
+        $honeyInfo = Products::where('id', $product_id)->latest()->first();
         $traceabilityLaboratory = Traceability::where('product_id', $product_id)->get();
 
-        return view('roles.laboratory', compact('analysis', 'traceabilityLaboratory'));
+        return view('roles.laboratory', compact('honeyInfo', 'traceabilityLaboratory'));
     }
 }

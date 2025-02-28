@@ -25,7 +25,9 @@ Route::get('/', function () {
 Route::get('/consumer/{product_id}', function () {
     return view('roles.consumer');
 })->name('consumer');
+
 Route::get('/qr_code/{qr_code?}', [DashboardController::class, 'qrCode'])->name('qr_code');
+
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -85,7 +87,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/laboratory/storeLaboratoryTrace/{product_id}', [TraceabilityController::class, 'storeLaboratoryTrace'])->name('traceabilityLaboratory.storeLaboratoryTrace');
     Route::put('/laboratory/updateLaboratoryTrace/{id}', [TraceabilityController::class, 'updateLaboratoryTrace'])->name('traceabilityLaboratory.updateLaboratoryTrace');
-    Route::delete('/laboratory/deleteLaboratoryTrace/{id}', [TraceabilityController::class, 'deleteLaboratoryTrace'])->name('traceabilityLaboratory.deleteLaboratoryTrace');
+    Route::delete('/laboratory/removeLaboratoryTrace/{id}', [TraceabilityController::class, 'removeLaboratoryTrace'])->name('traceabilityLaboratory.removeLaboratoryTrace');
+
+    Route::post('/wholesaler/storeWholesalerTrace/{product_id}', [TraceabilityController::class, 'storeWholesalerTrace'])->name('traceabilityWholesaler.storeWholesalerTrace');
+    Route::put('/wholesaler/updateWholesalerTrace/{id}', [TraceabilityController::class, 'updateWholesalerTrace'])->name('traceabilityWholesaler.updateWholesalerTrace');
+    Route::delete('/wholesaler/removeWholesalerTrace/{id}', [TraceabilityController::class, 'removeWholesalerTrace'])->name('traceabilityWholesaler.removeWholesalerTrace');
+
+    Route::post('/packaging/storePackagingTrace/{product_id}', [TraceabilityController::class, 'storePackagingTrace'])->name('traceabilityPackaging.storePackagingTrace');
+    Route::put('/packaging/updatePackagingTrace/{id}', [TraceabilityController::class, 'updatePackagingTrace'])->name('traceabilityPackaging.updatePackagingTrace');
+    Route::delete('/packaging/removePackagingTrace/{id}', [TraceabilityController::class, 'removePackagingTrace'])->name('traceabilityPackaging.removePackagingTrace');
 });
 
 // Profile Routes

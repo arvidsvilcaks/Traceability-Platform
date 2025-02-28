@@ -23,6 +23,9 @@ class Traceability extends Model
         'latitudePackaging',
         'longitudePackaging',
         'product_id',
+        'addressLaboratory',
+        'addressWholesaler',
+        'addressPackaging',
     ];
 
     protected $spatialFields = [

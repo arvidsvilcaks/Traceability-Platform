@@ -70,6 +70,6 @@ class ProductController extends Controller
 
         $honeyInfo->delete();
 
-        return redirect()->back()->with('success', 'Product info deleted successfully');
+        return redirect()->route('dashboard')->with('success', 'Product added successfully!');
     }
 }

@@ -1,30 +1,30 @@
 <x-app-layout>
 <div class="grid grid-cols-1 gap-4 mt-6">
     <div class="overflow-x-auto shadow-md sm:rounded-lg">
-      <table class="w-full text-sm text-center rtl:text-right text-gray-500">
+      <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
           <h1 class="flex justify-center text-lg font-semibold mb-4">Description of processes</h1>
-          <div class="flex justify-center">
+          <div class="flex justify-center mb-6">
                 <button onclick="showModalProcess('addModalProcess')" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">Add new row</button>
             </div>
           <tr>
-            <th class="px-6 py-3">Process</th>
-            <th class="px-6 py-3">Description</th>
-            <th class="px-6 py-3">Visual materials</th>
-            <th class="px-6 py-3">Actions</th>
+            <th class="px-6 py-3 border">Process</th>
+            <th class="px-6 py-3 border">Description</th>
+            <th class="px-6 py-3 border">Visual materials</th>
+            <th class="px-6 py-3 border">Actions</th>
           </tr>
         </thead>
         <tbody>
           @foreach($processesPackaging as $processesPackaging)
           <tr>
-            <td class="px-6 py-4">{{ $processesPackaging->process }}</td>
-            <td class="px-6 py-4">{{ $processesPackaging->description }}</td>
-            <td class="px-6 py-4">
+            <td class="px-6 py-4 border">{{ $processesPackaging->process }}</td>
+            <td class="px-6 py-4 border">{{ $processesPackaging->description }}</td>
+            <td class="px-6 py-4 border">
                 @if($processesPackaging->add_visual_materials)
                     <a href="{{ asset('storage/' . $processesPackaging->add_visual_materials) }}" target="_blank" class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-white rounded-full">View</a>
                 @endif
             </td>
-            <td class="px-6 py-4">
+            <td class="px-6 py-4 border">
               <button onclick="editModalProcess({{ json_encode($processesPackaging) }})" class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full">Edit</button>
               <form action="{{ route('processesPackaging.destroyProcess', $processesPackaging->id) }}" method="POST" style="display:inline;">
                   @csrf
@@ -43,10 +43,10 @@
       <div class="bg-white p-6 rounded-lg shadow-lg w-96">
           <h2 class="text-lg font-semibold mb-4">Add Process</h2>
 
-          <form id="addProcessForm" action="{{ route('processesPackaging.storeProcess', ['product_id' => $honeyInfo[0]->id]) }}" method="POST" enctype="multipart/form-data">
+          <form id="addProcessForm" action="{{ route('processesPackaging.storeProcess', ['product_id' => $honeyInfo->id]) }}" method="POST" enctype="multipart/form-data">
               @csrf
               <input type="hidden" id="processId" name="id">
-              <input type="hidden" name="product_id" value="{{ $honeyInfo[0]->id }}">
+              <input type="hidden" name="product_id" value="{{ $honeyInfo->id }}">
 
               <div class="flex flex-col space-y-2">
                   <input type="text" name="process" id="add_process" placeholder="Process" required class="border p-2 rounded">
@@ -84,74 +84,98 @@
       </div>
   </div>
 
-  <div class="grid grid-cols-2 gap-4 mt-6">
-    <div class="overflow-x-auto shadow-md sm:rounded-lg">
-      <table class="w-full text-sm text-center rtl:text-right text-gray-500">
-        <h1 class="flex bg-slate-100 justify-center text-2xl">QR code data</h1>
-        <div class="flex justify-center">
-                <button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">Add data</button>
-        </div>
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-          <tr>
-            <th class="px-6 py-3">QR Code ID</th>
-            <th class="px-6 py-3">Scan Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="px-6 py-4">QR1234</td>
-            <td class="px-6 py-4">2025-02-16 10:30 AM</td>
-          </tr>
-        </tbody>
+  <div class="overflow-x-auto shadow-md sm:rounded-lg mt-6">
+      <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
+          <h1 class="flex justify-center text-lg font-semibold mb-4">Info about collected honey</h1>
+          <div class="flex justify-center mb-6">
+              <button id="addNewRowBtn" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full" onclick="showModalTrace('addModalTrace')">Add new row</button>
+          </div>
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+              <tr>
+                  <th class="px-6 py-3 border">Collection date</th>
+                  <th class="px-6 py-3 border">Address</th>
+                  <th class="px-6 py-3 border">Actions</th>
+              </tr>
+          </thead>
+          <tbody>
+              @foreach ($traceabilityPackaging as $traceabilityPackaging)
+                  <tr>
+                      <td class="px-6 py-4 border">{{ $traceabilityPackaging->datePackaging}}</td>
+                      <td class="px-6 py-4 border">{{ $traceabilityPackaging->addressPackaging}}</td>
+                      <td class="px-6 py-4 border">
+                      <button onclick="editModalTrace({{ json_encode($traceabilityPackaging) }})" class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full">Edit</button>
+                      <form method="POST" action="{{ route('traceabilityPackaging.removePackagingTrace', $traceabilityPackaging->id) }}" style="display: inline-block;">
+                              @csrf
+                              @method('DELETE')
+                              <button type="submit" class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full">Delete</button>
+                          </form>
+                      </td>
+                  </tr>
+              @endforeach
+          </tbody>
       </table>
-    </div>
-
-    <div class="overflow-x-auto shadow-md sm:rounded-lg">
-      <table class="w-full text-sm text-center rtl:text-right text-gray-500">
-          <h1 class="flex bg-slate-100 justify-center text-2xl">Info about collected honey</h1>
-          <div class="flex justify-center">
-                <button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">Add new row</button>
-            </div>
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-          <tr>
-            <th class="px-6 py-3">Collection date</th>
-            <th class="px-6 py-3">Location</th>
-            <th class="px-6 py-3">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="px-6 py-4">2025-02-16 11:00 AM</td>
-            <td class="px-6 py-4">Jelgava</td>
-            <td class="px-6 py-4">
-              <button class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full">Edit</button>
-              <button class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 
-  <div class="overflow-x-auto shadow-md sm:rounded-lg mt-6">
-    <table class="w-full text-sm text-center rtl:text-right text-gray-500">
+  <div id="addModalTrace" class="fixed inset-0 flex items-center justify-center hidden">
+      <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+          <h2 class="text-lg font-semibold mb-4">Add Traceability Information</h2>
+          <form action="{{ route('traceabilityPackaging.storePackagingTrace', $honeyInfo->id) }}" method="POST">
+              @csrf
+              <input type="hidden" name="product_id" value="{{ $honeyInfo->id }}">
+              <div class="flex flex-col space-y-2">
+                  <input type="date" name="datePackaging" id="add_datePackaging" placeholder="Date" required>
+                  <input type="text" name="addressPackaging" id="add_addressPackaging" placeholder="Address" required>
+                  
+                  <div class="flex justify-between mt-4">
+                    <button type="submit" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-full">Save</button>
+                    <button type="button" onclick="closeModalTrace('addModalTrace')" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-full">Cancel</button>
+                </div>
+              </div>
+          </form>
+      </div>
+  </div>
+
+  <div id="editModalTrace" class="fixed inset-0 flex items-center justify-center hidden">
+      <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+      <h2 class="text-lg font-semibold mb-4">Edit Trace</h2>
+          <form id="editTraceForm" action="{{ route('traceabilityPackaging.updatePackagingTrace', ':id') }}" method="POST" enctype="multipart/form-data">
+              @csrf
+              @method('PUT')
+              <input type="hidden" id="edit_TraceId" name="id">
+
+              <div class="flex flex-col space-y-2">
+                  <input type="date" name="datePackaging" id="add_datePackaging" placeholder="Date" required>
+                  <input type="text" name="addressPackaging" id="add_addressPackaging" placeholder="Address" required>
+
+                  <div class="flex justify-between mt-4">
+                      <button type="submit" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-full">Save</button>
+                      <button type="button" onclick="closeModalTrace('editModalTrace')" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-full">Cancel</button>
+                  </div>
+              </div>
+          </form>
+      </div>
+  </div>
+
+
+  <div class="overflow-x-auto shadow-md sm:rounded-lg mt-6 mb-6">
+    <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
       <h1 class="flex justify-center text-lg font-semibold mb-4">Honey quality</h1>
-      <div class="flex justify-center">
+      <div class="flex justify-center mb-6">
         <button onclick="showModalQuality('addModalQuality')" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">Add new row</button>
       </div>
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
         <tr>
-          <th class="px-6 py-3">Quality Assessment</th>
-          <th class="px-6 py-3">Value</th>
-          <th class="px-6 py-3">Actions</th>
+          <th class="px-6 py-3 border">Quality Assessment</th>
+          <th class="px-6 py-3 border">Value</th>
+          <th class="px-6 py-3 border">Actions</th>
         </tr>
       </thead>
       <tbody>
       @foreach($qualityPackaging as $qualityPackaging)
         <tr>
-          <td class="px-6 py-4">{{ $qualityPackaging->quality_standard }}</td>
-          <td class="px-6 py-4">{{ $qualityPackaging->value }}</td>
-          <td class="px-6 py-3">
+          <td class="px-6 py-4 border">{{ $qualityPackaging->quality_standard }}</td>
+          <td class="px-6 py-4 border">{{ $qualityPackaging->value }}</td>
+          <td class="px-6 py-4 border">
             <button onclick="editModalQuality({{ json_encode($qualityPackaging) }})" class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full">Edit</button>
             
             <form action="{{ route('qualityPackaging.destroyHoneyQuality', $qualityPackaging->id) }}" method="POST" style="display:inline;">
@@ -170,10 +194,10 @@
       <div class="bg-white p-6 rounded-lg shadow-lg w-96">
           <h2 class="text-lg font-semibold mb-4">Add Quality Standard</h2>
 
-          <form id="addQualityForm" action="{{ route('qualityPackaging.storeHoneyQuality', ['product_id' => $honeyInfo[0]->id]) }}" method="POST" enctype="multipart/form-data">
+          <form id="addQualityForm" action="{{ route('qualityPackaging.storeHoneyQuality', ['product_id' => $honeyInfo->id]) }}" method="POST" enctype="multipart/form-data">
               @csrf
               <input type="hidden" id="qualityId" name="id">
-              <input type="hidden" name="product_id" value="{{ $honeyInfo[0]->id }}">
+              <input type="hidden" name="product_id" value="{{ $honeyInfo->id }}">
 
               <div class="flex flex-col space-y-2">
                   <input type="text" name="quality_standard" id="add_quality_standard" placeholder="Quality standard" required class="border p-2 rounded">
@@ -246,6 +270,24 @@
         form.action = form.action.replace(':id', $qualityPackaging.id);
 
         showModalProcess('editModalQuality');
+    }
+
+    function showModalTrace(modalId) {
+        document.getElementById(modalId).classList.remove('hidden');
+    }
+
+    function closeModalTrace(modalId) {
+        document.getElementById(modalId).classList.add('hidden');
+    }
+    function editModalTrace($traceabilityPackaging) {
+        document.getElementById('edit_TraceId').value = $traceabilityPackaging.id;
+        document.getElementById('add_datePackaging').value = $traceabilityPackaging.datePackaging;
+        document.getElementById('add_addressPackaging').value = $traceabilityPackaging.addressPackaging;
+
+        let form = document.getElementById('editTraceForm');
+        form.action = form.action.replace(':id', $traceabilityPackaging.id);
+
+        showModalTrace('editModalTrace');
     }
   </script>
 </x-app-layout>

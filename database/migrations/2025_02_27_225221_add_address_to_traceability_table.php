@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('traceability', function (Blueprint $table) {
-            $table->string('address')->nullable();
+            $table->string('addressLaboratory')->nullable();
+            $table->string('addressWholesaler')->nullable();
+            $table->string('addressPackaging')->nullable();
         });
     }
 
@@ -22,7 +24,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('traceability', function (Blueprint $table) {
-            $table->dropColumn('address');
+            $table->dropColumn('addressLaboratory');
+            $table->dropColumn('addressWholesaler');
+            $table->dropColumn('addressPackaging');
         });
     }
 };
