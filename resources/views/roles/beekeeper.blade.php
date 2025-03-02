@@ -177,11 +177,11 @@
                     <td class="border border-gray-300 px-4 py-2">{{ $honeyInfo->quantity }}</td>
                     <td class="border border-gray-300 px-4 py-2">
                         <button class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full" onclick="editHoney({{ $honeyInfo->id }}, '{{ $honeyInfo->date_of_production }}', '{{ $honeyInfo->honey_type }}', {{ $honeyInfo->quantity }})">Add product info</button>
-                        <form action="{{ route('products.deleteProduct', $honeyInfo->id) }}" method="POST" class="inline">
+                        <!-- <form action="{{ route('products.deleteProduct', $honeyInfo->id) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="bg-gray-500 text-white px-2 py-1 rounded-full">Delete</button>
-                        </form>
+                        </form> -->
                     </td>
                 </tr> 
             </tbody>

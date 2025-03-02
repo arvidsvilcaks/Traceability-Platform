@@ -31,7 +31,10 @@ Route::get('/qr_code/{qr_code?}', [DashboardController::class, 'qrCode'])->name(
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
     Route::post('/dashboard/store', [DashboardController::class, 'store'])->name('dashboard.store');
+    Route::put('/dashboard/update/{id}', [DashboardController::class, 'update'])->name('dashboard.update');
+    Route::delete('/dashboard/delete/{id}', [DashboardController::class, 'delete'])->name('dashboard.delete');
 
     Route::get('/administrator', function () {
         return view('roles.Administrator');
