@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\HoneyQuality;
 use Illuminate\Http\Request;
 
-class QualityPackagingConroller extends Controller
+class QualityPackagingController extends Controller
 {
     public function storeHoneyQuality(Request $request, $product_id)
     {

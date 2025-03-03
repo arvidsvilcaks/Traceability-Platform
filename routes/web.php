@@ -14,8 +14,11 @@ use App\Http\Controllers\Roles\Wholesaler\QualityWholesalerController;
 use App\Http\Controllers\Roles\Wholesaler\MarketController;
 use App\Http\Controllers\Roles\Packaging\PackagingController;
 use App\Http\Controllers\Roles\Packaging\ProcessPackagingController;
-use App\Http\Controllers\Roles\Packaging\QualityPackagingConroller;
+use App\Http\Controllers\Roles\Packaging\QualityPackagingController;
 use App\Http\Controllers\Roles\TraceabilityController;
+use App\Http\Controllers\Roles\UserController;
+
+
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -26,23 +29,25 @@ Route::get('/consumer/{product_id}', function () {
     return view('roles.consumer');
 })->name('consumer');
 
+Route::get('/disabled-account', function () {
+    return view('auth.disabled');
+});
+
 Route::get('/qr_code/{qr_code?}', [DashboardController::class, 'qrCode'])->name('qr_code');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'enabled'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    
+
     Route::post('/dashboard/store', [DashboardController::class, 'store'])->name('dashboard.store');
     Route::put('/dashboard/update/{id}', [DashboardController::class, 'update'])->name('dashboard.update');
-    Route::delete('/dashboard/delete/{id}', [DashboardController::class, 'delete'])->name('dashboard.delete');
+    Route::delete('/dashboard/delete/{id}', [DashboardController::class, 'delete'])->name('dashboard.delete');    
 
-    Route::get('/administrator', function () {
-        return view('roles.Administrator');
-    })->middleware('role:Administrator')->name('administrator');
+    Route::patch('/users/update-status/{user}', [UserController::class, 'updateStatus'])->name('users.update_status');
 
-    Route::get('/association', function () {
-        return view('roles.association');
-    })->middleware('role:Beekeeping association')->name('association');
+    Route::get('/administrator', [UserController::class, 'indexAdministrator'])->middleware('role:Administrator')->name('administrator.indexAdministrator');
+
+    Route::get('/association', [UserController::class, 'indexAssociation'])->middleware('role:Beekeeping association')->name('association.indexAssociation');
     
     Route::get('/beekeeper/{product_id?}', [BeekeeperController::class, 'index'])->middleware('role:Beekeeper')->name('beekeeper.index');
 
@@ -84,9 +89,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('/packaging/updateProcess/{id}', [ProcessPackagingController::class, 'updateProcess'])->name('processesPackaging.updateProcess');
     Route::delete('/packaging/destroyProcess/{id}', [ProcessPackagingController::class, 'destroyProcess'])->name('processesPackaging.destroyProcess');
 
-    Route::post('/packaging/storeHoneyQuality/{product_id}', [QualityPackagingConroller::class, 'storeHoneyQuality'])->name('qualityPackaging.storeHoneyQuality');
-    Route::put('/packaging/updateHoneyQuality/{id}', [QualityPackagingConroller::class, 'updateHoneyQuality'])->name('qualityPackaging.updateHoneyQuality');
-    Route::delete('/packaging/destroyHoneyQuality/{id}', [QualityPackagingConroller::class, 'destroyHoneyQuality'])->name('qualityPackaging.destroyHoneyQuality');
+    Route::post('/packaging/storeHoneyQuality/{product_id}', [QualityPackagingController::class, 'storeHoneyQuality'])->name('qualityPackaging.storeHoneyQuality');
+    Route::put('/packaging/updateHoneyQuality/{id}', [QualityPackagingController::class, 'updateHoneyQuality'])->name('qualityPackaging.updateHoneyQuality');
+    Route::delete('/packaging/destroyHoneyQuality/{id}', [QualityPackagingController::class, 'destroyHoneyQuality'])->name('qualityPackaging.destroyHoneyQuality');
 
     Route::post('/laboratory/storeLaboratoryTrace/{product_id}', [TraceabilityController::class, 'storeLaboratoryTrace'])->name('traceabilityLaboratory.storeLaboratoryTrace');
     Route::put('/laboratory/updateLaboratoryTrace/{id}', [TraceabilityController::class, 'updateLaboratoryTrace'])->name('traceabilityLaboratory.updateLaboratoryTrace');
@@ -101,7 +106,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/packaging/removePackagingTrace/{id}', [TraceabilityController::class, 'removePackagingTrace'])->name('traceabilityPackaging.removePackagingTrace');
 });
 
-// Profile Routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

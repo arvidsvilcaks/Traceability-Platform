@@ -36,6 +36,8 @@ class DashboardController extends Controller
                 break;
             case 'Beekeeping association':
                 break;
+            case 'Administrator':
+                break;
             default:
                 $query->whereNull('id');
                 break;

@@ -25,7 +25,7 @@ class User extends Authenticatable
         'company',
         'role',
         'country',
-
+        'is_enabled'
     ];
 
     /**

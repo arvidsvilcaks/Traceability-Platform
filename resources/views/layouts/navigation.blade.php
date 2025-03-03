@@ -11,14 +11,14 @@
                     @if(Auth::check())
                         <!-- Show Beekeeping Association link only if the user is a Beekeeping Association -->
                         @if(Auth::user()->role === 'Beekeeping association')
-                            <x-nav-link :href="route('association')" :active="request()->routeIs('association')">
+                            <x-nav-link :href="route('association.indexAssociation')" :active="request()->routeIs('association.indexAssociation')">
                                 {{ __('Beekeeping Association') }}
                             </x-nav-link>
                         @endif
 
                         <!-- Show Administrator link only if the user is an Administrator -->
                         @if(Auth::user()->role === 'Administrator')
-                            <x-nav-link :href="route('administrator')" :active="request()->routeIs('administrator')">
+                            <x-nav-link :href="route('administrator.indexAdministrator')" :active="request()->routeIs('administrator.indexAdministrator')">
                                 {{ __('Administrator') }}
                             </x-nav-link>
                         @endif

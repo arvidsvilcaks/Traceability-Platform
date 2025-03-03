@@ -83,7 +83,8 @@
                     <option value="Packaging company" {{ old('role') == 'Packaging company' ? 'selected' : '' }}>Packaging company</option>
                     <option value="Wholesaler" {{ old('role') == 'Wholesaler' ? 'selected' : '' }}>Wholesaler</option>
                     <option value="Beekeeping association" {{ old('role') == 'Beekeeping association' ? 'selected' : '' }}>Beekeeping association</option>
-            </select>
+                    <option value="Administrator" {{ old('role') == 'Administrator' ? 'selected' : '' }}>Administrator</option>
+                </select>
         </div>
 
         <div class="flex items-center justify-end mt-4">

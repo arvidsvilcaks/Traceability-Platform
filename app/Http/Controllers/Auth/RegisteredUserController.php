@@ -36,7 +36,7 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'company' => ['required','string','max:50'],
             'country' => ['required','string','max:50'],
-            'role' => 'required|in:Beekeeper,Packaging company,Laboratory employee,Wholesaler,Beekeeping association',
+            'role' => 'required|in:Beekeeper,Packaging company,Laboratory employee,Wholesaler,Beekeeping association,Administrator',
         ]);
 
         $user = User::create([
