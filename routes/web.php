@@ -17,6 +17,7 @@ use App\Http\Controllers\Roles\Packaging\ProcessPackagingController;
 use App\Http\Controllers\Roles\Packaging\QualityPackagingController;
 use App\Http\Controllers\Roles\TraceabilityController;
 use App\Http\Controllers\Roles\UserController;
+use App\Http\Controllers\MapController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/map', [MapController::class, 'index']);
 
 Route::get('/consumer/{product_id}', function () {
     return view('roles.consumer');
@@ -49,13 +52,13 @@ Route::middleware(['auth', 'verified', 'enabled'])->group(function () {
 
     Route::get('/association', [UserController::class, 'indexAssociation'])->middleware('role:Beekeeping association')->name('association.indexAssociation');
     
-    Route::get('/beekeeper/{product_id?}', [BeekeeperController::class, 'index'])->middleware('role:Beekeeper')->name('beekeeper.index');
+    Route::get('/beekeeper/{honey_id?}', [BeekeeperController::class, 'index'])->middleware('role:Beekeeper')->name('beekeeper.index');
 
-    Route::post('/beekeeper/storeApiary/{product_id}', [ApiaryController::class, 'storeApiary'])->middleware('role:Beekeeper')->name('apiary.storeApiary');
+    Route::post('/beekeeper/storeApiary/{honey_id}', [ApiaryController::class, 'storeApiary'])->middleware('role:Beekeeper')->name('apiary.storeApiary');
     Route::put('/beekeeper/updateApiary/{id}', [ApiaryController::class, 'updateApiary'])->middleware('role:Beekeeper')->name('apiary.updateApiary');
     Route::delete('/beekeeper/destroyApiary/{id}', [ApiaryController::class, 'destroyApiary'])->middleware('role:Beekeeper')->name('apiary.destroyApiary');
 
-    Route::post('/beekeeper/addDocument/{product_id}', [BeeDocumentController::class, 'addDocument'])->name('beekeepingDocuments.addDocument');
+    Route::post('/beekeeper/addDocument/{honey_id}', [BeeDocumentController::class, 'addDocument'])->name('beekeepingDocuments.addDocument');
     Route::put('/beekeeper/updateDocument/{id}', [BeeDocumentController::class, 'updateDocument'])->name('beekeepingDocuments.updateDocument');
     Route::delete('/beekeeper/deleteDocument/{id}', [BeeDocumentController::class, 'deleteDocument'])->name('beekeepingDocuments.deleteDocument');
     
@@ -63,7 +66,7 @@ Route::middleware(['auth', 'verified', 'enabled'])->group(function () {
     Route::put('/beekeeper/updateProduct/{id}', [ProductController::class, 'updateProduct'])->name('products.updateProduct');
     Route::delete('/beekeeper/deleteProduct/{id}', [ProductController::class, 'deleteProduct'])->name('products.deleteProduct');
 
-    Route::get('/laboratory/{product_id?}', [LaboratoryController::class, 'index'])->middleware('role:Laboratory employee')->name('laboratory.index');
+    Route::get('/laboratory/{honey_id?}', [LaboratoryController::class, 'index'])->middleware('role:Laboratory employee')->name('laboratory.index');
     
     Route::post('/laboratory/storeAnalysis', [AnalysisController::class, 'storeAnalysis'])->name('analysis.storeAnalysis');
     Route::put('/laboratory/updateAnalysis/{id}', [AnalysisController::class, 'updateAnalysis'])->name('analysis.updateAnalysis');

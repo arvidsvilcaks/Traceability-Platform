@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Products; 
 
 class Traceability extends Model
 {
@@ -22,7 +21,7 @@ class Traceability extends Model
         'longitudeWholesaler',
         'latitudePackaging',
         'longitudePackaging',
-        'product_id',
+        'honey_id',
         'addressLaboratory',
         'addressWholesaler',
         'addressPackaging',

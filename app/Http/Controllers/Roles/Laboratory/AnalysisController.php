@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Roles\Laboratory;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Products;
+use App\Models\Honey;
 use Illuminate\Support\Facades\Storage;
 
 class AnalysisController extends Controller
@@ -20,7 +20,7 @@ class AnalysisController extends Controller
             $filePath3 = $request->file('add_analysis_results')->store('analysis_files', 'public');
         }
 
-        Products::create([
+        Honey::create([
             'add_analysis_results' => $filePath3,
         ]);
 
@@ -29,7 +29,7 @@ class AnalysisController extends Controller
 
     public function updateAnalysis(Request $request, $id)
     {
-        $analysis = Products::findOrFail($id);
+        $analysis = Honey::findOrFail($id);
 
         $request->validate([
             'add_analysis_results' => 'nullable|mimes:pdf,docx|max:2048'
@@ -44,12 +44,12 @@ class AnalysisController extends Controller
 
         $analysis->save();
 
-        return redirect()->route('laboratory.index', ['product_id' => $id])->with('success', 'Analysis info updated successfully.');
+        return redirect()->route('laboratory.index', ['honey_id' => $id])->with('success', 'Analysis info updated successfully.');
     }
 
     public function deleteAnalysis($id)
     {
-        $honeyInfo = Products::findOrFail($id);
+        $honeyInfo = Honey::findOrFail($id);
 
         if ($honeyInfo->add_analysis_results) {
             Storage::disk('public')->delete($honeyInfo->add_analysis_results);

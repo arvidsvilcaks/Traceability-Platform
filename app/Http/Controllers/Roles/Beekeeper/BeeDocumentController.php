@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 class BeeDocumentController extends Controller
 {
-    public function addDocument(Request $request, $product_id)
+    public function addDocument(Request $request, $honey_id)
     {
         $request->validate([
             'add_beekeeping_documents' => 'nullable|mimes:pdf,docx|max:2048',
@@ -22,10 +22,10 @@ class BeeDocumentController extends Controller
 
         BeekeepingDocuments::create([
             'add_beekeeping_documents' => $filePath2,
-            'product_id' => $product_id
+            'honey_id' => $honey_id
         ]); 
 
-        return redirect()->route('beekeeper.index', ['product_id' => $product_id])->with('success', 'Apiary info added successfully.');
+        return redirect()->route('beekeeper.index', ['honey_id' => $honey_id])->with('success', 'Apiary info added successfully.');
     }
     public function updateDocument(Request $request, $id)
     {
@@ -43,7 +43,7 @@ class BeeDocumentController extends Controller
         }
         $beekeepingDocuments->save();
 
-        return redirect()->route('beekeeper.index', ['product_id' => $beekeepingDocuments->product_id])
+        return redirect()->route('beekeeper.index', ['honey_id' => $beekeepingDocuments->honey_id])
         ->with('success', 'Apiary info updated successfully.');    
     }
     public function deleteDocument($id)
@@ -55,7 +55,7 @@ class BeeDocumentController extends Controller
         }
         $beekeepingDocuments->delete();
 
-        return redirect()->route('beekeeper.index', ['product_id' => $beekeepingDocuments->product_id])
+        return redirect()->route('beekeeper.index', ['honey_id' => $beekeepingDocuments->honey_id])
         ->with('success', 'Apiary info deleted successfully.');
     }
 }

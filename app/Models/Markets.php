@@ -12,8 +12,8 @@ class Markets extends Model
     protected $table = 'markets';
 
     protected $fillable = [
-        'market_name',
-        'market_location',
-        'product_id',
+        'name',
+        'addresss',
+        'package_id',
     ];
 }

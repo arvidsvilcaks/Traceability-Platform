@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ApiaryController extends Controller
 {
-    public function storeApiary(Request $request, $product_id)
+    public function storeApiary(Request $request, $honey_id)
     {
         $request->validate([
             'description' => 'required|string',
@@ -30,10 +30,10 @@ class ApiaryController extends Controller
             'floral_composition' => $request->floral_composition,
             'specifics_of_environment' => $request->specifics_of_environment,
             'add_visual_materials' => $filePath,
-            'product_id' => $product_id
+            'honey_id' => $honey_id
         ]);
 
-        return redirect()->route('beekeeper.index', ['product_id' => $product_id])->with('success', 'Apiary info added successfully.');
+        return redirect()->route('beekeeper.index', ['honey_id' => $honey_id])->with('success', 'Apiary info added successfully.');
     }
 
     public function updateApiary(Request $request, $id)
@@ -62,7 +62,7 @@ class ApiaryController extends Controller
             'specifics_of_environment' => $request->specifics_of_environment
         ]);
 
-        return redirect()->route('beekeeper.index', ['product_id' => $apiary->product_id])
+        return redirect()->route('beekeeper.index', ['honey_id' => $apiary->honey_id])
         ->with('success', 'Apiary info updated successfully.');
     }
 
@@ -75,7 +75,7 @@ class ApiaryController extends Controller
         }
 
         $apiary->delete();
-        return redirect()->route('beekeeper.index', ['product_id' => $apiary->product_id])
+        return redirect()->route('beekeeper.index', ['honey_id' => $apiary->honey_id])
         ->with('success', 'Apiary info deleted successfully.');
     }
 }

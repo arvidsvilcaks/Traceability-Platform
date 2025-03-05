@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Roles\Beekeeper;
 
 use App\Http\Controllers\Controller;
-use App\Models\Products;
+use App\Models\Honey;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -23,7 +23,7 @@ class ProductController extends Controller
             $filePath = $request->file('add_analysis_results')->store('analysis_files', 'public');
         }
         
-        Products::create([
+        Honey::create([
             'date_of_production' => $request->date_of_production,
             'honey_type' => $request->honey_type,
             'quantity' => $request->quantity,
@@ -35,7 +35,7 @@ class ProductController extends Controller
 
     public function updateProduct(Request $request, $id)
     {
-        $honeyInfo = Products::findOrFail($id);
+        $honeyInfo = Honey::findOrFail($id);
 
         $request->validate([
             'date_of_production' => 'required|date',
@@ -62,7 +62,7 @@ class ProductController extends Controller
 
     public function deleteProduct($id)
     {
-        $honeyInfo = Products::findOrFail($id);
+        $honeyInfo = Honey::findOrFail($id);
 
         if ($honeyInfo->add_visual_materials) {
             Storage::disk('public')->delete($honeyInfo->add_visual_materials);

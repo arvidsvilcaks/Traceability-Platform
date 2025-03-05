@@ -5,14 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Permissions extends Model
+class Packages extends Model
 {
     use HasFactory;
 
-    protected $table = 'permissions';
+    protected $table = 'packages';
 
     protected $fillable = [
-        'user_id',
+        'type',
+        'quantity',
         'product_id',
     ];
 }

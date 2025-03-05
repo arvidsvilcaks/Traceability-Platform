@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Roles;
 
 use App\Http\Controllers\Controller;
-use App\Models\Products;
+use App\Models\Honey;
 use App\Models\User;
 use Illuminate\Http\Request;
 use TCPDF;
@@ -19,7 +19,7 @@ class DashboardController extends Controller
         $wholesalers = User::where('role', 'Wholesaler')->get();
         $packagingCompanies = User::where('role', 'Packaging company')->get();
     
-        $query = Products::query();
+        $query = Honey::query();
     
         switch ($user->role) {
             case 'Beekeeper':
@@ -51,9 +51,9 @@ class DashboardController extends Controller
     
     public function qrCode($qrCode)
     {
-        $product = Products::where('qr_code', $qrCode)->first();
+        $honey = Honey::where('qr_code', $qrCode)->first();
 
-        $value = route('consumer', ['product_id' => $product->id]);
+        $value = route('consumer', ['honey_id' => $honey->id]);
 
         // Create new PDF document
         $pdf = new TCPDF();
@@ -97,7 +97,7 @@ class DashboardController extends Controller
         $wholesaler_id = $request->wholesaler_id ?: null;
         $packaging_id = $request->packaging_id ?: null;
 
-        $product = Products::create([
+        $product = Honey::create([
             'name' => $request->input('name'),
             'beekeeper_id' => $beekeeper_id,
             'laboratory_id' => $laboratory_id,
@@ -112,7 +112,7 @@ class DashboardController extends Controller
     }
     public function update(Request $request, $id)
     {
-        $product = Products::findOrFail($id);
+        $product = Honey::findOrFail($id);
 
         $request->validate([
             'name' => 'required|string',
@@ -127,7 +127,7 @@ class DashboardController extends Controller
 
     public function delete($id)
     {
-        $product = Products::findOrFail($id);
+        $product = Honey::findOrFail($id);
 
         $product->delete();
 

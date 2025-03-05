@@ -17,6 +17,6 @@ class Apiary extends Model
         'floral_composition',
         'specifics_of_environment',
         'add_visual_materials',
-        'product_id'
+        'honey_id'
     ];
 }

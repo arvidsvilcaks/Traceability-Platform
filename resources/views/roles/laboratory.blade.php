@@ -98,7 +98,7 @@
             <h2 class="text-lg font-semibold mb-4">Add Traceability Information</h2>
             <form action="{{ route('traceabilityLaboratory.storeLaboratoryTrace', $honeyInfo->id) }}" method="POST">
                 @csrf
-                <input type="hidden" name="product_id" value="{{ $honeyInfo->id }}">
+                <input type="hidden" name="honey_id" value="{{ $honeyInfo->id }}">
                 <div class="flex flex-col space-y-2">
                     <input type="date" name="dateLaboratory" id="add_dateLaboratory" placeholder="Date" required>
                     <input type="text" name="addressLaboratory" id="add_addressLaboratory" placeholder="Address" required>

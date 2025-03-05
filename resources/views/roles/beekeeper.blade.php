@@ -46,10 +46,10 @@
             <div class="bg-white p-6 rounded-lg shadow-lg w-96">
                 <h2 class="text-lg font-semibold mb-4">Add Apiary</h2>
 
-                <form id="addApiaryForm" action="{{ route('apiary.storeApiary', ['product_id' => $honeyInfo->id]) }}" method="POST" enctype="multipart/form-data">
+                <form id="addApiaryForm" action="{{ route('apiary.storeApiary', ['honey_id' => $honeyInfo->id]) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" id="apiaryId" name="id">
-                    <input type="hidden" name="product_id" value="{{ $honeyInfo->id }}">
+                    <input type="hidden" name="honey_id" value="{{ $honeyInfo->id }}">
 
                     <div class="flex flex-col space-y-2">
                         <input type="text" name="description" id="add_description" placeholder="Description" required class="border p-2 rounded">
@@ -129,9 +129,9 @@
     <div id="modalBackdrop" class="fixed inset-0 bg-opacity-50 hidden flex items-center justify-center">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-lg font-semibold mb-4">Add New Document</h2>
-            <form action="{{ route('beekeepingDocuments.addDocument', ['product_id' => $honeyInfo->id]) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('beekeepingDocuments.addDocument', ['honey_id' => $honeyInfo->id]) }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="product_id" value="{{ $honeyInfo->id }}">
+                <input type="hidden" name="honey_id" value="{{ $honeyInfo->id }}">
 
                 <input type="file" id="add_beekeeping_documents" name="add_beekeeping_documents" accept=".pdf,.docx" class="mb-4">
                 <div class="flex justify-end gap-2">

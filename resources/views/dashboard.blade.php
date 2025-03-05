@@ -5,10 +5,12 @@
         </h2>
     </x-slot>
 
-    <div class="container mx-auto mt-8">
-        <h1 class="flex justify-center text-lg font-semibold mb-4 mt-4">Product List</h1>
+    @if(auth()->user()->role != 'Beekeeping association' && auth()->user()->role != 'Administrator')
 
-        @if(auth()->user()->role == 'Beekeeping association')
+    <div class="container mx-auto mt-8">
+        <h1 class="flex justify-center text-lg font-semibold mb-4 mt-4">Honey List</h1>
+
+        @if(auth()->user()->role == 'Beekeeper')
             <div class="flex justify-center mb-4">
                 <button onclick="showModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
                     Add New Product
@@ -24,63 +26,52 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($honeyInfo as $honey)
-                    <tr>
-                        <td class="px-6 py-4 border">{{ $honey->name }}</td>
-                        <td class="px-6 py-4 border">
-                            @if(auth()->user()->role == 'Beekeeping association')
-                                <div>
-                                    <p><strong>Beekeeper:</strong> {{ $honey->beekeeper->name ?? 'None' }}</p>
-                                    <p><strong>Laboratory Employee:</strong> {{ $honey->laboratoryEmployee->name ?? 'None' }}</p>
-                                    <p><strong>Wholesaler:</strong> {{ $honey->wholesaler->name ?? 'None' }}</p>
-                                    <p><strong>Packaging Company:</strong> {{ $honey->packagingCompany->name ?? 'None' }}</p>
-                                    <button onclick="showEditModal({{ $honey->id }}, '{{ $honey->name }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-4">
+            @foreach($honeyInfo as $honey)
+                <tr>
+                    <td class="px-6 py-4 border">{{ $honey->name }}</td>
+                    <td class="px-6 py-4 border">
+                        @if(auth()->user()->role == 'Beekeeper' && $honey->beekeeper_id == auth()->user()->id)
+                            <a href="{{ route('beekeeper.index', ['honey_id' => $honey->id]) }}" 
+                            class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
+                                View Beekeeper Data
+                            </a>
+                            <div class="ml-6">
+                                <button onclick="showEditModal({{ $honey->id }}, '{{ $honey->name }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-4">
                                     Edit
+                                </button>
+                                <form action="{{ route('dashboard.delete', $honey->id) }}" method="POST" style="display:inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
+                                        Delete
                                     </button>
-                                    <form action="{{ route('dashboard.delete', $honey->id) }}" method="POST" style="display:inline-block;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
-                                            Delete
-                                        </button>
-                                    </form>
-                                </div>
-                                @elseif(auth()->user()->role == 'Administrator')
-                                <div>
-                                    <p><strong>Beekeeper:</strong> {{ $honey->beekeeper->name ?? 'None' }}</p>
-                                    <p><strong>Laboratory Employee:</strong> {{ $honey->laboratoryEmployee->name ?? 'None' }}</p>
-                                    <p><strong>Wholesaler:</strong> {{ $honey->wholesaler->name ?? 'None' }}</p>
-                                    <p><strong>Packaging Company:</strong> {{ $honey->packagingCompany->name ?? 'None' }}</p>
-                                </div>
-                            @elseif(auth()->user()->role == 'Beekeeper' && $honey->beekeeper_id == auth()->user()->id)
-                                <a href="{{ route('beekeeper.index', ['product_id' => $honey->id]) }}" 
-                                class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
-                                    View Beekeeper Data
-                                </a>
-                            @elseif(auth()->user()->role == 'Laboratory employee' && $honey->laboratory_id == auth()->user()->id)
-                                <a href="{{ route('laboratory.index', ['product_id' => $honey->id]) }}" 
-                                class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
-                                    View Lab Data
-                                </a>
-                            @elseif(auth()->user()->role == 'Wholesaler' && $honey->wholesaler_id == auth()->user()->id)
-                                <a href="{{ route('wholesaler.index', ['product_id' => $honey->id]) }}" 
-                                class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
-                                    View Wholesaler Data
-                                </a>
-                            @elseif(auth()->user()->role == 'Packaging company' && $honey->packaging_id == auth()->user()->id)
-                                <a href="{{ route('packaging.index', ['product_id' => $honey->id]) }}" 
-                                class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
-                                    View Packaging Data
-                                </a>
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
+                                </form>
+                            </div>
+                        @elseif(auth()->user()->role == 'Laboratory employee' && $honey->laboratory_id == auth()->user()->id)
+                            <a href="{{ route('laboratory.index', ['honey_id' => $honey->id]) }}" 
+                            class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
+                                View Lab Data
+                            </a>
+                        @elseif(auth()->user()->role == 'Wholesaler' && $honey->wholesaler_id == auth()->user()->id)
+                            <a href="{{ route('wholesaler.index', ['product_id' => $honey->id]) }}" 
+                            class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
+                                View Wholesaler Data
+                            </a>
+                        @elseif(auth()->user()->role == 'Packaging company' && $honey->packaging_id == auth()->user()->id)
+                            <a href="{{ route('packaging.index', ['product_id' => $honey->id]) }}" 
+                            class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
+                                View Packaging Data
+                            </a>
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
             </tbody>
         </table>
     </div>
+    @endif
 
-    @if(auth()->user()->role == 'Beekeeping association')
+    @if(auth()->user()->role == 'Beekeeper')
     <div id="addProductModal" class="fixed inset-0 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-xl font-bold mb-4">Add New Product</h2>

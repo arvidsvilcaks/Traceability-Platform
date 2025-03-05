@@ -13,6 +13,6 @@ class BeekeepingDocuments extends Model
 
     protected $fillable = [
         'add_beekeeping_documents',
-        'product_id'
+        'honey_id'
     ];
 }

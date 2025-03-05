@@ -11,7 +11,7 @@ class TraceabilityController extends Controller
     /**
      * Store laboratory traceability data.
      */
-    public function storeLaboratoryTrace(Request $request, $product_id)
+    public function storeLaboratoryTrace(Request $request, $honey_id)
     {
         $request->validate([
             'dateLaboratory' => 'nullable|date',
@@ -21,13 +21,13 @@ class TraceabilityController extends Controller
         ]);
 
         Traceability::create([
-            'product_id' => $product_id,
+            'honey_id' => $honey_id,
             'dateLaboratory' => $request->dateLaboratory,
             'latitudeLaboratory' => $request->latitudeLaboratory,
             'longitudeLaboratory' => $request->longitudeLaboratory,
             'addressLaboratory' => $request->addressLaboratory,
         ]);
-        return redirect()->route('laboratory.index', ['product_id' => $product_id])->with('success', 'Trace info added successfully.');
+        return redirect()->route('laboratory.index', ['honey_id' => $honey_id])->with('success', 'Trace info added successfully.');
 
     }
 
@@ -52,7 +52,7 @@ class TraceabilityController extends Controller
             'addressLaboratory' => $request->addressLaboratory,
         ]);
 
-        return redirect()->route('laboratory.index', ['product_id' => $traceabilityLaboratory->product_id])->with('success', 'Trace info added successfully.');
+        return redirect()->route('laboratory.index', ['honey_id' => $traceabilityLaboratory->honey_id])->with('success', 'Trace info added successfully.');
     }
 
     /**
@@ -70,13 +70,13 @@ class TraceabilityController extends Controller
             'addressLaboratory' => null,
         ]);
     
-        return redirect()->route('laboratory.index', ['product_id' => $traceabilityLaboratory->product_id])->with('success', 'Trace info added successfully.');
+        return redirect()->route('laboratory.index', ['honey_id' => $traceabilityLaboratory->honey_id])->with('success', 'Trace info added successfully.');
     }
 
         /**
      * Store wholesaler traceability data.
      */
-    public function storeWholesalerTrace(Request $request, $product_id)
+    public function storeWholesalerTrace(Request $request, $honey_id)
     {
         $request->validate([
             'dateWholesaler' => 'nullable|date',
@@ -86,13 +86,13 @@ class TraceabilityController extends Controller
         ]);
 
         Traceability::create([
-            'product_id' => $product_id,
+            'honey_id' => $honey_id,
             'datedateWholesaler' => $request->datedateWholesaler,
             'latitudedateWholesaler' => $request->latitudedateWholesaler,
             'longitudedateWholesaler' => $request->longitudedateWholesaler,
             'addressdateWholesaler' => $request->addressdateWholesaler,
         ]);
-        return redirect()->route('wholesaler.index', ['product_id' => $product_id])->with('success', 'Trace info added successfully.');
+        return redirect()->route('wholesaler.index', ['honey_id' => $honey_id])->with('success', 'Trace info added successfully.');
 
     }
 
@@ -117,7 +117,7 @@ class TraceabilityController extends Controller
             'addressWholesaler' => $request->addressWholesaler,
         ]);
 
-        return redirect()->route('wholesaler.index', ['product_id' => $traceabilityWholesaler->product_id])->with('success', 'Trace info added successfully.');
+        return redirect()->route('wholesaler.index', ['honey_id' => $traceabilityWholesaler->honey_id])->with('success', 'Trace info added successfully.');
     }
 
     /**
@@ -135,13 +135,13 @@ class TraceabilityController extends Controller
             'addressWholesaler' => null,
         ]);
     
-        return redirect()->route('wholesaler.index', ['product_id' => $traceabilityWholesaler->product_id])->with('success', 'Trace info added successfully.');
+        return redirect()->route('wholesaler.index', ['honey_id' => $traceabilityWholesaler->honey_id])->with('success', 'Trace info added successfully.');
     }
 
             /**
      * Store packaging traceability data.
      */
-    public function storePackagingTrace(Request $request, $product_id)
+    public function storePackagingTrace(Request $request, $honey_id)
     {
         $request->validate([
             'datePackaging' => 'nullable|date',
@@ -151,13 +151,13 @@ class TraceabilityController extends Controller
         ]);
 
         Traceability::create([
-            'product_id' => $product_id,
+            'honey_id' => $honey_id,
             'datedatePackaging' => $request->datedatePackaging,
             'latitudedatePackaging' => $request->latitudedatePackaging,
             'longitudedatePackaging' => $request->longitudedatePackaging,
             'addressdatePackaging' => $request->addressdatePackaging,
         ]);
-        return redirect()->route('packaging.index', ['product_id' => $product_id])->with('success', 'Trace info added successfully.');
+        return redirect()->route('packaging.index', ['honey_id' => $honey_id])->with('success', 'Trace info added successfully.');
 
     }
 
@@ -182,7 +182,7 @@ class TraceabilityController extends Controller
             'addressPackaging' => $request->addressPackaging,
         ]);
 
-        return redirect()->route('packaging.index', ['product_id' => $traceabilityPackaging->product_id])->with('success', 'Trace info added successfully.');
+        return redirect()->route('packaging.index', ['honey_id' => $traceabilityPackaging->honey_id])->with('success', 'Trace info added successfully.');
     }
 
     /**
@@ -200,7 +200,7 @@ class TraceabilityController extends Controller
             'addressPackaging' => null,
         ]);
     
-        return redirect()->route('packaging.index', ['product_id' => $traceabilityPackaging->product_id])->with('success', 'Trace info added successfully.');
+        return redirect()->route('packaging.index', ['honey_id' => $traceabilityPackaging->honey_id])->with('success', 'Trace info added successfully.');
     }
     
 }

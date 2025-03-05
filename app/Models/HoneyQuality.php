@@ -12,7 +12,7 @@ class HoneyQuality extends Model
     protected $table = 'honey_quality';
 
     protected $fillable = [
-        'quality_standard',
+        'metric',
         'value',
         'product_id',
     ];

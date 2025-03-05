@@ -13,35 +13,8 @@ class Products extends Model
 
     protected $fillable = [
         'name',
-        'honey_type',
-        'date_of_production',
-        'quantity',
-        'add_analysis_results',
-        'qr_code',
-        'beekeeper_id',
-        'laboratory_id',
-        'wholesaler_id',
-        'packaging_id'
+        'description',
+        'add_visual_materials',
+        'user_id',
     ];
-
-        // In your Product model
-    public function beekeeper()
-    {
-        return $this->belongsTo(User::class, 'beekeeper_id');
-    }
-
-    public function laboratoryEmployee()
-    {
-        return $this->belongsTo(User::class, 'laboratory_id');
-    }
-
-    public function wholesaler()
-    {
-        return $this->belongsTo(User::class, 'wholesaler_id');
-    }
-
-    public function packagingCompany()
-    {
-        return $this->belongsTo(User::class, 'packaging_id');
-    }
 }

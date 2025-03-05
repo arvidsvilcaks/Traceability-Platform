@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('markets', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('product_id')->nullable();
-            $table->string('market_name')->nullable();
-            $table->string('market_location')->nullable();
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->unsignedBigInteger('package_id')->nullable();
+            $table->string('name')->nullable();
+            $table->string('address')->nullable();
+            $table->foreign('package_id')->references('id')->on('packages')->onDelete('cascade');
             $table->timestamps();
         });
     }
