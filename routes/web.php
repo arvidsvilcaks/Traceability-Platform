@@ -5,7 +5,7 @@ use App\Http\Controllers\Roles\DashboardController;
 use App\Http\Controllers\Roles\Beekeeper\BeekeeperController;
 use App\Http\Controllers\Roles\Beekeeper\ApiaryController;
 use App\Http\Controllers\Roles\Beekeeper\BeeDocumentController;
-use App\Http\Controllers\Roles\Beekeeper\ProductController;
+use App\Http\Controllers\Roles\Beekeeper\HoneyController;
 use App\Http\Controllers\Roles\Laboratory\LaboratoryController;
 use App\Http\Controllers\Roles\Laboratory\AnalysisController;
 use App\Http\Controllers\Roles\Wholesaler\WholesalerController;
@@ -28,7 +28,7 @@ Route::get('/', function () {
 
 Route::get('/map', [MapController::class, 'index']);
 
-Route::get('/consumer/{product_id}', function () {
+Route::get('/consumer/{honey_id}', function () {
     return view('roles.consumer');
 })->name('consumer');
 
@@ -46,6 +46,10 @@ Route::middleware(['auth', 'verified', 'enabled'])->group(function () {
     Route::put('/dashboard/update/{id}', [DashboardController::class, 'update'])->name('dashboard.update');
     Route::delete('/dashboard/delete/{id}', [DashboardController::class, 'delete'])->name('dashboard.delete');    
 
+    Route::post('/dashboard/product/storeProduct', [DashboardController::class, 'storeProduct'])->name('dashboard.product.storeProduct');
+    Route::put('/dashboard/product/updateProduct/{id}', [DashboardController::class, 'updateProduct'])->name('dashboard.product.updateProduct');
+    Route::delete('/dashboard/product/deleteProduct/{id}', [DashboardController::class, 'deleteProduct'])->name('dashboard.product.deleteProduct');
+
     Route::patch('/users/update-status/{user}', [UserController::class, 'updateStatus'])->name('users.update_status');
 
     Route::get('/administrator', [UserController::class, 'indexAdministrator'])->middleware('role:Administrator')->name('administrator.indexAdministrator');
@@ -53,6 +57,7 @@ Route::middleware(['auth', 'verified', 'enabled'])->group(function () {
     Route::get('/association', [UserController::class, 'indexAssociation'])->middleware('role:Beekeeping association')->name('association.indexAssociation');
     
     Route::get('/beekeeper/{honey_id?}', [BeekeeperController::class, 'index'])->middleware('role:Beekeeper')->name('beekeeper.index');
+    Route::post('/beekeeper/update', [BeekeeperController::class, 'update'])->name('beekeeper.update');
 
     Route::post('/beekeeper/storeApiary/{honey_id}', [ApiaryController::class, 'storeApiary'])->middleware('role:Beekeeper')->name('apiary.storeApiary');
     Route::put('/beekeeper/updateApiary/{id}', [ApiaryController::class, 'updateApiary'])->middleware('role:Beekeeper')->name('apiary.updateApiary');
@@ -62,9 +67,9 @@ Route::middleware(['auth', 'verified', 'enabled'])->group(function () {
     Route::put('/beekeeper/updateDocument/{id}', [BeeDocumentController::class, 'updateDocument'])->name('beekeepingDocuments.updateDocument');
     Route::delete('/beekeeper/deleteDocument/{id}', [BeeDocumentController::class, 'deleteDocument'])->name('beekeepingDocuments.deleteDocument');
     
-    Route::post('/beekeeper/addProduct', [ProductController::class, 'addProduct'])->name('products.addProduct');
-    Route::put('/beekeeper/updateProduct/{id}', [ProductController::class, 'updateProduct'])->name('products.updateProduct');
-    Route::delete('/beekeeper/deleteProduct/{id}', [ProductController::class, 'deleteProduct'])->name('products.deleteProduct');
+    Route::post('/beekeeper/addHoney', [HoneyController::class, 'addHoney'])->name('honey.addHoney');
+    Route::put('/beekeeper/updateHoney/{id}', [HoneyController::class, 'updateHoney'])->name('honey.updateHoney');
+    Route::delete('/beekeeper/deleteHoney/{id}', [HoneyController::class, 'deleteHoney'])->name('honey.deleteHoney');
 
     Route::get('/laboratory/{honey_id?}', [LaboratoryController::class, 'index'])->middleware('role:Laboratory employee')->name('laboratory.index');
     

@@ -21,10 +21,8 @@ class Honey extends Model
         'beekeeper_id',
         'laboratory_id',
         'wholesaler_id',
-        'packaging_id'
     ];
 
-        // In your Product model
     public function beekeeper()
     {
         return $this->belongsTo(User::class, 'beekeeper_id');
@@ -39,9 +37,8 @@ class Honey extends Model
     {
         return $this->belongsTo(User::class, 'wholesaler_id');
     }
-
-    public function packagingCompany()
+    public function products()
     {
-        return $this->belongsTo(User::class, 'packaging_id');
+        return $this->belongsToMany(Products::class, 'honey_products', 'honey_id', 'product_id');
     }
 }

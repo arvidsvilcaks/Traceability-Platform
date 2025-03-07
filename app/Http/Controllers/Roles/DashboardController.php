@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Roles;
 
 use App\Http\Controllers\Controller;
 use App\Models\Honey;
+use App\Models\Products;
 use App\Models\User;
 use Illuminate\Http\Request;
 use TCPDF;
@@ -45,7 +46,13 @@ class DashboardController extends Controller
     
         $honeyInfo = $query->get();
     
-        return view('dashboard', compact('honeyInfo','beekeepers','laboratoryEmployees','wholesalers','packagingCompanies'));
+        $wholesalerId = auth()->id();
+        $honeys = Honey::where('wholesaler_id', $wholesalerId)->get(); 
+        $products = Products::where('wholesaler_id', $wholesalerId) 
+            ->with('honeys') // Eager load honeys
+            ->get();
+    
+        return view('dashboard', compact('honeyInfo','beekeepers','laboratoryEmployees','wholesalers','packagingCompanies', 'products', 'honeys'));
     }
     
     
@@ -95,14 +102,12 @@ class DashboardController extends Controller
         $beekeeper_id = $request->beekeeper_id ?: null;
         $laboratory_id = $request->laboratory_id ?: null;
         $wholesaler_id = $request->wholesaler_id ?: null;
-        $packaging_id = $request->packaging_id ?: null;
 
         $product = Honey::create([
             'name' => $request->input('name'),
             'beekeeper_id' => $beekeeper_id,
             'laboratory_id' => $laboratory_id,
             'wholesaler_id' => $wholesaler_id,
-            'packaging_id' => $packaging_id,
         ]);
     
         $product->qr_code = urlencode(hash('sha256', $product->id . '-' . $product->name));
@@ -128,6 +133,48 @@ class DashboardController extends Controller
     public function delete($id)
     {
         $product = Honey::findOrFail($id);
+
+        $product->delete();
+
+        return redirect()->route('dashboard')->with('success', 'Product added successfully!');
+    }
+
+    // ------------------------------------------------------------------------------------------------------------- //
+
+    public function storeProduct(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'honey_ids' => 'required|array',
+            'honey_ids.*' => 'exists:honey,id'
+        ]);
+
+        $product = Products::create([
+            'name' => $request->name,
+        ]);
+
+        $product->honeys()->attach($request->honey_ids);
+
+        return redirect()->route('dashboard')->with('success', 'Product created successfully!');
+    }
+
+    public function updateProduct(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $product = Products::findOrFail($id);
+
+        $product->name = $request->input('name');
+        $product->save();
+
+        return redirect()->route('dashboard')->with('success', 'Product updated successfully.');
+    }
+
+    public function deleteProduct($id)
+    {
+        $product = Products::findOrFail($id);
 
         $product->delete();
 

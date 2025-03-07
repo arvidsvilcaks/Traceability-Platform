@@ -13,8 +13,15 @@ class Products extends Model
 
     protected $fillable = [
         'name',
-        'description',
-        'add_visual_materials',
-        'user_id',
+        'packaging_id'
     ];
+
+    public function packagingCompany()
+    {
+        return $this->belongsTo(User::class, 'packaging_id');
+    }
+    public function honeys()
+    {
+        return $this->belongsToMany(Honey::class, 'honey_products', 'product_id', 'honey_id');
+    }
 }

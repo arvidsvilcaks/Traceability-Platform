@@ -7,9 +7,9 @@ use App\Models\Honey;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class ProductController extends Controller
+class HoneyController extends Controller
 {
-    public function addProduct(Request $request)
+    public function addHoney(Request $request)
     {
         $request->validate([
             'date_of_production' => 'required|date',
@@ -33,7 +33,7 @@ class ProductController extends Controller
         return redirect()->back()->with('success', 'Product info added successfully');
     }
 
-    public function updateProduct(Request $request, $id)
+    public function updateHoney(Request $request, $id)
     {
         $honeyInfo = Honey::findOrFail($id);
 
@@ -60,7 +60,7 @@ class ProductController extends Controller
         return redirect()->back()->with('success', 'Product info updated successfully');
     }
 
-    public function deleteProduct($id)
+    public function deleteHoney($id)
     {
         $honeyInfo = Honey::findOrFail($id);
 

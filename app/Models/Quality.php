@@ -5,16 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Markets extends Model
+class Quality extends Model
 {
     use HasFactory;
 
-    protected $table = 'markets';
+    protected $table = 'quality';
 
     protected $fillable = [
-        'name',
-        'address',
-        'package_id',
+        'metric',
+        'value',
         'product_id',
     ];
 }

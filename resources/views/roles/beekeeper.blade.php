@@ -157,9 +157,6 @@
 
     <div class="overflow-x-auto shadow-md sm:rounded-lg w-full mb-6 mt-6">
         <h3 class="text-lg font-semibold flex justify-center mb-6 mt-4">Info about Produced Honey</h3>
-        <!-- <div class="flex justify-center mb-6">
-            <button id="showFormButton2" class="justify-center bg-gray-500 text-white px-4 py-2 rounded-full mt-4">Add New Row</button>
-        </div> -->
         <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
@@ -191,7 +188,7 @@
     <div id="modalBackdrop2" class="fixed inset-0 hidden flex items-center justify-center">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-lg font-semibold mb-4">Add New Honey Info</h2>
-            <form action="{{ route('products.addProduct') }}" method="POST">
+            <form action="{{ route('honey.addHoney') }}" method="POST">
                 @csrf
                 <input type="date" name="date_of_production" class="border p-2 w-full mb-2" required>
                 <input type="text" name="honey_type" placeholder="Honey Type" class="border p-2 w-full mb-2" required>
@@ -307,7 +304,96 @@
         </table>
     </div>
 
+    <!-- ------------------------------------------------------------------------------------------------------------- -->
+    <div class="flex justify-center mb-4">
+        <button onclick="showModalLaboratory()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
+            Assign Laboratory company for analysis
+        </button>
+    </div>
+    <div class="flex justify-center mb-4">
+        <p><strong>Laboratory Employee:</strong> {{ $honeyInfo->laboratoryEmployee->name ?? 'None' }}</p>
+    </div>
+
+    <div class="flex justify-center mb-4">
+        <button onclick="showModalWholesaler()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
+            Assign Wholesaler company for blending
+        </button>
+    </div>
+
+    <div class="flex justify-center mb-4">
+        <p><strong>Wholesaler:</strong> {{ $honeyInfo->wholesaler->name ?? 'None' }}</p>
+    </div>
+
+    <div id="assignLaboratoryModal" class="fixed inset-0 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 class="text-xl font-bold mb-4">Add New Product</h2>
+            <form action="{{ route('beekeeper.update') }}" method="POST">
+                @csrf
+                <input type="hidden" name="honey_id" value="{{ $honeyInfo->id }}">
+
+                <label class="block mt-4">Assign Laboratory Employee:</label>
+                <select name="laboratory_id" id="laboratorySelect" class="w-full border p-2 rounded">
+                    <option value="">None</option>    
+                    @foreach($laboratoryEmployees as $employee)
+                        <option value="{{ $employee->id }}" {{ $honeyInfo->laboratory_id == $employee->id ? 'selected' : '' }}>
+                            {{ $employee->name }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <div class="mt-4 flex justify-between">
+                    <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded">Save</button>
+                    <button type="button" onclick="hideModalLaboratory()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="assignWholesalerModal" class="fixed inset-0 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 class="text-xl font-bold mb-4">Add New Product</h2>
+            <form action="{{ route('beekeeper.update') }}" method="POST">
+                @csrf
+                <input type="hidden" name="honey_id" value="{{ $honeyInfo->id }}">
+
+                <label class="block mt-4">Assign Wholesaler:</label>
+                <select name="wholesaler_id" id="wholesalerSelect" class="w-full border p-2 rounded">
+                    <option value="">None</option>
+                    @foreach($wholesalers as $wholesaler)
+                        <option value="{{ $wholesaler->id }}" {{ $honeyInfo->wholesaler_id == $wholesaler->id ? 'selected' : '' }}>
+                            {{ $wholesaler->name }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <div class="mt-4 flex justify-between">
+                    <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded">Save</button>
+                    <button type="button" onclick="hideModalWholesaler()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- ------------------------------------------------------------------------------------------------------------- -->
     <script>
+    // -----------------------------------------------------------------------------------------------------------------
+            
+        function showModalLaboratory() {
+            document.getElementById('assignLaboratoryModal').classList.remove('hidden');
+        }
+
+        function hideModalLaboratory() {
+            document.getElementById('assignLaboratoryModal').classList.add('hidden');
+        }
+
+        function showModalWholesaler() {
+            document.getElementById('assignWholesalerModal').classList.remove('hidden');
+        }
+
+        function hideModalWholesaler() {
+            document.getElementById('assignWholesalerModal').classList.add('hidden');
+        }
+
+    // -----------------------------------------------------------------------------------------------------------------
         function showModal() {
             document.getElementById('modalBackdrop').classList.remove('hidden');
         }
@@ -354,7 +440,7 @@
             document.getElementById('editHoneyDate').value = date;
             document.getElementById('editHoneyType').value = type;
             document.getElementById('editHoneyQuantity').value = quantity;
-            document.getElementById('editHoneyForm').action = `/beekeeper/updateProduct/${id}`;
+            document.getElementById('editHoneyForm').action = `/beekeeper/updateHoney/${id}`;
             document.getElementById('editHoneyModal').classList.remove('hidden');
         }
 
@@ -373,16 +459,6 @@
             });
         }
 
-        function setupModalEventListeners2() {
-            document.getElementById('showFormButton2').addEventListener('click', showModal2);
-            document.getElementById('closeModalButton2').addEventListener('click', closeModal2);
-
-            document.getElementById('modalBackdrop2').addEventListener('click', function(event) {
-                if (event.target === this) {
-                    closeModal();
-                }
-            });
-        }
 
         function editModal(apiary) {
             document.getElementById('edit_apiaryId').value = apiary.id;
@@ -398,7 +474,6 @@
             showModal4('editModal');
         }
         document.addEventListener('DOMContentLoaded', setupModalEventListeners);
-        document.addEventListener('DOMContentLoaded', setupModalEventListeners2);
         
     </script>
     

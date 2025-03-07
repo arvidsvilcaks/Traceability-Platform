@@ -11,14 +11,14 @@ class MarketController extends Controller
     public function storeMarket(Request $request, $product_id)
     {
         $request->validate([
-            'market_name' => 'required|string',
-            'market_location' => 'required|string',
+            'name' => 'required|string',
+            'address' => 'required|string',
         ]);
 
 
         Markets::create([
-            'market_name' => $request->market_name,
-            'market_location' => $request->market_location,
+            'name' => $request->name,
+            'address' => $request->address,
             'product_id' => $product_id,
         ]);
 
@@ -30,13 +30,13 @@ class MarketController extends Controller
         $market = Markets::findOrFail($id);
 
         $request->validate([
-            'market_name' => 'required|string',
-            'market_location' => 'required|string',
+            'name' => 'required|string',
+            'address' => 'required|string',
         ]);
 
         $market->update([
-            'market_name' => $request->market_name,
-            'market_location' => $request->market_location,
+            'name' => $request->name,
+            'address' => $request->address,
         ]);
 
         return redirect()->route('wholesaler.index', ['product_id' => $market->product_id])->with('success', 'Market info updated successfully.');

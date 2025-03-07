@@ -5,15 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class HoneyQuality extends Model
+class HoneyProducts extends Model
 {
     use HasFactory;
 
-    protected $table = 'honey_quality';
+    protected $table = 'honey_products';
 
     protected $fillable = [
-        'metric',
-        'value',
         'product_id',
+        'honey_id'
     ];
 }

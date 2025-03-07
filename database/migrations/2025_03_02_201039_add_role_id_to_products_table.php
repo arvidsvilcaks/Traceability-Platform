@@ -15,12 +15,10 @@ return new class extends Migration
             $table->unsignedBigInteger('beekeeper_id')->nullable()->after('id');
             $table->unsignedBigInteger('laboratory_id')->nullable()->after('id');
             $table->unsignedBigInteger('wholesaler_id')->nullable()->after('id');
-            $table->unsignedBigInteger('packaging_id')->nullable()->after('id');
         
             $table->foreign('beekeeper_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('laboratory_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('wholesaler_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('packaging_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

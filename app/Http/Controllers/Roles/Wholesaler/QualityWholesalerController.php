@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Roles\Wholesaler;
 
 use App\Http\Controllers\Controller;
-use App\Models\HoneyQuality;
+use App\Models\Quality;
 use Illuminate\Http\Request;
 
 class QualityWholesalerController extends Controller
@@ -11,13 +11,13 @@ class QualityWholesalerController extends Controller
     public function storeHoneyQuality(Request $request, $product_id)
     {
         $request->validate([
-            'quality_standard' => 'required|string',
+            'metric' => 'required|string',
             'value' => 'required|string',
         ]);
 
 
-        HoneyQuality::create([
-            'quality_standard' => $request->quality_standard,
+        Quality::create([
+            'metric' => $request->metric,
             'value' => $request->value,
             'product_id' => $product_id,
         ]);
@@ -27,15 +27,15 @@ class QualityWholesalerController extends Controller
 
     public function updateHoneyQuality(Request $request, $id)
     {
-        $qualityWholesaler = HoneyQuality::findOrFail($id);
+        $qualityWholesaler = Quality::findOrFail($id);
 
         $request->validate([
-            'quality_standard' => 'required|string',
+            'metric' => 'required|string',
             'value' => 'required|string',
         ]);
 
         $qualityWholesaler->update([
-            'quality_standard' => $request->quality_standard,
+            'metric' => $request->metric,
             'value' => $request->value,
         ]);
 
@@ -44,7 +44,7 @@ class QualityWholesalerController extends Controller
 
     public function destroyHoneyQuality($id)
     {
-        $qualityWholesaler = HoneyQuality::findOrFail($id);
+        $qualityWholesaler = Quality::findOrFail($id);
         $qualityWholesaler->delete();
         return redirect()->route('wholesaler.index', ['product_id' => $qualityWholesaler->product_id])->with('success', 'Quality info deleted successfully.');
     }
