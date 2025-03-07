@@ -28,15 +28,21 @@ Route::get('/', function () {
 
 Route::get('/map', [MapController::class, 'index']);
 
-Route::get('/consumer/{honey_id}', function () {
-    return view('roles.consumer');
-})->name('consumer');
+Route::get('/consumerHoney/{honey_id}', function () {
+    return view('roles.consumerHoney');
+})->name('consumerHoney');
+
+Route::get('/consumerProduct/{product_id}', function () {
+    return view('roles.consumerProduct');
+})->name('consumerProduct');
 
 Route::get('/disabled-account', function () {
     return view('auth.disabled');
 });
 
-Route::get('/qr_code/{qr_code?}', [DashboardController::class, 'qrCode'])->name('qr_code');
+Route::get('/qr_code_Honey/{qr_code?}', [DashboardController::class, 'qrCodeHoney'])->name('qr_code_Honey');
+
+Route::get('/qr_code_Product/{qr_code?}', [DashboardController::class, 'qrCodeProduct'])->name('qr_code_Product');
 
 Route::middleware(['auth', 'verified', 'enabled'])->group(function () {
 
@@ -78,6 +84,7 @@ Route::middleware(['auth', 'verified', 'enabled'])->group(function () {
     Route::delete('/laboratory/deleteAnalysis/{id}', [AnalysisController::class, 'deleteAnalysis'])->name('analysis.deleteAnalysis');
 
     Route::get('/wholesaler/{product_id?}', [WholesalerController::class, 'index'])->middleware('role:Wholesaler')->name('wholesaler.index');
+    Route::post('/wholesaler/update', [WholesalerController::class, 'update'])->name('wholesaler.update');
 
     Route::post('/wholesaler/storeProcess/{product_id}', [ProcessWholesalerController::class, 'storeProcess'])->name('processesWholesaler.storeProcess');
     Route::put('/wholesaler/updateProcess/{id}', [ProcessWholesalerController::class, 'updateProcess'])->name('processesWholesaler.updateProcess');
@@ -100,6 +107,10 @@ Route::middleware(['auth', 'verified', 'enabled'])->group(function () {
     Route::post('/packaging/storeHoneyQuality/{product_id}', [QualityPackagingController::class, 'storeHoneyQuality'])->name('qualityPackaging.storeHoneyQuality');
     Route::put('/packaging/updateHoneyQuality/{id}', [QualityPackagingController::class, 'updateHoneyQuality'])->name('qualityPackaging.updateHoneyQuality');
     Route::delete('/packaging/destroyHoneyQuality/{id}', [QualityPackagingController::class, 'destroyHoneyQuality'])->name('qualityPackaging.destroyHoneyQuality');
+
+    Route::post('/packaging/storeProductPackages/{product_id}', [PackagingController::class, 'storePackage'])->name('packages.storePackage');
+    Route::put('/packaging/updateProductPackages/{id}', [PackagingController::class, 'updatePackage'])->name('packages.updatePackage');
+    Route::delete('/packaging/destroyProductPackages/{id}', [PackagingController::class, 'destroyPackage'])->name('packages.destroyPackage');
 
     Route::post('/laboratory/storeLaboratoryTrace/{product_id}', [TraceabilityController::class, 'storeLaboratoryTrace'])->name('traceabilityLaboratory.storeLaboratoryTrace');
     Route::put('/laboratory/updateLaboratoryTrace/{id}', [TraceabilityController::class, 'updateLaboratoryTrace'])->name('traceabilityLaboratory.updateLaboratoryTrace');

@@ -21,6 +21,7 @@ class Honey extends Model
         'beekeeper_id',
         'laboratory_id',
         'wholesaler_id',
+        'is_available',
     ];
 
     public function beekeeper()

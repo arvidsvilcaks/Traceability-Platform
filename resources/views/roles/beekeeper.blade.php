@@ -174,11 +174,6 @@
                     <td class="border border-gray-300 px-4 py-2">{{ $honeyInfo->quantity }}</td>
                     <td class="border border-gray-300 px-4 py-2">
                         <button class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full" onclick="editHoney({{ $honeyInfo->id }}, '{{ $honeyInfo->date_of_production }}', '{{ $honeyInfo->honey_type }}', {{ $honeyInfo->quantity }})">Add product info</button>
-                        <!-- <form action="{{ route('products.deleteProduct', $honeyInfo->id) }}" method="POST" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="bg-gray-500 text-white px-2 py-1 rounded-full">Delete</button>
-                        </form> -->
                     </td>
                 </tr> 
             </tbody>
@@ -263,7 +258,7 @@
                 <tbody>
                     <tr>
                         <td class="px-6 py-4">
-                            <a href="{{ route('qr_code', ['qr_code' => $honeyInfo->qr_code]) }}" 
+                            <a href="{{ route('qr_code_Honey', ['qr_code' => $honeyInfo->qr_code]) }}" 
                             target="_blank" 
                             class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-white rounded-full">
                                 View

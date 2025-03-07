@@ -32,9 +32,6 @@ class DashboardController extends Controller
             case 'Wholesaler':
                 $query->where('wholesaler_id', $user->id);
                 break;
-            case 'Packaging company':
-                $query->where('packaging_id', $user->id);
-                break;
             case 'Beekeeping association':
                 break;
             case 'Administrator':
@@ -47,26 +44,28 @@ class DashboardController extends Controller
         $honeyInfo = $query->get();
     
         $wholesalerId = auth()->id();
+        $packagingId = auth()->id();
         $honeys = Honey::where('wholesaler_id', $wholesalerId)->get(); 
         $products = Products::where('wholesaler_id', $wholesalerId) 
-            ->with('honeys') // Eager load honeys
+            ->orWhere('packaging_id', $packagingId)
+            ->with('honeys')
             ->get();
     
         return view('dashboard', compact('honeyInfo','beekeepers','laboratoryEmployees','wholesalers','packagingCompanies', 'products', 'honeys'));
     }
     
     
-    public function qrCode($qrCode)
+    public function qrCodeHoney($qrCodeHoney)
     {
-        $honey = Honey::where('qr_code', $qrCode)->first();
+        $honey = Honey::where('qr_code', $qrCodeHoney)->first();
 
-        $value = route('consumer', ['honey_id' => $honey->id]);
+        $value = route('consumerHoney', ['honey_id' => $honey->id]);
 
         // Create new PDF document
         $pdf = new TCPDF();
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('Arvids');
-        $pdf->SetTitle('QR Code PDF');
+        $pdf->SetTitle('Honey QR Code PDF');
         $pdf->SetSubject('QR Code');
 
         // Remove default header/footer
@@ -86,7 +85,40 @@ class DashboardController extends Controller
         $pdf->write2DBarcode($value, 'QRCODE,H', 80, 40, 50, 50, [], 'N');
 
         // Output the PDF in browser
-        $pdf->Output('qrcode.pdf', 'I');
+        $pdf->Output('qrCodeHoney.pdf', 'I');
+    }
+
+    public function qrCodeProduct($qrCodeProduct)
+    {
+        $products = Products::where('qr_code', $qrCodeProduct)->first();
+
+        $value = route('consumerProduct', ['product_id' => $products->id]);
+
+        // Create new PDF document
+        $pdf = new TCPDF();
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('Arvids');
+        $pdf->SetTitle('Product QR Code PDF');
+        $pdf->SetSubject('QR Code');
+
+        // Remove default header/footer
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+
+        // Add a page
+        $pdf->AddPage();
+
+        // Set font
+        $pdf->SetFont('helvetica', '', 12);
+
+        // Add Title
+        $pdf->Cell(0, 10, 'QR Code', 0, 1, 'C');
+
+        // Generate and embed QR Code
+        $pdf->write2DBarcode($value, 'QRCODE,H', 80, 40, 50, 50, [], 'N');
+
+        // Output the PDF in browser
+        $pdf->Output('qrCodeProduct.pdf', 'I');
     }
 
     public function store(Request $request)
@@ -95,8 +127,7 @@ class DashboardController extends Controller
             'name' => 'required|string|max:255',
             'beekeeper_id' => 'nullable|exists:users,id',
             'laboratory_id' => 'nullable|exists:users,id',
-            'wholesaler_id' => 'nullable|exists:users,id',
-            'packaging_id' => 'nullable|exists:users,id'
+            'wholesaler_id' => 'nullable|exists:users,id'
         ]);
     
         $beekeeper_id = $request->beekeeper_id ?: null;
@@ -139,22 +170,28 @@ class DashboardController extends Controller
         return redirect()->route('dashboard')->with('success', 'Product added successfully!');
     }
 
-    // ------------------------------------------------------------------------------------------------------------- //
-
     public function storeProduct(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'honey_ids' => 'required|array',
-            'honey_ids.*' => 'exists:honey,id'
+            'honey_ids.*' => 'exists:honey,id',
+            'wholesaler_id' => 'nullable|exists:users,id',
         ]);
+
+        $wholesaler_id = $request->wholesaler_id ?: null;
 
         $product = Products::create([
             'name' => $request->name,
+            'wholesaler_id' => $wholesaler_id,
         ]);
 
         $product->honeys()->attach($request->honey_ids);
+        $product->qr_code = urlencode(hash('sha256', $product->id . '-' . $product->name));
+        $product->save();
 
+        Honey::whereIn('id', $request->honey_ids)->update(['is_available' => false]);
+        
         return redirect()->route('dashboard')->with('success', 'Product created successfully!');
     }
 

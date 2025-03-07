@@ -237,8 +237,73 @@
       </div>
   </div>
 
-  <script>
+  <div class="overflow-x-auto shadow-md sm:rounded-lg w-full md:w-1/2">
+      <h1 class="flex justify-center text-lg font-semibold mb-4 mt-6">
+          QR code data
+      </h1>
+      <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
+          <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+              <tr>
+                  <th class="px-6 py-3">QR Code</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr>
+                  <td class="px-6 py-4">
+                      <a href="{{ route('qr_code_Product', ['qr_code' => $honeyInfo->qr_code]) }}" 
+                      target="_blank" 
+                      class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-white rounded-full">
+                          View
+                      </a>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+  </div>
 
+  <div class="flex justify-center mb-4 mt-6">
+    <button onclick="showModalPackaging()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
+        Assign Packaging company for blending
+    </button>
+  </div>
+
+  <div class="flex justify-center mb-4">
+    <p><strong>Packaging:</strong> {{ $honeyInfo->packaging->name ?? 'None' }}</p>
+  </div>
+
+  <div id="assignPackagingModal" class="fixed inset-0 flex items-center justify-center hidden">
+      <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+          <h2 class="text-xl font-bold mb-4">Add New Product</h2>
+          <form action="{{ route('wholesaler.update') }}" method="POST">
+              @csrf
+              <input type="hidden" name="product_id" value="{{ $honeyInfo->id }}">
+
+              <label class="block mt-4">Assign Packaging company:</label>
+              <select name="packaging_id" id="packagingSelect" class="w-full border p-2 rounded">
+                  <option value="">None</option>
+                  @foreach($packaging as $packaging)
+                      <option value="{{ $packaging->id }}" {{ $honeyInfo->packaging_id == $packaging->id ? 'selected' : '' }}>
+                          {{ $packaging->name }}
+                      </option>
+                  @endforeach
+              </select>
+
+              <div class="mt-4 flex justify-between">
+                  <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded">Save</button>
+                  <button type="button" onclick="hideModalPackaging()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+              </div>
+          </form>
+      </div>
+  </div>
+
+  <script>
+    function showModalPackaging() {
+        document.getElementById('assignPackagingModal').classList.remove('hidden');
+    }
+
+    function hideModalPackaging() {
+        document.getElementById('assignPackagingModal').classList.add('hidden');
+    }
 
     function showModalProcess(modalId) {
         document.getElementById(modalId).classList.remove('hidden');

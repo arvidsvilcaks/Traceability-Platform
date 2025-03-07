@@ -13,12 +13,17 @@ class Products extends Model
 
     protected $fillable = [
         'name',
-        'packaging_id'
+        'packaging_id',
+        'wholesaler_id'
     ];
 
-    public function packagingCompany()
+    public function packaging()
     {
         return $this->belongsTo(User::class, 'packaging_id');
+    }
+    public function wholesaler()
+    {
+        return $this->belongsTo(User::class, 'wholesaler_id');
     }
     public function honeys()
     {

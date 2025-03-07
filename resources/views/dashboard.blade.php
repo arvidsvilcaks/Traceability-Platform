@@ -7,6 +7,10 @@
 
     @if(auth()->user()->role != 'Beekeeping association' && auth()->user()->role != 'Administrator')
 
+    @if(auth()->user()->role != 'Packaging company')
+
+    <!-- HONEY LIST -->
+
     <div class="container mx-auto mt-8">
         <h1 class="flex justify-center text-lg font-semibold mb-4 mt-4">Honey List</h1>
 
@@ -21,12 +25,17 @@
         <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
-                    <th class="px-6 py-3 border">Product Name</th>
-                    <th class="px-6 py-3 border">Action</th>
+                    <th class="px-6 py-3 border">Name</th>
+                    @if(auth()->user()->role == 'Beekeeper' || auth()->user()->role == 'Laboratory employee')
+                        <th class="px-6 py-3 border">Action</th>
+                    @elseif(auth()->user()->role == 'Wholesaler')
+                        <th class="px-6 py-3 border">Beekeeper (Producer)</th>
+                        <th class="px-6 py-3 border">Quantity (kg)</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
-            @foreach($honeys as $honey)
+            @foreach($honeyInfo as $honey)
                 <tr>
                     <td class="px-6 py-4 border">{{ $honey->name }}</td>
                     <td class="px-6 py-4 border">
@@ -53,10 +62,12 @@
                                 View Lab Data
                             </a>
                         @elseif(auth()->user()->role == 'Wholesaler' && $honey->wholesaler_id == auth()->user()->id)
-                            <!-- <a href="{{ route('wholesaler.index', ['product_id' => $honey->id]) }}" 
-                            class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
-                            </a> -->
-                            <button class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">View Honey Data</button>
+                            <p>{{ $honey->beekeeper->name ?? 'Unknown' }}</p>
+                        @endif
+                    </td>
+                    <td>
+                        @if(auth()->user()->role == 'Wholesaler' && $honey->wholesaler_id == auth()->user()->id)
+                            <p>{{ $honey->quantity }}</p>
                         @endif
                     </td>
                 </tr>
@@ -65,21 +76,27 @@
         </table>
     </div>
 
-    @if(auth()->user()->role == 'Wholesaler')
-    <div class="container">
+    @endif
 
-        <!-- Product Table -->
-        <h3 class="mt-8 text-xl font-semibold flex justify-center mt-4">Products List</h3>
+    @if(auth()->user()->role == 'Wholesaler' || auth()->user()->role == 'Packaging company')
+
+    <!-- PRODUCT LIST -->
+
+    <div class="container">
+        <h3 class="flex justify-center text-lg font-semibold mb-4 mt-4">Products List</h3>
+        @if(auth()->user()->role == 'Wholesaler')
+
         <div class="flex justify-center mt-4 mb-4">
             <button onclick="showProductModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
                 Add New Product
             </button>
         </div>
+        @endif
         <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200 mb-6">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
                     <th class="px-6 py-3 border">Name</th>
-                    <th class="px-6 py-3 border">Honeys</th>
+                    <th class="px-6 py-3 border">Bleneded Honey's</th>
                     <th class="px-6 py-3 border">Action</th>
                 </tr>
             </thead>
@@ -92,6 +109,9 @@
                                 {{ $honey->name }}<br>
                             @endforeach
                         </td>
+
+                        @if(auth()->user()->role == 'Wholesaler' && $products->wholesaler_id == auth()->user()->id)
+
                         <td class="px-6 py-4 border">
                             <div>
                                 <button onclick="showEditProduct({{ $products->id }}, '{{ $products->name }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-4">
@@ -110,12 +130,32 @@
                                 </form>
                             </div>
                         </td>
+
+                        @elseif(auth()->user()->role == 'Packaging company' && $products->packaging_id == auth()->user()->id)
+                        <td class="px-6 py-4 border">
+                            <div>
+                                <button onclick="showEditProduct({{ $products->id }}, '{{ $products->name }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-4">
+                                    Edit
+                                </button>
+                                <form action="{{ route('dashboard.product.deleteProduct', $products->id) }}" method="POST" style="display:inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                <button type="submit" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
+                                    Delete
+                                </button>
+                                <a href="{{ route('packaging.index', ['product_id' => $products->id]) }}" 
+                                class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
+                                    View Product
+                                </a>
+                                </form>
+                            </div>
+                        </td>
+                        @endif
                     </tr>
                 @endforeach
             </tbody>
         </table>
         
-        <!-- Modal Window for Product Table -->
         <div id="productModal" class="modal fixed inset-0 flex items-center justify-center hidden">
             <div class="modal-dialog bg-white rounded-lg shadow-lg w-full max-w-lg">
                 <div class="modal-header flex justify-between items-center p-4 border-b">
@@ -123,28 +163,36 @@
                     <button type="button" onclick="hideProductModal()" class="text-black font-bold text-2xl">&times;</button>
                 </div>
                 <div class="modal-body p-4">
-                    <!-- Product Form -->
                     <form action="{{ route('dashboard.product.storeProduct') }}" method="POST">
                         @csrf
+                        <input type="hidden" name="wholesaler_id" value="{{ auth()->user()->id }}">
+
                         <div class="form-group mb-4">
                             <label for="name" class="block text-gray-700">Product Name:</label>
                             <input type="text" name="name" class="form-control w-full p-2 border border-gray-300 rounded-md" required>
                         </div>
+                        
                         <div class="form-group mb-4">
-                            <label for="honey_ids" class="block text-gray-700">Select Honeys:</label>
-                            <select name="honey_ids[]" class="form-control w-full p-2 border border-gray-300 rounded-md" multiple required>
+                            <label class="block text-gray-700">Available Honey's:</label>
+                            <div class="space-y-2">
                                 @foreach($honeyInfo as $honey)
-                                    <option value="{{ $honey->id }}">{{ $honey->name }}</option>
+                                    @if($honey->is_available)
+                                        <div class="flex items-center gap-2">
+                                            <input type="checkbox" name="honey_ids[]" value="{{ $honey->id }}" id="honey_{{ $honey->id }}" class="form-checkbox text-gray-600">
+                                            <label for="honey_{{ $honey->id }}" class="text-gray-800">{{ $honey->name }}</label>
+                                        </div>
+                                    @endif
                                 @endforeach
-                            </select>
+                            </div>
                         </div>
+
                         <button type="submit" class="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-700">Create Product</button>
                     </form>
                 </div>
             </div>
         </div>
 
-        <!-- Edit Product Modal -->
+
         <div id="editProductModal2" class="fixed inset-0 flex justify-center items-center hidden">
             <div class="bg-white p-6 rounded-lg shadow-lg w-96">
                 <h3 class="text-xl font-semibold mb-4">Edit Product</h3>
@@ -171,8 +219,6 @@
 
     @endif
 
-
-
     @if(auth()->user()->role == 'Beekeeper')
     <div id="addHoneyModal" class="fixed inset-0 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -180,39 +226,8 @@
             <form action="{{ route('dashboard.store') }}" method="POST">
                 @csrf
                 <label class="block mb-2">Product Name:</label>
-                <input type="text" name="name" required class="w-full border p-2 rounded">
-                
-                <label class="block mt-4">Assign Beekeeper:</label>
-                <select name="beekeeper_id" class="w-full border p-2 rounded">
-                    <option value="">None</option>    
-                    @foreach($beekeepers as $beekeeper)
-                        <option value="{{ $beekeeper->id }}">{{ $beekeeper->name }}</option>
-                    @endforeach
-                </select>
-
-                <label class="block mt-4">Assign Laboratory Employee:</label>
-                <select name="laboratory_id" class="w-full border p-2 rounded">
-                    <option value="">None</option>    
-                    @foreach($laboratoryEmployees as $employee)
-                        <option value="{{ $employee->id }}">{{ $employee->name }}</option>
-                    @endforeach
-                </select>
-
-                <label class="block mt-4">Assign Wholesaler:</label>
-                <select name="wholesaler_id" class="w-full border p-2 rounded">
-                    <option value="">None</option>
-                    @foreach($wholesalers as $wholesaler)
-                        <option value="{{ $wholesaler->id }}">{{ $wholesaler->name }}</option>
-                    @endforeach
-                </select>
-
-                <label class="block mt-4">Assign Packaging Company:</label>
-                <select name="packaging_id" class="w-full border p-2 rounded">
-                    <option value="">None</option>    
-                    @foreach($packagingCompanies as $company)
-                        <option value="{{ $company->id }}">{{ $company->name }}</option>
-                    @endforeach
-                </select>
+                <input type="text" name="name" required class="w-full border p-2 rounded">    
+                <input type="hidden" name="beekeeper_id" value="{{ auth()->user()->id }}">
 
                 <div class="mt-4 flex justify-between">
                     <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded">Save</button>
