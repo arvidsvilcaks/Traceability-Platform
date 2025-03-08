@@ -8,16 +8,23 @@ use App\Models\Processes;
 use App\Models\Markets;
 use App\Models\User;
 use App\Models\Products;
-use App\Models\Traceability;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Traceability;
 
 class WholesalerController extends Controller
 {
     public function index($product_id)
     {
+        $user = Auth::user();
+
         //$traceabilityWholesaler = Traceability::where('product_id', $product_id)->get();
-        $processesWholesaler = Processes::where('product_id', $product_id)->get();
-        $qualityWholesaler = Quality::where('product_id', $product_id)->get();
+        $processesWholesaler = Processes::where('product_id', $product_id)
+        ->where('user_id', $user->id)
+        ->get();
+        $qualityWholesaler = Quality::where('product_id', $product_id)
+        ->where('user_id', $user->id)
+        ->get();
         $market = Markets::where('product_id', $product_id)->get();
         $honeyInfo = Products::where('id', $product_id)->latest()->first();
         $packaging = User::where('role', 'Packaging company')->get();

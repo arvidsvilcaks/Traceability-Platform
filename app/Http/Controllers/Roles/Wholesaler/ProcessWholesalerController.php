@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Processes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProcessWholesalerController extends Controller
 {
@@ -26,7 +27,8 @@ class ProcessWholesalerController extends Controller
             'process' => $request->process,
             'description' => $request->description,
             'add_visual_materials' => $filePath,
-            'product_id' => $product_id
+            'product_id' => $product_id,
+            'user_id' => Auth::id(),
         ]);
 
         return redirect()->route('wholesaler.index', ['product_id' => $product_id])->with('success', 'Process info added successfully.');

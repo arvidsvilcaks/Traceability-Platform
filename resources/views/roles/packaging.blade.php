@@ -94,7 +94,7 @@
       </div>
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
         <tr>
-          <th class="px-6 py-3 border">Metric</th>
+          <th class="px-6 py-3 border">Quality Assessment (Metric)</th>
           <th class="px-6 py-3 border">Value</th>
           <th class="px-6 py-3 border">Actions</th>
         </tr>
@@ -169,28 +169,32 @@
         <button onclick="showModalPackages('addModalPackages')" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">Add new row</button>
       </div>
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-        <tr>
-          <th class="px-6 py-3 border">Quantity</th>
-          <th class="px-6 py-3 border">Type</th>
-          <th class="px-6 py-3 border">Actions</th>
-        </tr>
+          <tr>
+              <th class="px-6 py-3 border">Quantity</th>
+              <th class="px-6 py-3 border">Package Weight</th>
+              <th class="px-6 py-3 border">Type</th>
+              <th class="px-6 py-3 border">Market</th>
+              <th class="px-6 py-3 border">Actions</th>
+          </tr>
       </thead>
       <tbody>
-      @foreach($packages as $packages)
-        <tr>
-          <td class="px-6 py-4 border">{{ $packages->quantity }}</td>
-          <td class="px-6 py-4 border">{{ $packages->type }}</td>
-          <td class="px-6 py-4 border">
-            <button onclick="editModalPackages({{ json_encode($packages) }})" class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full">Edit</button>
-            
-            <form action="{{ route('packages.destroyPackage', $packages->id) }}" method="POST" style="display:inline;">
-              @csrf
-              @method('DELETE')
-              <button class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full">Delete</button>
-            </form>
-            </td>
-        </tr>
-        @endforeach
+          @foreach($packages as $package)
+          <tr>
+              <td class="px-6 py-4 border">{{ $package->quantity }}</td>
+              <td class="px-6 py-4 border">{{ $package->package_weight }} kg</td>
+              <td class="px-6 py-4 border">{{ $package->type }}</td>
+              <td class="px-6 py-4 border">{{ $package->market ? $package->market->name : 'N/A' }}</td>
+              <td class="px-6 py-4 border">
+                  <button onclick="editModalPackages({{ json_encode($package) }})" class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full">Edit</button>
+                  
+                  <form action="{{ route('packages.destroyPackage', $package->id) }}" method="POST" style="display:inline;">
+                      @csrf
+                      @method('DELETE')
+                      <button class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full">Delete</button>
+                  </form>
+              </td>
+          </tr>
+          @endforeach
       </tbody>
     </table>
   </div>
@@ -207,7 +211,15 @@
               <div class="flex flex-col space-y-2">
                   <input type="number" name="quantity" id="add_quantity" placeholder="Quantity" required class="border p-2 rounded">
                   <input type="text" name="type" id="add_type" placeholder="Type" required class="border p-2 rounded">
-                  
+                  <input type="number" name="package_weight" id="add_package_weight" placeholder="Package Weight (kg)" required class="border p-2 rounded">
+
+                  <select name="market_id" id="add_market_id" class="border p-2 rounded">
+                      <option value="">Select Market</option>
+                      @foreach($markets as $market)
+                          <option value="{{ $market->id }}">{{ $market->name }}</option>
+                      @endforeach
+                  </select>
+
                   <div class="flex justify-between mt-4">
                       <button type="submit" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-full">Save</button>
                       <button type="button" onclick="closeModalPackages('addModalPackages')" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-full">Cancel</button>
@@ -226,9 +238,17 @@
               <input type="hidden" id="edit_packagesId" name="id">
 
               <div class="flex flex-col space-y-2">
-                  <input type="number" name="quantity" id="add_quantity" placeholder="Quantity" required class="border p-2 rounded">
-                  <input type="text" name="type" id="add_type" placeholder="Type" required class="border p-2 rounded">
-        
+                  <input type="number" name="quantity" id="edit_quantity" placeholder="Quantity" required class="border p-2 rounded">
+                  <input type="text" name="type" id="edit_type" placeholder="Type" required class="border p-2 rounded">
+                  <input type="number" name="package_weight" id="edit_package_weight" placeholder="Package Weight (kg)" required class="border p-2 rounded">
+
+                  <select name="market_id" id="edit_market_id" class="border p-2 rounded">
+                      <option value="">Select Market</option>
+                      @foreach($markets as $market)
+                          <option value="{{ $market->id }}">{{ $market->name }}</option>
+                      @endforeach
+                  </select>
+
                   <div class="flex justify-between mt-4">
                       <button type="submit" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-full">Save</button>
                       <button type="button" onclick="closeModalPackages('editModalPackages')" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-full">Cancel</button>
@@ -289,15 +309,18 @@
     }
 
     function editModalPackages($packages) {
-        document.getElementById('edit_packagesId').value = $packages.id;
-        document.getElementById('add_quantity').value = $packages.quantity;
-        document.getElementById('add_type').value = $packages.type;
+      document.getElementById('edit_packagesId').value = $packages.id;
+      document.getElementById('edit_quantity').value = $packages.quantity;
+      document.getElementById('edit_package_weight').value = $packages.package_weight;
+      document.getElementById('edit_type').value = $packages.type;
+      document.getElementById('edit_market_id').value = $packages.market_id || '';
 
-        let form = document.getElementById('editPackagesForm');
-        form.action = form.action.replace(':id', $packages.id);
+      let form = document.getElementById('editPackagesForm');
+      form.action = form.action.replace(':id', $packages.id);
 
-        showModalProcess('editModalPackages');
-    }
+      showModalPackages('editModalPackages');
+  }
+
 
   </script>
 </x-app-layout>

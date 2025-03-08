@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Roles\Wholesaler;
 use App\Http\Controllers\Controller;
 use App\Models\Quality;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class QualityWholesalerController extends Controller
 {
@@ -20,6 +21,7 @@ class QualityWholesalerController extends Controller
             'metric' => $request->metric,
             'value' => $request->value,
             'product_id' => $product_id,
+            'user_id' => Auth::id(),
         ]);
 
         return redirect()->route('wholesaler.index', ['product_id' => $product_id])->with('success', 'Quality info added successfully.');

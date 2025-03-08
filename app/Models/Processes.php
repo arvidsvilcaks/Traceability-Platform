@@ -16,5 +16,10 @@ class Processes extends Model
         'description',
         'add_visual_materials',
         'product_id',
+        'user_id',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -15,5 +15,10 @@ class Quality extends Model
         'metric',
         'value',
         'product_id',
+        'user_id',
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
