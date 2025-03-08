@@ -26,10 +26,4 @@ class Traceability extends Model
         'addressWholesaler',
         'addressPackaging',
     ];
-
-    protected $spatialFields = [
-        'locationLaboratory',
-        'locationWholesaler',
-        'locationPackaging'
-    ];
 }
