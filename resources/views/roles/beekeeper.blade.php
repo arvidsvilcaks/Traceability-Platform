@@ -272,32 +272,74 @@
 
 
     <div class="overflow-x-auto shadow-md sm:rounded-lg w-full mb-6 mt-6">
-        <h1 class="flex justify-center text-lg font-semibold mb-4 mt-6">Honey tracing (buyer, location of product, packaging company who handles honey, honey blending)</h1>
-        <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200 mb-6">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+    <h1 class="flex justify-center text-lg font-semibold mb-4 mt-6">
+        Honey Tracing (Buyer, Location of Product, Packaging Company, Honey Blending)
+    </h1>
+
+    <!-- Traceability Laboratory Table -->
+    <h2 class="flex justify-center text-md font-semibold mb-4">Traceability Laboratory</h2>
+    <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200 mb-6">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 border">Date Collected</th>
+                <th class="px-6 py-3 border">Location</th>
+                <th class="px-6 py-3 border">Stage</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($traceability as $trace)
                 <tr>
-                    <th class="px-6 py-3 border">Date Collected (Laboratory Company)</th>
-                    <th class="px-6 py-3 border">Address (Laboratory Company)</th>
-                    <th class="px-6 py-3 border">Date Collected (Wholesaler Company)</th>
-                    <th class="px-6 py-3 border">Address (Wholesaler Company)</th>
-                    <th class="px-6 py-3 border">Date Collected (Packaging Company)</th>
-                    <th class="px-6 py-3 border">Address (Packaging Company)</th>
-                </tr>
-            </thead>    
-            <tbody>
-            @foreach($traceability as $traceability)
-                <tr>
-                    <td class="px-6 py-4 border">{{ $traceability->dateLaboratory }}</td>
-                    <td class="px-6 py-4 border">{{ $traceability->addressLaboratory }}</td>
-                    <td class="px-6 py-4 border">{{ $traceability->dateWholesaler }}</td>
-                    <td class="px-6 py-4 border">{{ $traceability->addressWholesaler }}</td>
-                    <td class="px-6 py-4 border">{{ $traceability->datePackaging }}</td>
-                    <td class="px-6 py-4 border">{{ $traceability->addressPackaging }}</td>
+                    <td class="px-6 py-4 border">{{ $trace->dateLaboratory }}</td>
+                    <td class="px-6 py-4 border">{{ $trace->addressLaboratory }}</td>
+                    <td class="px-6 py-4 border">Laboratory</td>
                 </tr>
             @endforeach
-            </tbody>
-        </table>
+        </tbody>
+    </table>
+
+    <!-- Traceability Wholesaler Table -->
+    <h2 class="flex justify-center text-md font-semibold mb-4">Traceability Wholesaler</h2>
+    <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200 mb-6">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 border">Date Collected</th>
+                <th class="px-6 py-3 border">Location</th>
+                <th class="px-6 py-3 border">Stage</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($traceability as $trace)
+                <tr>
+                    <td class="px-6 py-4 border">{{ $trace->dateWholesaler }}</td>
+                    <td class="px-6 py-4 border">{{ $trace->addressWholesaler }}</td>
+                    <td class="px-6 py-4 border">Wholesaler</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    <!-- Traceability Packaging Table -->
+    <h2 class="flex justify-center text-md font-semibold mb-4">Traceability Packaging</h2>
+    <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200 mb-6">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 border">Date Collected</th>
+                <th class="px-6 py-3 border">Location</th>
+                <th class="px-6 py-3 border">Stage</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($traceability as $trace)
+                <tr>
+                    <td class="px-6 py-4 border">{{ $trace->datePackaging }}</td>
+                    <td class="px-6 py-4 border">{{ $trace->addressPackaging }}</td>
+                    <td class="px-6 py-4 border">Packaging</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
     </div>
+
 
     <!-- ------------------------------------------------------------------------------------------------------------- -->
     <div class="flex justify-center mb-4">
@@ -306,7 +348,7 @@
         </button>
     </div>
     <div class="flex justify-center mb-4">
-        <p><strong>Laboratory Employee:</strong> {{ $honeyInfo->laboratoryEmployee->name ?? 'None' }}</p>
+        <p><strong>Laboratory:</strong> {{ $honeyInfo->laboratoryEmployee->company ?? 'None' }}</p>
     </div>
 
     <div class="flex justify-center mb-4">
@@ -316,22 +358,22 @@
     </div>
 
     <div class="flex justify-center mb-4">
-        <p><strong>Wholesaler:</strong> {{ $honeyInfo->wholesaler->name ?? 'None' }}</p>
+        <p><strong>Wholesaler:</strong> {{ $honeyInfo->wholesaler->company ?? 'None' }}</p>
     </div>
 
     <div id="assignLaboratoryModal" class="fixed inset-0 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 class="text-xl font-bold mb-4">Add New Product</h2>
+            <h2 class="text-xl font-bold mb-4">Assign Laboratory Company</h2>
             <form action="{{ route('beekeeper.update') }}" method="POST">
                 @csrf
                 <input type="hidden" name="honey_id" value="{{ $honeyInfo->id }}">
 
-                <label class="block mt-4">Assign Laboratory Employee:</label>
+                <label class="block mt-4">Assign Laboratory Company</label>
                 <select name="laboratory_id" id="laboratorySelect" class="w-full border p-2 rounded">
                     <option value="">None</option>    
                     @foreach($laboratoryEmployees as $employee)
                         <option value="{{ $employee->id }}" {{ $honeyInfo->laboratory_id == $employee->id ? 'selected' : '' }}>
-                            {{ $employee->name }}
+                            {{ $employee->company }}
                         </option>
                     @endforeach
                 </select>
@@ -346,17 +388,17 @@
 
     <div id="assignWholesalerModal" class="fixed inset-0 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 class="text-xl font-bold mb-4">Add New Product</h2>
+            <h2 class="text-xl font-bold mb-4">Assign Wholesaler Company</h2>
             <form action="{{ route('beekeeper.update') }}" method="POST">
                 @csrf
                 <input type="hidden" name="honey_id" value="{{ $honeyInfo->id }}">
 
-                <label class="block mt-4">Assign Wholesaler:</label>
+                <label class="block mt-4">Assign Wholesaler Company</label>
                 <select name="wholesaler_id" id="wholesalerSelect" class="w-full border p-2 rounded">
                     <option value="">None</option>
                     @foreach($wholesalers as $wholesaler)
                         <option value="{{ $wholesaler->id }}" {{ $honeyInfo->wholesaler_id == $wholesaler->id ? 'selected' : '' }}>
-                            {{ $wholesaler->name }}
+                            {{ $wholesaler->company }}
                         </option>
                     @endforeach
                 </select>

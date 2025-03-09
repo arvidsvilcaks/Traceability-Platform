@@ -62,7 +62,7 @@
                                 View Lab Data
                             </a>
                         @elseif(auth()->user()->role == 'Wholesaler' && $honey->wholesaler_id == auth()->user()->id)
-                            <p>{{ $honey->beekeeper->name ?? 'Unknown' }}</p>
+                            <p>{{ $honey->beekeeper->company ?? 'Unknown' }}</p>
                         @endif
                     </td>
                     <td>

@@ -268,22 +268,22 @@
   </div>
 
   <div class="flex justify-center mb-4">
-    <p><strong>Packaging:</strong> {{ $honeyInfo->packaging->name ?? 'None' }}</p>
+    <p><strong>Packaging:</strong> {{ $honeyInfo->packaging->company ?? 'None' }}</p>
   </div>
 
   <div id="assignPackagingModal" class="fixed inset-0 flex items-center justify-center hidden">
       <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-          <h2 class="text-xl font-bold mb-4">Add New Product</h2>
+          <h2 class="text-xl font-bold mb-4">Assign Packaging Company</h2>
           <form action="{{ route('wholesaler.update') }}" method="POST">
               @csrf
               <input type="hidden" name="product_id" value="{{ $honeyInfo->id }}">
 
-              <label class="block mt-4">Assign Packaging company:</label>
+              <label class="block mt-4">Assign Packaging Company</label>
               <select name="packaging_id" id="packagingSelect" class="w-full border p-2 rounded">
                   <option value="">None</option>
                   @foreach($packaging as $packaging)
                       <option value="{{ $packaging->id }}" {{ $honeyInfo->packaging_id == $packaging->id ? 'selected' : '' }}>
-                          {{ $packaging->name }}
+                          {{ $packaging->company }}
                       </option>
                   @endforeach
               </select>
