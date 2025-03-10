@@ -112,17 +112,21 @@ Route::middleware(['auth', 'verified', 'enabled'])->group(function () {
     Route::put('/packaging/updateProductPackages/{id}', [PackagingController::class, 'updatePackage'])->name('packages.updatePackage');
     Route::delete('/packaging/destroyProductPackages/{id}', [PackagingController::class, 'destroyPackage'])->name('packages.destroyPackage');
 
-    Route::post('/laboratory/storeLaboratoryTrace/{product_id}', [TraceabilityController::class, 'storeLaboratoryTrace'])->name('traceabilityLaboratory.storeLaboratoryTrace');
-    Route::put('/laboratory/updateLaboratoryTrace/{id}', [TraceabilityController::class, 'updateLaboratoryTrace'])->name('traceabilityLaboratory.updateLaboratoryTrace');
-    Route::delete('/laboratory/removeLaboratoryTrace/{id}', [TraceabilityController::class, 'removeLaboratoryTrace'])->name('traceabilityLaboratory.removeLaboratoryTrace');
+    Route::post('/traceability/{honey_id}', [BeekeeperController::class, 'storeTraceability'])->name('traceability.storeTraceability');
+    Route::put('/traceability/{id}', [BeekeeperController::class, 'updateTraceability'])->name('traceability.updateTraceability');
+    Route::delete('/traceability/{id}', [BeekeeperController::class, 'destroyTraceability'])->name('traceability.destroyTraceability');
 
-    Route::post('/wholesaler/storeWholesalerTrace/{product_id}', [TraceabilityController::class, 'storeWholesalerTrace'])->name('traceabilityWholesaler.storeWholesalerTrace');
-    Route::put('/wholesaler/updateWholesalerTrace/{id}', [TraceabilityController::class, 'updateWholesalerTrace'])->name('traceabilityWholesaler.updateWholesalerTrace');
-    Route::delete('/wholesaler/removeWholesalerTrace/{id}', [TraceabilityController::class, 'removeWholesalerTrace'])->name('traceabilityWholesaler.removeWholesalerTrace');
+    // Route::post('/laboratory/storeLaboratoryTrace/{product_id}', [TraceabilityController::class, 'storeLaboratoryTrace'])->name('traceabilityLaboratory.storeLaboratoryTrace');
+    // Route::put('/laboratory/updateLaboratoryTrace/{id}', [TraceabilityController::class, 'updateLaboratoryTrace'])->name('traceabilityLaboratory.updateLaboratoryTrace');
+    // Route::delete('/laboratory/removeLaboratoryTrace/{id}', [TraceabilityController::class, 'removeLaboratoryTrace'])->name('traceabilityLaboratory.removeLaboratoryTrace');
 
-    Route::post('/packaging/storePackagingTrace/{product_id}', [TraceabilityController::class, 'storePackagingTrace'])->name('traceabilityPackaging.storePackagingTrace');
-    Route::put('/packaging/updatePackagingTrace/{id}', [TraceabilityController::class, 'updatePackagingTrace'])->name('traceabilityPackaging.updatePackagingTrace');
-    Route::delete('/packaging/removePackagingTrace/{id}', [TraceabilityController::class, 'removePackagingTrace'])->name('traceabilityPackaging.removePackagingTrace');
+    // Route::post('/wholesaler/storeWholesalerTrace/{product_id}', [TraceabilityController::class, 'storeWholesalerTrace'])->name('traceabilityWholesaler.storeWholesalerTrace');
+    // Route::put('/wholesaler/updateWholesalerTrace/{id}', [TraceabilityController::class, 'updateWholesalerTrace'])->name('traceabilityWholesaler.updateWholesalerTrace');
+    // Route::delete('/wholesaler/removeWholesalerTrace/{id}', [TraceabilityController::class, 'removeWholesalerTrace'])->name('traceabilityWholesaler.removeWholesalerTrace');
+
+    // Route::post('/packaging/storePackagingTrace/{product_id}', [TraceabilityController::class, 'storePackagingTrace'])->name('traceabilityPackaging.storePackagingTrace');
+    // Route::put('/packaging/updatePackagingTrace/{id}', [TraceabilityController::class, 'updatePackagingTrace'])->name('traceabilityPackaging.updatePackagingTrace');
+    // Route::delete('/packaging/removePackagingTrace/{id}', [TraceabilityController::class, 'removePackagingTrace'])->name('traceabilityPackaging.removePackagingTrace');
 });
 
 Route::middleware('auth')->group(function () {

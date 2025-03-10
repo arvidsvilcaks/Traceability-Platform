@@ -17,8 +17,8 @@ class BeekeeperController extends Controller
         $honeyInfo = Honey::where('id', $honey_id)->first();
         $beekeepingDocuments = BeekeepingDocuments::where('honey_id', $honey_id)->get();
         $apiary = Apiary::where('honey_id', $honey_id)->get();
-        $traceability = Traceability::where('honey_id', $honey_id)->get();
-
+        //$traceability = Traceability::where('honey_id', $honey_id)->get();
+        $traceability = Traceability::all();
         $user = auth()->user();
     
         $laboratoryEmployees = User::where('role', 'Laboratory employee')->get();
@@ -63,5 +63,41 @@ class BeekeeperController extends Controller
     
         return redirect()->back()->with('success', 'Product info updated successfully');
     }
+    // Store new traceability record
+    public function storeTraceability(Request $request)
+    {
+        $request->validate([
+            'address' => 'required|string|max:255',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'stage' => 'required|in:laboratory,wholesaler,packaging'
+        ]);
+
+        Traceability::create($request->all());
+
+        return redirect()->back()->with('success', 'Traceability record added successfully.');
+    }
     
+    // Update traceability record
+    public function updateTraceability(Request $request, $id)
+    {
+        $request->validate([
+            'address' => 'required|string|max:255',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'stage' => 'required|in:laboratory,wholesaler,packaging'
+        ]);
+
+        $traceability = Traceability::findOrFail($id);
+        $traceability->update($request->all());
+
+        return redirect()->back()->with('success', 'Traceability record updated successfully.');
+    }
+    
+    // Delete traceability record
+    public function destroyTraceability($id)
+    {
+        Traceability::findOrFail($id)->delete();
+        return redirect()->back()->with('success', 'Traceability record deleted successfully.');
+    }
 }

@@ -17,7 +17,6 @@
         <h1 class="text-center">Laravel Google Maps</h1>
         <div id="map"></div>
 
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBoCstylgREVj_Kd4Ji08ah5Vp8YlkBe8s&callback=initMap" async></script>
         <script>
             let map, activeInfoWindow, markers = [];
 

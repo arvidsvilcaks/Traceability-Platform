@@ -273,8 +273,79 @@
 
     <div class="overflow-x-auto shadow-md sm:rounded-lg w-full mb-6 mt-6">
     <h1 class="flex justify-center text-lg font-semibold mb-4 mt-6">
-        Honey Tracing (Buyer, Location of Product, Packaging Company, Honey Blending)
+        Honey Tracing
     </h1>
+
+    <!-- Button to Open Modal -->
+    <div class="flex justify-center">
+        <button class="bg-gray-500 text-white px-4 py-2 rounded-full mb-4" onclick="showModalTraceability()">
+            Add New Record
+        </button>
+    </div>
+
+    <!-- Traceability Table -->
+    <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200 mb-6">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 border">Date Collected</th>
+                <th class="px-6 py-3 border">Address</th>
+                <th class="px-6 py-3 border">Stage</th>
+                <th class="px-6 py-3 border">Location on Map</th> <!-- New column for map -->
+                <th class="px-6 py-3 border">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($traceability as $trace)
+                <tr>
+                    <td class="px-6 py-4 border">{{ $trace->created_at }}</td>
+                    <td class="px-6 py-4 border">{{ $trace->address }}</td>
+                    <td class="px-6 py-4 border">{{ ucfirst($trace->stage) }}</td>
+
+                    <td class="px-6 py-4 border">
+                        <div id="map-{{ $trace->id }}" class="w-full h-32 mb-4"></div>
+                    </td>
+
+                    <td class="px-6 py-4 border">
+                        <button class="bg-gray-500 text-white px-3 py-1 rounded-full mb-4" onclick="showModalTraceability({{ $trace->id }})">
+                            Edit
+                        </button>
+                        <form action="{{ route('traceability.destroyTraceability', $trace->id) }}" method="POST" class="inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="bg-gray-500 text-white px-3 py-1 rounded-full">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div id="addModalTraceability" class="fixed inset-0 flex items-center justify-center hidden ">
+    <div class="bg-white p-6 rounded-lg w-1/3">
+        <h2 class="text-lg font-semibold mb-4">Add Traceability Record</h2>
+        <form action="{{ route('traceability.storeTraceability', ['honey_id' => $honeyInfo->id]) }}" method="POST">
+            @csrf
+            <label>Address:</label>
+            <input type="text" id="address" name="address" class="border p-2 w-full mb-4" oninput="geocodeAddress()">
+            <div id="map" class="w-full h-64 mb-4" style="height: 300px;"></div> <!-- Adjust the height if necessary -->
+            <label>Stage:</label>
+            <select name="stage" class="border p-2 w-full mb-4">
+                <option value="laboratory">Laboratory</option>
+                <option value="wholesaler">Wholesaler</option>
+                <option value="packaging">Packaging</option>
+            </select>
+            <input type="hidden" name="latitude" id="latitude">
+            <input type="hidden" name="longitude" id="longitude">
+            <button type="submit" class="bg-gray-500 text-white px-4 py-2 rounded-full">Save</button>
+            <button type="button" onclick="closeModalTraceability()" class="bg-gray-500 text-white px-4 py-2 rounded-full">Cancel</button>
+        </form>
+    </div>
+    </div>
 
     <!-- Traceability Laboratory Table -->
     <h2 class="flex justify-center text-md font-semibold mb-4">Traceability Laboratory</h2>
@@ -512,6 +583,49 @@
         }
         document.addEventListener('DOMContentLoaded', setupModalEventListeners);
         
-    </script>
-    
+
+        // -----------------------------------------------------------------------------------------------------------------
+        let map, marker, geocoder;
+
+        function initMap() {
+            geocoder = new google.maps.Geocoder();
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 37.7749, lng: -122.4194 },
+                zoom: 12,
+                mapId: '37823448a8c4cd11'
+            });
+
+            marker = new google.maps.marker.AdvancedMarkerElement({
+                map: map,
+                position: { lat: 37.7749, lng: -122.4194 }
+            });
+        }
+
+
+        function geocodeAddress() {
+            let address = document.getElementById('address').value;
+            if (!address) return;
+
+            geocoder.geocode({ address: address }, function (results, status) {
+                if (status === 'OK') {
+                    let location = results[0].geometry.location;
+                    map.setCenter(location);
+                    marker.position = location;
+                    document.getElementById('latitude').value = location.lat();
+                    document.getElementById('longitude').value = location.lng();
+                } else {
+                    console.error('Geocoding failed:', status);
+                }
+            });
+        }
+
+        function showModalTraceability() {
+            document.getElementById('addModalTraceability').classList.remove('hidden');
+        }
+
+        function closeModalTraceability() {
+            document.getElementById('addModalTraceability').classList.add('hidden');
+        }
+        </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBoCstylgREVj_Kd4Ji08ah5Vp8YlkBe8s&libraries=places,marker&callback=initMap" async defer></script>
 </x-app-layout>
