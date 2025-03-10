@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('packages', function (Blueprint $table) {
             $table->unsignedBigInteger('market_id')->nullable()->after('id');
-
         });
     }
 
