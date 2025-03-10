@@ -24,11 +24,18 @@ class Traceability extends Model
         return $this->belongsTo(Honey::class, 'honey_id');
     }
 
-    // Static function to fetch all records
-    public static function getAll()
+    // Static function to fetch all records, optionally filtering by honey_id
+    public static function getAll($honey_id = null)
     {
-        return self::all();
+        $query = self::query();
+
+        if ($honey_id !== null) {
+            $query->where('honey_id', $honey_id);
+        }
+
+        return $query->get();
     }
+
 
     // Static function to create a new traceability record
     public static function createTraceability($data)

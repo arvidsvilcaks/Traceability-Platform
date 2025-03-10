@@ -17,8 +17,7 @@ class BeekeeperController extends Controller
         $honeyInfo = Honey::where('id', $honey_id)->first();
         $beekeepingDocuments = BeekeepingDocuments::where('honey_id', $honey_id)->get();
         $apiary = Apiary::where('honey_id', $honey_id)->get();
-        //$traceability = Traceability::where('honey_id', $honey_id)->get();
-        $traceability = Traceability::all();
+        $traceability = Traceability::getAll($honey_id);
         $user = auth()->user();
     
         $laboratoryEmployees = User::where('role', 'Laboratory employee')->get();

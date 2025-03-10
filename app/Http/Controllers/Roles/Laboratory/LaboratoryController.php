@@ -11,8 +11,8 @@ class LaboratoryController extends Controller
     public function index($honey_id)
     {
         $honeyInfo = Honey::where('id', $honey_id)->latest()->first();
-        $traceabilityLaboratory = Traceability::where('honey_id', $honey_id)->get();
+        $traceability = Traceability::getAll($honey_id);
 
-        return view('roles.laboratory', compact('honeyInfo', 'traceabilityLaboratory'));
+        return view('roles.laboratory', compact('honeyInfo', 'traceability'));
     }
 }
