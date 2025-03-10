@@ -27,7 +27,6 @@ return new class extends Migration
             $table->decimal('latitudePackaging', 9, 6)->nullable();
             $table->decimal('longitudePackaging', 9, 6)->nullable();
 
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->timestamps();
         });
     }

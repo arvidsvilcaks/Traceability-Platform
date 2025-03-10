@@ -15,8 +15,6 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('honey_id')->nullable();
             $table->unsignedBigInteger('product_id')->nullable();
-            $table->foreign('honey_id')->references('id')->on('honey')->onDelete('cascade');
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->timestamps();
         });
     }
