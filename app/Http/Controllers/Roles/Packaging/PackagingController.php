@@ -27,9 +27,9 @@ class PackagingController extends Controller
         ->get();        
         $honeyInfo = Products::where('id', $product_id)->latest()->first();
         $packages = Packages::where('product_id', $product_id)->get();
-        $markets = Markets::where('product_id', $product_id)->get(); // Fetch available markets
+        $markets = Markets::where('product_id', $product_id)->get();
 
-        return view('roles.Packaging', data: compact('processesPackaging', 'qualityPackaging', 'honeyInfo', 'packages', 'markets'));
+        return view('roles.packaging', data: compact('processesPackaging', 'qualityPackaging', 'honeyInfo', 'packages', 'markets'));
     }
     public function storePackage(Request $request, $product_id)
     {

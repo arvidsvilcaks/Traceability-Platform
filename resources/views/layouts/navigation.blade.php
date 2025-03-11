@@ -5,9 +5,11 @@
             <div class="flex items-center space-x-10">
                 <!-- Navigation Links -->
                 <div class="hidden sm:flex space-x-8">
-                <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    @if(auth()->user()->role != 'Beekeeping association' && auth()->user()->role != 'Administrator')
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    @endif
                     @if(Auth::check())
                         <!-- Show Beekeeping Association link only if the user is a Beekeeping Association -->
                         @if(Auth::user()->role === 'Beekeeping association')

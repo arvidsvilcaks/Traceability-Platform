@@ -29,7 +29,7 @@ class WholesalerController extends Controller
         $honeyInfo = Products::where('id', $product_id)->latest()->first();
         $packaging = User::where('role', 'Packaging company')->get();
 
-        return view('roles.Wholesaler', data: compact('processesWholesaler', 'qualityWholesaler', 'market', 'honeyInfo', 'packaging'));
+        return view('roles.wholesaler', data: compact('processesWholesaler', 'qualityWholesaler', 'market', 'honeyInfo', 'packaging'));
     }
     public function update(Request $request)
     {

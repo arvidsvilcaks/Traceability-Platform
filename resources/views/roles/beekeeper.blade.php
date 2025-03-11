@@ -212,7 +212,7 @@
         </div>
     </div>
 
-    <div class="flex flex-wrap justify-between gap-6 mt-6">
+    <div class="flex justify-between gap-6 mt-6">
         <div class="overflow-x-auto shadow-md sm:rounded-lg w-full md:w-1/2">
             <h1 class="flex justify-center text-lg font-semibold mb-4 mt-6">
                 Results of honey analysis
