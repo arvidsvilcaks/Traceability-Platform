@@ -18,7 +18,7 @@ class WholesalerController extends Controller
     {
         $user = Auth::user();
 
-        //$traceabilityWholesaler = Traceability::where('product_id', $product_id)->get();
+        $traceability = Traceability::getAll_2($product_id);
         $processesWholesaler = Processes::where('product_id', $product_id)
         ->where('user_id', $user->id)
         ->get();
@@ -29,7 +29,43 @@ class WholesalerController extends Controller
         $honeyInfo = Products::where('id', $product_id)->latest()->first();
         $packaging = User::where('role', 'Packaging company')->get();
 
-        return view('roles.wholesaler', data: compact('processesWholesaler', 'qualityWholesaler', 'market', 'honeyInfo', 'packaging'));
+        return view('roles.wholesaler', data: compact('processesWholesaler', 'qualityWholesaler', 'market', 'honeyInfo', 'packaging', 'traceability'));
+    }
+    // Store new traceability record
+    public function storeTraceabilityProduct(Request $request)
+    {
+        $request->validate([
+            'address' => 'required|string|max:255',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'stage' => 'required|in:beekeeper,laboratory,wholesaler,packaging'
+        ]);
+
+        Traceability::create($request->all());
+
+        return redirect()->back()->with('success', 'Traceability record added successfully.');
+    }
+    // Update traceability record
+    public function updateTraceabilityProduct(Request $request, $id)
+    {
+        $request->validate([
+            'address' => 'required|string|max:255',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'stage' => 'required|in:beekeeper,laboratory,wholesaler,packaging'
+        ]);
+
+        $traceability = Traceability::findOrFail($id);
+        $traceability->update($request->all());
+
+        return redirect()->back()->with('success', 'Traceability record updated successfully.');
+    }
+    
+    // Delete traceability record
+    public function destroyTraceabilityProduct($id)
+    {
+        Traceability::findOrFail($id)->delete();
+        return redirect()->back()->with('success', 'Traceability record deleted successfully.');
     }
     public function update(Request $request)
     {

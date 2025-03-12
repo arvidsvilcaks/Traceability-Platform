@@ -17,6 +17,10 @@ class Apiary extends Model
         'floral_composition',
         'specifics_of_environment',
         'add_visual_materials',
-        'honey_id'
+        'beekeeper_id'
     ];
+    public function beekeeper()
+    {
+        return $this->belongsTo(User::class, 'beekeeper_id');
+    }
 }

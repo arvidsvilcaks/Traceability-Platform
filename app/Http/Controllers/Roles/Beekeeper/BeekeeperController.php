@@ -16,7 +16,6 @@ class BeekeeperController extends Controller
     {
         $honeyInfo = Honey::where('id', $honey_id)->first();
         $beekeepingDocuments = BeekeepingDocuments::where('honey_id', $honey_id)->get();
-        $apiary = Apiary::where('honey_id', $honey_id)->get();
         $traceability = Traceability::getAll($honey_id);
         $user = auth()->user();
     
@@ -38,7 +37,7 @@ class BeekeeperController extends Controller
         }
     
         $honey = $query->get();
-        return view('roles.beekeeper', compact('apiary', 'beekeepingDocuments', 'honeyInfo', 'traceability', 'laboratoryEmployees', 'wholesalers', 'honey'));
+        return view('roles.beekeeper', compact( 'beekeepingDocuments', 'honeyInfo', 'traceability', 'laboratoryEmployees', 'wholesalers', 'honey'));
     }
 
     public function update(Request $request)
@@ -69,7 +68,7 @@ class BeekeeperController extends Controller
             'address' => 'required|string|max:255',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
-            'stage' => 'required|in:laboratory,wholesaler,packaging'
+            'stage' => 'required|in:beekeeper,laboratory,wholesaler,packaging'
         ]);
 
         Traceability::create($request->all());
@@ -84,7 +83,7 @@ class BeekeeperController extends Controller
             'address' => 'required|string|max:255',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
-            'stage' => 'required|in:laboratory,wholesaler,packaging'
+            'stage' => 'required|in:beekeeper,laboratory,wholesaler,packaging'
         ]);
 
         $traceability = Traceability::findOrFail($id);

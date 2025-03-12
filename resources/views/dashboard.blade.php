@@ -26,6 +26,7 @@
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
                     <th class="px-6 py-3 border">Name</th>
+                    <th class="px-6 py-3 border">Apiary</th>
                     @if(auth()->user()->role == 'Beekeeper' || auth()->user()->role == 'Laboratory employee')
                         <th class="px-6 py-3 border">Action</th>
                     @elseif(auth()->user()->role == 'Wholesaler')
@@ -38,6 +39,7 @@
             @foreach($honeyInfo as $honey)
                 <tr>
                     <td class="px-6 py-4 border">{{ $honey->name }}</td>
+                    <td class="px-6 py-4 border">{{ $honey->apiary->description ?? 'No Apiary Assigned' }}</td>
                     <td class="px-6 py-4 border">
                         @if(auth()->user()->role == 'Beekeeper' && $honey->beekeeper_id == auth()->user()->id)
                             <a href="{{ route('beekeeper.index', ['honey_id' => $honey->id]) }}" 
@@ -45,7 +47,7 @@
                                 View Beekeeper Data
                             </a>
                             <div class="ml-6">
-                                <button onclick="showEditModal({{ $honey->id }}, '{{ $honey->name }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-4">
+                                <button onclick="showEditModal({{ $honey->id }}, '{{ $honey->name }}', '{{ $honey->apiary_id }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-4">
                                     Edit
                                 </button>
                                 <form action="{{ route('dashboard.delete', $honey->id) }}" method="POST" style="display:inline-block;">
@@ -77,6 +79,176 @@
     </div>
 
     @endif
+
+    @if(auth()->user()->role == 'Beekeeper')
+    <div id="addHoneyModal" class="fixed inset-0 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 class="text-xl font-bold mb-4">Add New Honey</h2>
+            <form action="{{ route('dashboard.store') }}" method="POST">
+                @csrf
+                <label class="block mb-2">Honey Name:</label>
+                <input type="text" name="name" required class="w-full border p-2 rounded">    
+
+                <label class="block mb-2 mt-4">Select Apiary:</label>
+                <select name="apiary_id" required class="w-full border p-2 rounded">
+                    <option value="">Select an Apiary</option>
+                    @foreach($apiaryInfo as $apiary)
+                        <option value="{{ $apiary->id }}">{{ $apiary->description }}</option>
+                    @endforeach
+                </select>
+
+                <input type="hidden" name="beekeeper_id" value="{{ auth()->user()->id }}">
+
+                <div class="mt-4 flex justify-between">
+                    <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded">Save</button>
+                    <button type="button" onclick="hideModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="editProductModal" class="fixed inset-0 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 class="text-xl font-bold mb-4">Edit Honey</h2>
+            <form id="editProductForm" method="POST">
+                @csrf
+                @method('PUT')
+                <input type="hidden" id="editProductId" name="id">
+                
+                <label class="block mb-2">Honey Name:</label>
+                <input type="text" id="editProductName" name="name" required class="w-full border p-2 rounded">
+
+                <label class="block mb-2 mt-4">Select Apiary:</label>
+                <select id="editApiarySelect" name="apiary_id" required class="w-full border p-2 rounded">
+                    <option value="">Select an Apiary</option>
+                    @foreach($apiaryInfo as $apiary)
+                        <option value="{{ $apiary->id }}">{{ $apiary->description }}</option>
+                    @endforeach
+                </select>
+
+                <div class="mt-4 flex justify-between">
+                    <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded">Save</button>
+                    <button type="button" onclick="hideEditModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @endif
+
+    <!-- APIARY LIST -->
+    @if(auth()->user()->role == 'Beekeeper')
+    
+    <div class="container mx-auto mt-6 mb-6">
+        <h1 class="flex justify-center text-lg font-semibold mb-4 mt-4">Apiary List</h1>
+
+            <div class="flex justify-center mb-4">
+                <button onclick="showApiaryModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
+                    Add New Apiary
+                </button>
+            </div>
+
+            <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 border">Description</th>
+                        <th class="px-6 py-3 border">Location</th>
+                        <th class="px-6 py-3 border">Floral Composition</th>
+                        <th class="px-6 py-3 border">Specifics of Environment</th>
+                        <th class="px-6 py-3 border">Visual Materials</th>
+                        @if(auth()->user()->role == 'Beekeeper')
+                            <th class="px-6 py-3 border">Action</th>
+                        @endif
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach($apiaryInfo as $apiary)
+                    <tr>
+                        <td class="px-6 py-4 border">{{ $apiary->description }}</td>
+                        <td class="px-6 py-4 border">{{ $apiary->location }}</td>
+                        <td class="px-6 py-4 border">{{ $apiary->floral_composition }}</td>
+                        <td class="px-6 py-4 border">{{ $apiary->specifics_of_environment }}</td>
+                        <td class="px-6 py-4 border">
+                            @if($apiary->add_visual_materials)
+                                <a href="{{ asset('storage/' . $apiary->add_visual_materials) }}" target="_blank" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">View File</a>
+                            @else
+                                <span class="text-gray-500">No File</span>
+                            @endif
+                        </td>
+                        <td class="px-6 py-4 border">
+                            @if(auth()->user()->role == 'Beekeeper' && $apiary->beekeeper_id == auth()->user()->id)
+                                <button onclick="showEditApiaryModal({{ $apiary->id }}, '{{ $apiary->description }}', '{{ $apiary->location }}', '{{ $apiary->floral_composition }}', '{{ $apiary->specifics_of_environment }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
+                                    Edit
+                                </button>
+                                <form action="{{ route('dashboard.destroyApiary', $apiary->id) }}" method="POST" style="display:inline-block;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
+                                        Delete
+                                    </button>
+                                </form>
+                            @endif
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        <div id="addApiaryModal" class="fixed inset-0 flex items-center justify-center hidden">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+                <h2 class="text-xl font-bold mb-4">Add New Apiary</h2>
+                <form action="{{ route('dashboard.storeApiary') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <label class="block mb-2">Description:</label>
+                    <input type="text" name="description" required class="w-full border p-2 rounded">    
+                    <label class="block mb-2 mt-4">Location:</label>
+                    <input type="text" name="location" required class="w-full border p-2 rounded">
+                    <label class="block mb-2 mt-4">Floral Composition:</label>
+                    <input type="text" name="floral_composition" required class="w-full border p-2 rounded">
+                    <label class="block mb-2 mt-4">Specifics of Environment:</label>
+                    <input type="text" name="specifics_of_environment" required class="w-full border p-2 rounded">
+                    <label class="block mb-2 mt-4">Add Visual Materials (PDF, DOCX):</label>
+                    <input type="file" name="add_visual_materials" class="w-full border p-2 rounded">
+                    <input type="hidden" name="beekeeper_id" value="{{ auth()->user()->id }}">
+
+                    <div class="mt-4 flex justify-between">
+                        <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded">Save</button>
+                        <button type="button" onclick="hideApiaryModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <div id="editApiaryModal" class="fixed inset-0 flex items-center justify-center hidden">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+                <h2 class="text-xl font-bold mb-4">Edit Apiary</h2>
+                <form id="editApiaryForm" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" id="editApiaryId" name="id">
+                    <label class="block mb-2">Description:</label>
+                    <input type="text" id="editApiaryDescription" name="description" required class="w-full border p-2 rounded">
+                    <label class="block mb-2 mt-4">Location:</label>
+                    <input type="text" id="editApiaryLocation" name="location" required class="w-full border p-2 rounded">
+                    <label class="block mb-2 mt-4">Floral Composition:</label>
+                    <input type="text" id="editApiaryFloralComposition" name="floral_composition" required class="w-full border p-2 rounded">
+                    <label class="block mb-2 mt-4">Specifics of Environment:</label>
+                    <input type="text" id="editApiarySpecificsOfEnvironment" name="specifics_of_environment" required class="w-full border p-2 rounded">
+                    <label class="block mb-2 mt-4">Add Visual Materials (PDF, DOCX):</label>
+                    <input type="file" name="add_visual_materials" class="w-full border p-2 rounded">
+
+                    <div class="mt-4 flex justify-between">
+                        <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded">Save</button>
+                        <button type="button" onclick="hideEditApiaryModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    @endif
+
 
     @if(auth()->user()->role == 'Wholesaler' || auth()->user()->role == 'Packaging company')
 
@@ -216,46 +388,34 @@
         </div>
     </div>
     @endif
-
-    @endif
-
-    @if(auth()->user()->role == 'Beekeeper')
-    <div id="addHoneyModal" class="fixed inset-0 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 class="text-xl font-bold mb-4">Add New Product</h2>
-            <form action="{{ route('dashboard.store') }}" method="POST">
-                @csrf
-                <label class="block mb-2">Product Name:</label>
-                <input type="text" name="name" required class="w-full border p-2 rounded">    
-                <input type="hidden" name="beekeeper_id" value="{{ auth()->user()->id }}">
-
-                <div class="mt-4 flex justify-between">
-                    <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded">Save</button>
-                    <button type="button" onclick="hideModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <div id="editProductModal" class="fixed inset-0 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 class="text-xl font-bold mb-4">Edit Product</h2>
-            <form id="editProductForm" method="POST">
-                @csrf
-                @method('PUT')
-                <input type="hidden" id="editProductId" name="id">
-                <label class="block mb-2">Product Name:</label>
-                <input type="text" id="editProductName" name="name" required class="w-full border p-2 rounded">
-                <div class="mt-4 flex justify-between">
-                    <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded">Save</button>
-                    <button type="button" onclick="hideEditModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
     @endif
 
     <script>
+    function showApiaryModal() {
+        document.getElementById('addApiaryModal').classList.remove('hidden');
+    }
+
+    function hideApiaryModal() {
+        document.getElementById('addApiaryModal').classList.add('hidden');
+    }
+
+    function showEditApiaryModal(id, description, location, floral_composition, specifics_of_environment) {
+        document.getElementById('editApiaryId').value = id;
+        document.getElementById('editApiaryDescription').value = description;
+        document.getElementById('editApiaryLocation').value = location;
+        document.getElementById('editApiaryFloralComposition').value = floral_composition;
+        document.getElementById('editApiarySpecificsOfEnvironment').value = specifics_of_environment;
+        document.getElementById('editApiaryForm').action = '/dashboard/updateApiary/' + id;
+
+        document.getElementById('editApiaryModal').classList.remove('hidden');
+    }
+
+    function hideEditApiaryModal() {
+        document.getElementById('editApiaryModal').classList.add('hidden');
+    }
+
+    // --------------------------------------------------------------------------------------------
+
     function showModal() {
         document.getElementById('addHoneyModal').classList.remove('hidden');
     }
@@ -263,11 +423,13 @@
     function hideModal() {
         document.getElementById('addHoneyModal').classList.add('hidden');
     }
-    function showEditModal(id, name) {
-        document.getElementById('editProductModal').classList.remove('hidden');
+    function showEditModal(id, name, apiary_id) {
         document.getElementById('editProductId').value = id;
         document.getElementById('editProductName').value = name;
+        document.getElementById('editApiarySelect').value = apiary_id;
         document.getElementById('editProductForm').action = '/dashboard/update/' + id;
+
+        document.getElementById('editProductModal').classList.remove('hidden');
     }
 
     function hideEditModal() {

@@ -2,8 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Roles\DashboardController;
+use App\Http\Controllers\Roles\TraceabilityController;
 use App\Http\Controllers\Roles\Beekeeper\BeekeeperController;
-use App\Http\Controllers\Roles\Beekeeper\ApiaryController;
 use App\Http\Controllers\Roles\Beekeeper\BeeDocumentController;
 use App\Http\Controllers\Roles\Beekeeper\HoneyController;
 use App\Http\Controllers\Roles\Laboratory\LaboratoryController;
@@ -15,7 +15,6 @@ use App\Http\Controllers\Roles\Wholesaler\MarketController;
 use App\Http\Controllers\Roles\Packaging\PackagingController;
 use App\Http\Controllers\Roles\Packaging\ProcessPackagingController;
 use App\Http\Controllers\Roles\Packaging\QualityPackagingController;
-use App\Http\Controllers\Roles\TraceabilityController;
 use App\Http\Controllers\Roles\UserController;
 use App\Http\Controllers\MapController;
 
@@ -36,6 +35,13 @@ Route::get('/consumerProduct/{product_id}', function () {
     return view('roles.consumerProduct');
 })->name('consumerProduct');
 
+// Route::get('/consumerPackage/{package_id}', function () {
+//     return view('roles.consumerPackage');
+// })->name('consumerPackage');
+
+Route::get('/consumerPackage/{package_id}', [TraceabilityController::class, 'index'])->name('consumerPackage');
+
+
 Route::get('/disabled-account', function () {
     return view('auth.disabled');
 });
@@ -44,17 +50,23 @@ Route::get('/qr_code_Honey/{qr_code?}', [DashboardController::class, 'qrCodeHone
 
 Route::get('/qr_code_Product/{qr_code?}', [DashboardController::class, 'qrCodeProduct'])->name('qr_code_Product');
 
+Route::get('/qr_code_Package/{qr_code?}', [PackagingController::class, 'qrCodePackage'])->name('qr_code_Package');
+
 Route::middleware(['auth', 'verified', 'enabled'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::post('/dashboard/store', [DashboardController::class, 'store'])->name('dashboard.store');
+    Route::post('/dashboard/store/', [DashboardController::class, 'store'])->name('dashboard.store');
     Route::put('/dashboard/update/{id}', [DashboardController::class, 'update'])->name('dashboard.update');
     Route::delete('/dashboard/delete/{id}', [DashboardController::class, 'delete'])->name('dashboard.delete');    
 
     Route::post('/dashboard/product/storeProduct', [DashboardController::class, 'storeProduct'])->name('dashboard.product.storeProduct');
     Route::put('/dashboard/product/updateProduct/{id}', [DashboardController::class, 'updateProduct'])->name('dashboard.product.updateProduct');
     Route::delete('/dashboard/product/deleteProduct/{id}', [DashboardController::class, 'deleteProduct'])->name('dashboard.product.deleteProduct');
+
+    Route::post('/dashboard/storeApiary/', [DashboardController::class, 'storeApiary'])->middleware('role:Beekeeper')->name('dashboard.storeApiary');
+    Route::put('/dashboard/updateApiary/{id}', [DashboardController::class, 'updateApiary'])->middleware('role:Beekeeper')->name('dashboard.updateApiary');
+    Route::delete('/dashboard/destroyApiary/{id}', [DashboardController::class, 'destroyApiary'])->middleware('role:Beekeeper')->name('dashboard.destroyApiary');
 
     Route::patch('/users/update-status/{user}', [UserController::class, 'updateStatus'])->name('users.update_status');
 
@@ -64,10 +76,6 @@ Route::middleware(['auth', 'verified', 'enabled'])->group(function () {
     
     Route::get('/beekeeper/{honey_id?}', [BeekeeperController::class, 'index'])->middleware('role:Beekeeper')->name('beekeeper.index');
     Route::post('/beekeeper/update', [BeekeeperController::class, 'update'])->name('beekeeper.update');
-
-    Route::post('/beekeeper/storeApiary/{honey_id}', [ApiaryController::class, 'storeApiary'])->middleware('role:Beekeeper')->name('apiary.storeApiary');
-    Route::put('/beekeeper/updateApiary/{id}', [ApiaryController::class, 'updateApiary'])->middleware('role:Beekeeper')->name('apiary.updateApiary');
-    Route::delete('/beekeeper/destroyApiary/{id}', [ApiaryController::class, 'destroyApiary'])->middleware('role:Beekeeper')->name('apiary.destroyApiary');
 
     Route::post('/beekeeper/addDocument/{honey_id}', [BeeDocumentController::class, 'addDocument'])->name('beekeepingDocuments.addDocument');
     Route::put('/beekeeper/updateDocument/{id}', [BeeDocumentController::class, 'updateDocument'])->name('beekeepingDocuments.updateDocument');
@@ -116,17 +124,9 @@ Route::middleware(['auth', 'verified', 'enabled'])->group(function () {
     Route::put('/traceability/{id}', [BeekeeperController::class, 'updateTraceability'])->name('traceability.updateTraceability');
     Route::delete('/traceability/{id}', [BeekeeperController::class, 'destroyTraceability'])->name('traceability.destroyTraceability');
 
-    // Route::post('/laboratory/storeLaboratoryTrace/{product_id}', [TraceabilityController::class, 'storeLaboratoryTrace'])->name('traceabilityLaboratory.storeLaboratoryTrace');
-    // Route::put('/laboratory/updateLaboratoryTrace/{id}', [TraceabilityController::class, 'updateLaboratoryTrace'])->name('traceabilityLaboratory.updateLaboratoryTrace');
-    // Route::delete('/laboratory/removeLaboratoryTrace/{id}', [TraceabilityController::class, 'removeLaboratoryTrace'])->name('traceabilityLaboratory.removeLaboratoryTrace');
-
-    // Route::post('/wholesaler/storeWholesalerTrace/{product_id}', [TraceabilityController::class, 'storeWholesalerTrace'])->name('traceabilityWholesaler.storeWholesalerTrace');
-    // Route::put('/wholesaler/updateWholesalerTrace/{id}', [TraceabilityController::class, 'updateWholesalerTrace'])->name('traceabilityWholesaler.updateWholesalerTrace');
-    // Route::delete('/wholesaler/removeWholesalerTrace/{id}', [TraceabilityController::class, 'removeWholesalerTrace'])->name('traceabilityWholesaler.removeWholesalerTrace');
-
-    // Route::post('/packaging/storePackagingTrace/{product_id}', [TraceabilityController::class, 'storePackagingTrace'])->name('traceabilityPackaging.storePackagingTrace');
-    // Route::put('/packaging/updatePackagingTrace/{id}', [TraceabilityController::class, 'updatePackagingTrace'])->name('traceabilityPackaging.updatePackagingTrace');
-    // Route::delete('/packaging/removePackagingTrace/{id}', [TraceabilityController::class, 'removePackagingTrace'])->name('traceabilityPackaging.removePackagingTrace');
+    Route::post('/traceabilityProduct/{product_id}', [WholesalerController::class, 'storeTraceabilityProduct'])->name('traceability.storeTraceabilityProduct');
+    Route::put('/traceabilityProduct/{id}', [WholesalerController::class, 'updateTraceabilityProduct'])->name('traceability.updateTraceabilityProduct');
+    Route::delete('/traceabilityProduct/{id}', [WholesalerController::class, 'destroyTraceabilityProduct'])->name('traceability.destroyTraceabilityProduct');
 });
 
 Route::middleware('auth')->group(function () {

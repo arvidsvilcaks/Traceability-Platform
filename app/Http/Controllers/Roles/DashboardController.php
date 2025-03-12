@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Honey;
 use App\Models\Products;
 use App\Models\User;
+use App\Models\Apiary;
 use Illuminate\Http\Request;
 use TCPDF;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardController extends Controller
 {
@@ -21,7 +23,6 @@ class DashboardController extends Controller
         $packagingCompanies = User::where('role', 'Packaging company')->get();
     
         $query = Honey::query();
-    
         switch ($user->role) {
             case 'Beekeeper':
                 $query->where('beekeeper_id', $user->id);
@@ -43,6 +44,8 @@ class DashboardController extends Controller
     
         $honeyInfo = $query->get();
     
+        $apiaryInfo = Apiary::where('beekeeper_id', $user->id)->get();
+
         $wholesalerId = auth()->id();
         $packagingId = auth()->id();
         $honeys = Honey::where('wholesaler_id', $wholesalerId)->get(); 
@@ -51,10 +54,8 @@ class DashboardController extends Controller
             ->with('honeys')
             ->get();
     
-        return view('dashboard', compact('honeyInfo','beekeepers','laboratoryEmployees','wholesalers','packagingCompanies', 'products', 'honeys'));
+        return view('dashboard', compact('honeyInfo','apiaryInfo','beekeepers','laboratoryEmployees','wholesalers','packagingCompanies', 'products', 'honeys'));
     }
-    
-    
     public function qrCodeHoney($qrCodeHoney)
     {
         $honey = Honey::where('qr_code', $qrCodeHoney)->first();
@@ -127,7 +128,8 @@ class DashboardController extends Controller
             'name' => 'required|string|max:255',
             'beekeeper_id' => 'nullable|exists:users,id',
             'laboratory_id' => 'nullable|exists:users,id',
-            'wholesaler_id' => 'nullable|exists:users,id'
+            'wholesaler_id' => 'nullable|exists:users,id',
+            'apiary_id' => 'nullable|exists:apiary,id'
         ]);
     
         $beekeeper_id = $request->beekeeper_id ?: null;
@@ -139,6 +141,7 @@ class DashboardController extends Controller
             'beekeeper_id' => $beekeeper_id,
             'laboratory_id' => $laboratory_id,
             'wholesaler_id' => $wholesaler_id,
+            'apiary_id' => $request->apiary_id
         ]);
     
         $product->qr_code = urlencode(hash('sha256', $product->id . '-' . $product->name));
@@ -149,17 +152,21 @@ class DashboardController extends Controller
     public function update(Request $request, $id)
     {
         $product = Honey::findOrFail($id);
-
+    
         $request->validate([
             'name' => 'required|string',
+            'apiary_id' => 'nullable|exists:apiary,id'
         ]);
-
+    
         $product->update([
             'name' => $request->name,
+            'apiary_id' => $request->apiary_id
         ]);
-
-        return redirect()->back()->with('success', 'Product info updated successfully');
+    
+        return redirect()->route('dashboard', ['apiary_id' => $product->apiary_id])
+            ->with('success', 'Product updated successfully!');
     }
+    
 
     public function delete($id)
     {
@@ -167,7 +174,8 @@ class DashboardController extends Controller
 
         $product->delete();
 
-        return redirect()->route('dashboard')->with('success', 'Product added successfully!');
+        return redirect()->route('dashboard', ['apiary_id' => $product->apiary_id])
+            ->with('success', 'Product updated successfully!');
     }
 
     public function storeProduct(Request $request)
@@ -216,5 +224,79 @@ class DashboardController extends Controller
         $product->delete();
 
         return redirect()->route('dashboard')->with('success', 'Product added successfully!');
+    }
+    public function storeApiary(Request $request)
+    {
+        $request->validate([
+            'description' => 'required|string',
+            'location' => 'required|string',
+            'floral_composition' => 'required|string',
+            'specifics_of_environment' => 'required|string',
+            'add_visual_materials' => 'nullable|mimes:pdf,docx|max:2048',
+            'beekeeper_id' => 'nullable|exists:users,id',
+        ]);
+
+        $beekeeper_id = $request->beekeeper_id ?: null;
+
+        $filePath = null;
+        if ($request->hasFile('add_visual_materials')) {
+            $filePath = $request->file('add_visual_materials')->store('apiary_files', 'public');
+        }
+
+        Apiary::create([
+            'description' => $request->description,
+            'location' => $request->location,
+            'floral_composition' => $request->floral_composition,
+            'specifics_of_environment' => $request->specifics_of_environment,
+            'add_visual_materials' => $filePath,
+            'beekeeper_id' => $beekeeper_id,
+        ]);
+
+        return redirect()->route('dashboard')->with('success', 'Apiary added successfully!');
+    }
+
+    public function updateApiary(Request $request, $id)
+    {
+        $apiary = Apiary::findOrFail($id);
+
+        $request->validate([
+            'description' => 'required|string',
+            'location' => 'required|string',
+            'floral_composition' => 'required|string',
+            'specifics_of_environment' => 'required|string',
+            'add_visual_materials' => 'nullable|mimes:pdf,docx|max:2048'
+        ]);
+
+        if ($request->hasFile('add_visual_materials')) {
+            if ($apiary->add_visual_materials) {
+                Storage::disk('public')->delete($apiary->add_visual_materials);
+            }
+            $apiary->add_visual_materials = $request->file('add_visual_materials')->store('apiary_files', 'public');
+        }
+
+        $apiary->update([
+            'description' => $request->description,
+            'location' => $request->location,
+            'floral_composition' => $request->floral_composition,
+            'specifics_of_environment' => $request->specifics_of_environment
+        ]);
+
+        return redirect()->route('dashboard')->with('success', 'Apiary added successfully!');
+
+    }
+
+    public function destroyApiary($id)
+    {
+        Honey::where('apiary_id', $id)->update(['apiary_id' => null]);
+
+        $apiary = Apiary::findOrFail($id);
+
+        if ($apiary->add_visual_materials) {
+            Storage::disk('public')->delete($apiary->add_visual_materials);
+        }
+
+        $apiary->delete();
+        return redirect()->route('dashboard')->with('success', 'Apiary added successfully!');
+
     }
 }

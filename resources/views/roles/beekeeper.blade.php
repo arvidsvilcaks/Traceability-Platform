@@ -1,97 +1,4 @@
 <x-app-layout>
-    <div class="overflow-x-auto shadow-md sm:rounded-lg w-full mb-6">
-        <h1 class="flex justify-center text-lg font-semibold mb-4 mt-6">Info about apiary</h1>
-        
-        <div class="flex justify-center mb-6">
-            <button onclick="showModal3('addModal')" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">Add new row</button>
-        </div>
-
-        <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 border">Apiary description</th>
-                    <th class="px-6 py-3 border">Location</th>
-                    <th class="px-6 py-3 border">Floral composition</th>
-                    <th class="px-6 py-3 border">Specifics of environment</th>
-                    <th class="px-6 py-3 border">Visual materials</th>
-                    <th class="px-6 py-3 border">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($apiary as $apiary)
-                    <tr>
-                        <td class="px-6 py-4 border">{{ $apiary->description }}</td>
-                        <td class="px-6 py-4 border">{{ $apiary->location }}</td>
-                        <td class="px-6 py-4 border">{{ $apiary->floral_composition }}</td>
-                        <td class="px-6 py-4 border">{{ $apiary->specifics_of_environment }}</td>
-                        <td class="px-6 py-4 border">
-                            @if($apiary->add_visual_materials)
-                                <a href="{{ asset('storage/' . $apiary->add_visual_materials) }}" target="_blank" class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-white rounded-full">View</a>
-                            @endif
-                        </td>
-                        <td class="px-6 py-4 border">
-                            <button onclick="editModal({{ json_encode($apiary) }})" class="bg-gray-500 text-white rounded-full px-4 py-2">Edit</button>
-                            <form action="{{ route('apiary.destroyApiary', $apiary->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-
-        <div id="addModal" class="fixed inset-0 flex items-center justify-center hidden">
-            <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-                <h2 class="text-lg font-semibold mb-4">Add Apiary</h2>
-
-                <form id="addApiaryForm" action="{{ route('apiary.storeApiary', ['honey_id' => $honeyInfo->id]) }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <input type="hidden" id="apiaryId" name="id">
-                    <input type="hidden" name="honey_id" value="{{ $honeyInfo->id }}">
-
-                    <div class="flex flex-col space-y-2">
-                        <input type="text" name="description" id="add_description" placeholder="Description" required class="border p-2 rounded">
-                        <input type="text" name="location" id="add_location" placeholder="Location" required class="border p-2 rounded">
-                        <input type="text" name="floral_composition" id="add_floral_composition" placeholder="Floral Composition" required class="border p-2 rounded">
-                        <input type="text" name="specifics_of_environment" id="add_specifics_of_environment" placeholder="Environment Specifics" required class="border p-2 rounded">
-                        <input type="file" name="add_visual_materials" accept=".pdf,.docx" class="border p-2 rounded">
-                        
-                        <div class="flex justify-between mt-4">
-                            <button type="submit" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-full">Save</button>
-                            <button type="button" onclick="closeModal3('addModal')" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-full">Cancel</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div id="editModal" class="fixed inset-0 flex items-center justify-center hidden">
-            <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-                <h2 class="text-lg font-semibold mb-4">Edit Apiary</h2>
-                <form id="editApiaryForm" action="{{ route('apiary.updateApiary', ':id') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <input type="hidden" id="edit_apiaryId" name="id">
-
-                    <div class="flex flex-col space-y-2">
-                        <input type="text" name="description" id="edit_description" placeholder="Description" class="border p-2 rounded">
-                        <input type="text" name="location" id="edit_location" placeholder="Location" class="border p-2 rounded">
-                        <input type="text" name="floral_composition" id="edit_floral_composition" placeholder="Floral Composition" class="border p-2 rounded">
-                        <input type="text" name="specifics_of_environment" id="edit_specifics_of_environment" placeholder="Environment Specifics" class="border p-2 rounded">
-                        <input type="file" name="add_visual_materials" accept=".pdf,.docx" class="border p-2 rounded">
-
-                        <div class="flex justify-between mt-4">
-                            <button type="submit" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-full">Save</button>
-                            <button type="button" onclick="closeModal4('editModal')" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-full">Cancel</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <div class="overflow-x-auto shadow-md sm:rounded-lg w-full mb-6 mt-6">
         <h3 class="text-lg font-semibold flex justify-center">Documents about Beekeeping Practices</h3>
         <div class="flex justify-center mb-6">
@@ -276,21 +183,24 @@
             Honey Tracing
         </h1>
 
-        <!-- Traceability Table -->
+        <div class="flex justify-center">
+            <button class="bg-gray-500 text-white px-4 py-2 rounded-full mb-4" onclick="showModalTraceability()">
+                Add New Record
+            </button>
+        </div>
         <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200 mb-6">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
                     <th class="px-6 py-3 border">Date Collected</th>
-                    <th class="px-6 py-3 border">Stage</th>
                     <th class="px-6 py-3 border">Address</th>
                     <th class="px-6 py-3 border">Location on Map</th>
+                    <th class="px-6 py-3 border">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($traceability as $trace)
+                @foreach($traceability->filter(fn($trace) => $trace->stage === 'beekeeper') as $trace)
                     <tr>
                         <td class="px-6 py-4 border">{{ $trace->created_at }}</td>
-                        <td class="px-6 py-4 border">{{ ucfirst($trace->stage) }}</td>
                         <td class="px-6 py-4 border">{{ $trace->address }}</td>
 
                         <td class="px-6 py-4 border">
@@ -299,13 +209,27 @@
                                 data-lng="{{ $trace->longitude }}">
                             </div>
                         </td>
+
+                        <td class="px-6 py-4 border">
+                            <button class="bg-gray-500 text-white px-3 py-1 rounded-full mb-4" onclick="showModalTraceability({{ $trace->id }})">
+                                Edit
+                            </button>
+                            <form action="{{ route('traceability.destroyTraceability', $trace->id) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="bg-gray-500 text-white px-3 py-1 rounded-full">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
+
         </table>
     </div>
 
-    <div id="addModalTraceability" class="fixed inset-0 flex items-center justify-center hidden ">
+    <div id="addModalTraceability" class="fixed inset-0 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg w-1/3">
             <h2 class="text-lg font-semibold mb-4">Add Traceability Record</h2>
             <form action="{{ route('traceability.storeTraceability', ['honey_id' => $honeyInfo->id]) }}" method="POST">
@@ -314,15 +238,10 @@
 
                 <label>Address:</label>
                 <input type="text" id="address" name="address" class="border p-2 w-full mb-4" oninput="geocodeAddress()">
-                <div id="map" class="w-full h-64 mb-4" style="height: 300px;">
-                    
-                </div>
-                <label>Stage:</label>
-                <select name="stage" class="border p-2 w-full mb-4">
-                    <option value="laboratory">Laboratory</option>
-                    <option value="wholesaler">Wholesaler</option>
-                    <option value="packaging">Packaging</option>
-                </select>
+                <div id="map" class="w-full h-64 mb-4" style="height: 300px;"></div>
+
+                <input type="hidden" name="stage" value="beekeeper">
+
                 <input type="hidden" name="latitude" id="latitude">
                 <input type="hidden" name="longitude" id="longitude">
                 <button type="submit" class="bg-gray-500 text-white px-4 py-2 rounded-full">Save</button>
@@ -430,18 +349,18 @@
         function closeModal2() {
             document.getElementById('modalBackdrop2').classList.add('hidden');
         }            
-        function showModal3(modalId) {
-            document.getElementById(modalId).classList.remove('hidden');
-        }
-        function closeModal3(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
-        }
-        function showModal4(modalId) {
-            document.getElementById(modalId).classList.remove('hidden');
-        }
-        function closeModal4(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
-        }        
+        // function showModal3(modalId) {
+        //     document.getElementById(modalId).classList.remove('hidden');
+        // }
+        // function closeModal3(modalId) {
+        //     document.getElementById(modalId).classList.add('hidden');
+        // }
+        // function showModal4(modalId) {
+        //     document.getElementById(modalId).classList.remove('hidden');
+        // }
+        // function closeModal4(modalId) {
+        //     document.getElementById(modalId).classList.add('hidden');
+        // }        
         function editDocument(beekeepingDocuments) {
 
             let docData = beekeepingDocuments;
@@ -483,22 +402,20 @@
             });
         }
 
+        // function editModal(apiary) {
+        //     document.getElementById('edit_apiaryId').value = apiary.id;
 
-        function editModal(apiary) {
-            document.getElementById('edit_apiaryId').value = apiary.id;
+        //     const form = document.getElementById('editApiaryForm');
+        //     form.action = form.action.replace(':id', apiary.id);
 
-            const form = document.getElementById('editApiaryForm');
-            form.action = form.action.replace(':id', apiary.id);
+        //     document.getElementById('edit_description').value = apiary.description;
+        //     document.getElementById('edit_location').value = apiary.location;
+        //     document.getElementById('edit_floral_composition').value = apiary.floral_composition;
+        //     document.getElementById('edit_specifics_of_environment').value = apiary.specifics_of_environment;
 
-            document.getElementById('edit_description').value = apiary.description;
-            document.getElementById('edit_location').value = apiary.location;
-            document.getElementById('edit_floral_composition').value = apiary.floral_composition;
-            document.getElementById('edit_specifics_of_environment').value = apiary.specifics_of_environment;
-
-            showModal4('editModal');
-        }
+        //     showModal4('editModal');
+        // }
         document.addEventListener('DOMContentLoaded', setupModalEventListeners);
-        
 
 
         let map, marker, geocoder;
@@ -557,6 +474,13 @@
                     console.error('Geocoding failed:', status);
                 }
             });
+        }
+        function showModalTraceability() {
+            document.getElementById('addModalTraceability').classList.remove('hidden');
+        }
+
+        function closeModalTraceability() {
+            document.getElementById('addModalTraceability').classList.add('hidden');
         }
         </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBoCstylgREVj_Kd4Ji08ah5Vp8YlkBe8s&libraries=places,marker&callback=initMap"></script>

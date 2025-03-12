@@ -16,12 +16,17 @@ class Traceability extends Model
         'longitude',
         'latitude',
         'stage',
-        'honey_id'
+        'honey_id',
+        'product_id',
     ];
 
     public function honey()
     {
         return $this->belongsTo(Honey::class, 'honey_id');
+    }    
+    public function product()
+    {
+        return $this->belongsTo(Honey::class, 'product_id');
     }
 
     // Static function to fetch all records, optionally filtering by honey_id
@@ -31,6 +36,16 @@ class Traceability extends Model
 
         if ($honey_id !== null) {
             $query->where('honey_id', $honey_id);
+        }
+
+        return $query->get();
+    }
+    public static function getAll_2($product_id = null)
+    {
+        $query = self::query();
+
+        if ($product_id !== null) {
+            $query->where('product_id', $product_id);
         }
 
         return $query->get();
@@ -52,6 +67,24 @@ class Traceability extends Model
 
     // Static function to delete a record
     public static function deleteTraceability($id)
+    {
+        return self::findOrFail($id)->delete();
+    }
+    // Static function to create a new traceability record
+    public static function createTraceabilityProduct($data)
+    {
+        return self::create($data);
+    }
+
+    // Static function to update a record
+    public static function updateTraceabilityProduct($id, $data)
+    {
+        $traceability = self::findOrFail($id);
+        return $traceability->update($data);
+    }
+
+    // Static function to delete a record
+    public static function deleteTraceabilityProduct($id)
     {
         return self::findOrFail($id)->delete();
     }

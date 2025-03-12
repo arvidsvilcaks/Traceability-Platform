@@ -22,13 +22,16 @@ class Honey extends Model
         'laboratory_id',
         'wholesaler_id',
         'is_available',
+        'apiary_id',
     ];
-
+    public function apiary()
+    {
+        return $this->belongsTo(Apiary::class, 'apiary_id');
+    }
     public function beekeeper()
     {
         return $this->belongsTo(User::class, 'beekeeper_id');
     }
-
     public function laboratoryEmployee()
     {
         return $this->belongsTo(User::class, 'laboratory_id');

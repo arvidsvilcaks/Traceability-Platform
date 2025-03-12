@@ -11,6 +11,7 @@ use App\Models\Markets;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Traceability;
+use TCPDF;
 
 class PackagingController extends Controller
 {
@@ -18,7 +19,7 @@ class PackagingController extends Controller
     {
         $user = Auth::user();
         
-        //$traceabilityPackaging = Traceability::where('product_id', $product_id)->get();
+        $traceability = Traceability::getAll_2($product_id);
         $processesPackaging = Processes::where('product_id', $product_id)
         ->where('user_id', $user->id)
         ->get();        
@@ -29,7 +30,40 @@ class PackagingController extends Controller
         $packages = Packages::where('product_id', $product_id)->get();
         $markets = Markets::where('product_id', $product_id)->get();
 
-        return view('roles.packaging', data: compact('processesPackaging', 'qualityPackaging', 'honeyInfo', 'packages', 'markets'));
+        return view('roles.packaging', data: compact('processesPackaging', 'qualityPackaging', 'honeyInfo', 'packages', 'markets', 'traceability'));
+    }
+    
+    public function qrCodePackage($qrCodePackage)
+    {
+        $packages = Packages::where('qr_code', $qrCodePackage)->first();
+        
+        $value = route('consumerPackage', ['package_id' => $packages->id]);
+
+        // Create new PDF document
+        $pdf = new TCPDF();
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('Arvids');
+        $pdf->SetTitle('Package QR Code PDF');
+        $pdf->SetSubject('QR Code');
+
+        // Remove default header/footer
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+
+        // Add a page
+        $pdf->AddPage();
+
+        // Set font
+        $pdf->SetFont('helvetica', '', 12);
+
+        // Add Title
+        $pdf->Cell(0, 10, 'QR Code', 0, 1, 'C');
+
+        // Generate and embed QR Code
+        $pdf->write2DBarcode($value, 'QRCODE,H', 80, 40, 50, 50, [], 'N');
+
+        // Output the PDF in browser
+        $pdf->Output('qrCodePackage.pdf', 'I');
     }
     public function storePackage(Request $request, $product_id)
     {
@@ -40,14 +74,17 @@ class PackagingController extends Controller
             'market_id' => 'nullable|exists:markets,id'
         ]);
     
-        Packages::create([
+        $package = Packages::create([
             'quantity' => $request->quantity,
             'package_weight' => $request->package_weight,
             'type' => $request->type,
             'product_id' => $product_id,
             'market_id' => $request->market_id
         ]);
-    
+
+        $package->qr_code = urlencode(hash('sha256', $package->id . '-' . $package->type));
+        $package->save();
+
         return redirect()->route('packaging.index', ['product_id' => $product_id])->with('success', 'Package added successfully.');
     }
     

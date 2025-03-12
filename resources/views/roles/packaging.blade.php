@@ -162,6 +162,77 @@
       </div>
   </div>
 
+    <div class="overflow-x-auto shadow-md sm:rounded-lg w-full mb-6 mt-6">
+        <h1 class="flex justify-center text-lg font-semibold mb-4 mt-6">
+            Honey Tracing
+        </h1>
+
+        <div class="flex justify-center">
+            <button class="bg-gray-500 text-white px-4 py-2 rounded-full mb-4" onclick="showModalTraceability()">
+                Add New Record
+            </button>
+        </div>
+        <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200 mb-6">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 border">Date Collected</th>
+                    <th class="px-6 py-3 border">Address</th>
+                    <th class="px-6 py-3 border">Location on Map</th>
+                    <th class="px-6 py-3 border">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($traceability->filter(fn($trace) => $trace->stage === 'packaging') as $trace)
+                    <tr>
+                        <td class="px-6 py-4 border">{{ $trace->created_at }}</td>
+                        <td class="px-6 py-4 border">{{ $trace->address }}</td>
+
+                        <td class="px-6 py-4 border">
+                            <div id="map-{{ $trace->id }}" class="w-full h-32 mb-4" style="height: 300px;"
+                                data-lat="{{ $trace->latitude }}" 
+                                data-lng="{{ $trace->longitude }}">
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4 border">
+                            <button class="bg-gray-500 text-white px-3 py-1 rounded-full mb-4" onclick="showModalTraceability({{ $trace->id }})">
+                                Edit
+                            </button>
+                            <form action="{{ route('traceability.destroyTraceabilityProduct', $trace->id) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="bg-gray-500 text-white px-3 py-1 rounded-full">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    <div id="addModalTraceability" class="fixed inset-0 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg w-1/3">
+            <h2 class="text-lg font-semibold mb-4">Add Traceability Record</h2>
+            <form action="{{ route('traceability.storeTraceabilityProduct', ['product_id' => $honeyInfo->id]) }}" method="POST">
+                @csrf
+                <input type="hidden" name="product_id" value="{{ $honeyInfo->id }}">
+
+                <label>Address:</label>
+                <input type="text" id="address" name="address" class="border p-2 w-full mb-4" oninput="geocodeAddress()">
+                <div id="map" class="w-full h-64 mb-4" style="height: 300px;"></div>
+
+                <input type="hidden" name="stage" value="packaging">
+
+                <input type="hidden" name="latitude" id="latitude">
+                <input type="hidden" name="longitude" id="longitude">
+                <button type="submit" class="bg-gray-500 text-white px-4 py-2 rounded-full">Save</button>
+                <button type="button" onclick="closeModalTraceability()" class="bg-gray-500 text-white px-4 py-2 rounded-full">Cancel</button>
+            </form>
+        </div>
+    </div>
+
   <div class="overflow-x-auto shadow-md sm:rounded-lg mt-6 mb-6">
     <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
       <h1 class="flex justify-center text-lg font-semibold mb-4">Packages</h1>
@@ -174,6 +245,7 @@
               <th class="px-6 py-3 border">Package Weight</th>
               <th class="px-6 py-3 border">Type</th>
               <th class="px-6 py-3 border">Market</th>
+              <th class="px-6 py-3 border">Package QR code</th>
               <th class="px-6 py-3 border">Actions</th>
           </tr>
       </thead>
@@ -184,7 +256,14 @@
               <td class="px-6 py-4 border">{{ $package->package_weight }} kg</td>
               <td class="px-6 py-4 border">{{ $package->type }}</td>
               <td class="px-6 py-4 border">{{ $package->market ? $package->market->name : 'N/A' }}</td>
-              <td class="px-6 py-4 border">
+              <td class="px-6 py-4">
+                    <a href="{{ route('qr_code_Package', ['qr_code' => $package->qr_code]) }}" 
+                    target="_blank" 
+                    class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-white rounded-full">
+                        View
+                    </a>
+                </td>              
+                <td class="px-6 py-4 border">
                   <button onclick="editModalPackages({{ json_encode($package) }})" class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full">Edit</button>
                   
                   <form action="{{ route('packages.destroyPackage', $package->id) }}" method="POST" style="display:inline;">
@@ -309,18 +388,85 @@
     }
 
     function editModalPackages($packages) {
-      document.getElementById('edit_packagesId').value = $packages.id;
-      document.getElementById('edit_quantity').value = $packages.quantity;
-      document.getElementById('edit_package_weight').value = $packages.package_weight;
-      document.getElementById('edit_type').value = $packages.type;
-      document.getElementById('edit_market_id').value = $packages.market_id || '';
+        document.getElementById('edit_packagesId').value = $packages.id;
+        document.getElementById('edit_quantity').value = $packages.quantity;
+        document.getElementById('edit_package_weight').value = $packages.package_weight;
+        document.getElementById('edit_type').value = $packages.type;
+        document.getElementById('edit_market_id').value = $packages.market_id || '';
 
-      let form = document.getElementById('editPackagesForm');
-      form.action = form.action.replace(':id', $packages.id);
+        let form = document.getElementById('editPackagesForm');
+        form.action = form.action.replace(':id', $packages.id);
 
-      showModalPackages('editModalPackages');
-  }
+        showModalPackages('editModalPackages');
+    }
+
+    let map, marker, geocoder;
+
+    function initMap() {
+        geocoder = new google.maps.Geocoder();
+
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: 37.7749, lng: -122.4194 },
+            zoom: 12,
+            mapId: '37823448a8c4cd11'
+        });
+
+        marker = new google.maps.Marker({
+            map: map,
+            position: { lat: 37.7749, lng: -122.4194 }
+        });
+
+        document.querySelectorAll('[id^="map-"]').forEach(mapElement => {
+            let traceId = mapElement.id.split('-')[1];
+            let lat = parseFloat(mapElement.dataset.lat);
+            let lng = parseFloat(mapElement.dataset.lng);
+
+            if (!isNaN(lat) && !isNaN(lng)) {
+                let traceMap = new google.maps.Map(mapElement, {
+                    center: { lat: lat, lng: lng },
+                    zoom: 12,
+                    mapId: '37823448a8c4cd11'
+                });
+
+                new google.maps.Marker({
+                    map: traceMap,
+                    position: { lat: lat, lng: lng }
+                });
+            }
+        });
+    }
+
+    function geocodeAddress() {
+        let address = document.getElementById('address').value;
+        if (!address) return;
+
+        if (!map) { 
+            console.error('Map is not initialized'); 
+            return; 
+        }
+
+        geocoder.geocode({ address: address }, function (results, status) {
+            if (status === 'OK') {
+                let location = results[0].geometry.location;
+                map.setCenter(location);
+                marker.setPosition(location);
+                document.getElementById('latitude').value = location.lat();
+                document.getElementById('longitude').value = location.lng();
+            } else {
+                console.error('Geocoding failed:', status);
+            }
+        });
+    }
 
 
-  </script>
+    function showModalTraceability() {
+        document.getElementById('addModalTraceability').classList.remove('hidden');
+    }
+
+    function closeModalTraceability() {
+        document.getElementById('addModalTraceability').classList.add('hidden');
+    }
+
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBoCstylgREVj_Kd4Ji08ah5Vp8YlkBe8s&libraries=places,marker&callback=initMap"></script>
 </x-app-layout>
