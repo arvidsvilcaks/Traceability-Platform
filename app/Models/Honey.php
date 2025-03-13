@@ -45,4 +45,8 @@ class Honey extends Model
     {
         return $this->belongsToMany(Products::class, 'honey_products', 'honey_id', 'product_id');
     }
+    public function traceability()
+    {
+        return $this->hasMany(Traceability::class, 'honey_id');
+    }
 }

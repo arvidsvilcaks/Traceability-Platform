@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class QualityPackagingController extends Controller
 {
-    public function storeHoneyQuality(Request $request, $product_id)
+    public function storeQuality(Request $request, $product_id)
     {
         $request->validate([
             'metric' => 'required|string',
@@ -27,7 +27,7 @@ class QualityPackagingController extends Controller
         return redirect()->route('packaging.index', ['product_id' => $product_id])->with('success', 'Quality info added successfully.');
     }
 
-    public function updateHoneyQuality(Request $request, $id)
+    public function updateQuality(Request $request, $id)
     {
         $qualityPackaging = Quality::findOrFail($id);
 
@@ -44,7 +44,7 @@ class QualityPackagingController extends Controller
         return redirect()->route('packaging.index', ['product_id' => $qualityPackaging->product_id])->with('success', 'Quality info updated successfully.');
     }
 
-    public function destroyHoneyQuality($id)
+    public function destroyQuality($id)
     {
         $qualityPackaging = Quality::findOrFail($id);
         $qualityPackaging->delete();

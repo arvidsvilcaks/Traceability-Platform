@@ -5,26 +5,26 @@
             <div class="flex items-center space-x-10">
                 <!-- Navigation Links -->
                 <div class="hidden sm:flex space-x-8">
-                    @if(auth()->user()->role != 'Beekeeping association' && auth()->user()->role != 'Administrator')
+                @if(auth()->check() && auth()->user()->role != 'Beekeeping association' && auth()->user()->role != 'Administrator')
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    @endif
-                    @if(Auth::check())
-                        <!-- Show Beekeeping Association link only if the user is a Beekeeping Association -->
-                        @if(Auth::user()->role === 'Beekeeping association')
-                            <x-nav-link :href="route('association.indexAssociation')" :active="request()->routeIs('association.indexAssociation')">
-                                {{ __('Beekeeping Association') }}
-                            </x-nav-link>
-                        @endif
+                @endif
 
-                        <!-- Show Administrator link only if the user is an Administrator -->
-                        @if(Auth::user()->role === 'Administrator')
-                            <x-nav-link :href="route('administrator.indexAdministrator')" :active="request()->routeIs('administrator.indexAdministrator')">
-                                {{ __('Administrator') }}
-                            </x-nav-link>
-                        @endif
+                @if(Auth::check())
+                    @if(Auth::user()->role === 'Beekeeping association')
+                        <x-nav-link :href="route('association.indexAssociation')" :active="request()->routeIs('association.indexAssociation')">
+                            {{ __('Beekeeping Association') }}
+                        </x-nav-link>
                     @endif
+
+                    @if(Auth::user()->role === 'Administrator')
+                        <x-nav-link :href="route('administrator.indexAdministrator')" :active="request()->routeIs('administrator.indexAdministrator')">
+                            {{ __('Administrator') }}
+                        </x-nav-link>
+                    @endif
+                @endif
+
                 </div>
             </div>
 

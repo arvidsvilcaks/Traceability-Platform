@@ -17,4 +17,12 @@ class Markets extends Model
         'package_id',
         'product_id',
     ];
+    public function product()
+    {
+        return $this->belongsTo(Products::class, 'product_id');
+    }
+    public function package()
+    {
+        return $this->belongsTo(Packages::class, 'package_id');
+    }
 }

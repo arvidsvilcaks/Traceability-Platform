@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 class BeeDocumentController extends Controller
 {
-    public function addDocument(Request $request, $honey_id)
+    public function storeDocument(Request $request, $honey_id)
     {
         $request->validate([
             'add_beekeeping_documents' => 'nullable|mimes:pdf,docx|max:2048',
@@ -27,6 +27,7 @@ class BeeDocumentController extends Controller
 
         return redirect()->route('beekeeper.index', ['honey_id' => $honey_id])->with('success', 'Apiary info added successfully.');
     }
+
     public function updateDocument(Request $request, $id)
     {
         $beekeepingDocuments = BeekeepingDocuments::findOrFail($id);
@@ -46,7 +47,8 @@ class BeeDocumentController extends Controller
         return redirect()->route('beekeeper.index', ['honey_id' => $beekeepingDocuments->honey_id])
         ->with('success', 'Apiary info updated successfully.');    
     }
-    public function deleteDocument($id)
+    
+    public function destroyDocument($id)
     {
         $beekeepingDocuments = BeekeepingDocuments::findOrFail($id);
         

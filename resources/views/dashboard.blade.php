@@ -9,14 +9,13 @@
 
     @if(auth()->user()->role != 'Packaging company')
 
-    <!-- HONEY LIST -->
-
+    <!-- Honey List -->
     <div class="container mx-auto mt-8">
         <h1 class="flex justify-center text-lg font-semibold mb-4 mt-4">Honey List</h1>
 
         @if(auth()->user()->role == 'Beekeeper')
             <div class="flex justify-center mb-4">
-                <button onclick="showModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
+                <button onclick="showStoreHoneyModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
                     Add New Honey
                 </button>
             </div>
@@ -47,10 +46,10 @@
                                 View Beekeeper Data
                             </a>
                             <div class="ml-6">
-                                <button onclick="showEditModal({{ $honey->id }}, '{{ $honey->name }}', '{{ $honey->apiary_id }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-4">
+                                <button onclick="showUpdateHoneyModal({{ $honey->id }}, '{{ $honey->name }}', '{{ $honey->apiary_id }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-4">
                                     Edit
                                 </button>
-                                <form action="{{ route('dashboard.delete', $honey->id) }}" method="POST" style="display:inline-block;">
+                                <form action="{{ route('dashboard.destroyHoney', $honey->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
@@ -84,7 +83,7 @@
     <div id="addHoneyModal" class="fixed inset-0 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-xl font-bold mb-4">Add New Honey</h2>
-            <form action="{{ route('dashboard.store') }}" method="POST">
+            <form action="{{ route('dashboard.storeHoney') }}" method="POST">
                 @csrf
                 <label class="block mb-2">Honey Name:</label>
                 <input type="text" name="name" required class="w-full border p-2 rounded">    
@@ -101,22 +100,22 @@
 
                 <div class="mt-4 flex justify-between">
                     <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded">Save</button>
-                    <button type="button" onclick="hideModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+                    <button type="button" onclick="hideStoreHoneyModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div id="editProductModal" class="fixed inset-0 flex items-center justify-center hidden">
+    <div id="editHoneyModal" class="fixed inset-0 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-xl font-bold mb-4">Edit Honey</h2>
-            <form id="editProductForm" method="POST">
+            <form id="editHoneyForm" method="POST">
                 @csrf
                 @method('PUT')
-                <input type="hidden" id="editProductId" name="id">
+                <input type="hidden" id="editHoneyId" name="id">
                 
                 <label class="block mb-2">Honey Name:</label>
-                <input type="text" id="editProductName" name="name" required class="w-full border p-2 rounded">
+                <input type="text" id="editHoneyName" name="name" required class="w-full border p-2 rounded">
 
                 <label class="block mb-2 mt-4">Select Apiary:</label>
                 <select id="editApiarySelect" name="apiary_id" required class="w-full border p-2 rounded">
@@ -128,7 +127,7 @@
 
                 <div class="mt-4 flex justify-between">
                     <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded">Save</button>
-                    <button type="button" onclick="hideEditModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+                    <button type="button" onclick="hideUpdateHoneyModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
                 </div>
             </form>
         </div>
@@ -136,14 +135,14 @@
 
     @endif
 
-    <!-- APIARY LIST -->
+    <!-- Apiary List -->
     @if(auth()->user()->role == 'Beekeeper')
     
     <div class="container mx-auto mt-6 mb-6">
         <h1 class="flex justify-center text-lg font-semibold mb-4 mt-4">Apiary List</h1>
 
             <div class="flex justify-center mb-4">
-                <button onclick="showApiaryModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
+                <button onclick="showStoreApiaryModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
                     Add New Apiary
                 </button>
             </div>
@@ -177,7 +176,7 @@
                         </td>
                         <td class="px-6 py-4 border">
                             @if(auth()->user()->role == 'Beekeeper' && $apiary->beekeeper_id == auth()->user()->id)
-                                <button onclick="showEditApiaryModal({{ $apiary->id }}, '{{ $apiary->description }}', '{{ $apiary->location }}', '{{ $apiary->floral_composition }}', '{{ $apiary->specifics_of_environment }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
+                                <button onclick="showUpdateApiaryModal({{ $apiary->id }}, '{{ $apiary->description }}', '{{ $apiary->location }}', '{{ $apiary->floral_composition }}', '{{ $apiary->specifics_of_environment }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
                                     Edit
                                 </button>
                                 <form action="{{ route('dashboard.destroyApiary', $apiary->id) }}" method="POST" style="display:inline-block;">
@@ -214,7 +213,7 @@
 
                     <div class="mt-4 flex justify-between">
                         <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded">Save</button>
-                        <button type="button" onclick="hideApiaryModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+                        <button type="button" onclick="hideStoreApiaryModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -241,7 +240,7 @@
 
                     <div class="mt-4 flex justify-between">
                         <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded">Save</button>
-                        <button type="button" onclick="hideEditApiaryModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+                        <button type="button" onclick="hideUpdateApiaryModal()" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -252,14 +251,13 @@
 
     @if(auth()->user()->role == 'Wholesaler' || auth()->user()->role == 'Packaging company')
 
-    <!-- PRODUCT LIST -->
-
+    <!-- Product List -->
     <div class="container">
         <h3 class="flex justify-center text-lg font-semibold mb-4 mt-4">Products List</h3>
         @if(auth()->user()->role == 'Wholesaler')
 
         <div class="flex justify-center mt-4 mb-4">
-            <button onclick="showProductModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
+            <button onclick="showStoreProductModal()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
                 Add New Product
             </button>
         </div>
@@ -286,10 +284,10 @@
 
                         <td class="px-6 py-4 border">
                             <div>
-                                <button onclick="showEditProduct({{ $products->id }}, '{{ $products->name }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-4">
+                                <button onclick="showUpdateProductModal({{ $products->id }}, '{{ $products->name }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-4">
                                     Edit
                                 </button>
-                                <form action="{{ route('dashboard.product.deleteProduct', $products->id) }}" method="POST" style="display:inline-block;">
+                                <form action="{{ route('dashboard.product.destroyProduct', $products->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
                                 <button type="submit" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
@@ -306,10 +304,10 @@
                         @elseif(auth()->user()->role == 'Packaging company' && $products->packaging_id == auth()->user()->id)
                         <td class="px-6 py-4 border">
                             <div>
-                                <button onclick="showEditProduct({{ $products->id }}, '{{ $products->name }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-4">
+                                <button onclick="showUpdateProductModal({{ $products->id }}, '{{ $products->name }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-4">
                                     Edit
                                 </button>
-                                <form action="{{ route('dashboard.product.deleteProduct', $products->id) }}" method="POST" style="display:inline-block;">
+                                <form action="{{ route('dashboard.product.destroyProduct', $products->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
                                 <button type="submit" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
@@ -332,7 +330,7 @@
             <div class="modal-dialog bg-white rounded-lg shadow-lg w-full max-w-lg">
                 <div class="modal-header flex justify-between items-center p-4 border-b">
                     <h5 class="text-xl font-bold" id="productModalLabel">Manage Products</h5>
-                    <button type="button" onclick="hideProductModal()" class="text-black font-bold text-2xl">&times;</button>
+                    <button type="button" onclick="hideStoreProductModal()" class="text-black font-bold text-2xl">&times;</button>
                 </div>
                 <div class="modal-body p-4">
                     <form action="{{ route('dashboard.product.storeProduct') }}" method="POST">
@@ -357,7 +355,6 @@
                                 @endforeach
                             </div>
                         </div>
-
                         <button type="submit" class="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-700">Create Product</button>
                     </form>
                 </div>
@@ -365,22 +362,22 @@
         </div>
 
 
-        <div id="editProductModal2" class="fixed inset-0 flex justify-center items-center hidden">
+        <div id="editProductModal" class="fixed inset-0 flex justify-center items-center hidden">
             <div class="bg-white p-6 rounded-lg shadow-lg w-96">
                 <h3 class="text-xl font-semibold mb-4">Edit Product</h3>
-                <form id="editProductForm2" method="POST">
+                <form id="editProductForm" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="mb-4">
-                        <label for="editProductName2" class="block text-sm font-medium text-gray-700">Product Name</label>
-                        <input type="text" id="editProductName2" name="name" class="w-full px-4 py-2 border border-gray-300 rounded-md" required>
+                        <label for="editProductName" class="block text-sm font-medium text-gray-700">Product Name</label>
+                        <input type="text" id="editProductName" name="name" class="w-full px-4 py-2 border border-gray-300 rounded-md" required>
                     </div>
                     <div class="mb-4">
-                        <label for="editProductId2" class="block text-sm font-medium text-gray-700">Product ID</label>
-                        <input type="text" id="editProductId2" name="id" class="w-full px-4 py-2 border border-gray-300 rounded-md" readonly>
+                        <label for="editProductId" class="block text-sm font-medium text-gray-700">Product ID</label>
+                        <input type="text" id="editProductId" name="id" class="w-full px-4 py-2 border border-gray-300 rounded-md" readonly>
                     </div>
                     <div class="flex justify-between">
-                        <button type="button" onclick="hideEditProduct()" class="bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400">Cancel</button>
+                        <button type="button" onclick="hideUpdateProductModal()" class="bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400">Cancel</button>
                         <button type="submit" class="bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-700">Save Changes</button>
                     </div>
                 </form>
@@ -391,15 +388,16 @@
     @endif
 
     <script>
-    function showApiaryModal() {
+
+    function showStoreApiaryModal() {
         document.getElementById('addApiaryModal').classList.remove('hidden');
     }
 
-    function hideApiaryModal() {
+    function hideStoreApiaryModal() {
         document.getElementById('addApiaryModal').classList.add('hidden');
     }
 
-    function showEditApiaryModal(id, description, location, floral_composition, specifics_of_environment) {
+    function showUpdateApiaryModal(id, description, location, floral_composition, specifics_of_environment) {
         document.getElementById('editApiaryId').value = id;
         document.getElementById('editApiaryDescription').value = description;
         document.getElementById('editApiaryLocation').value = location;
@@ -410,53 +408,50 @@
         document.getElementById('editApiaryModal').classList.remove('hidden');
     }
 
-    function hideEditApiaryModal() {
+    function hideUpdateApiaryModal() {
         document.getElementById('editApiaryModal').classList.add('hidden');
     }
 
-    // --------------------------------------------------------------------------------------------
-
-    function showModal() {
+    function showStoreHoneyModal() {
         document.getElementById('addHoneyModal').classList.remove('hidden');
     }
 
-    function hideModal() {
+    function hideStoreHoneyModal() {
         document.getElementById('addHoneyModal').classList.add('hidden');
     }
-    function showEditModal(id, name, apiary_id) {
-        document.getElementById('editProductId').value = id;
-        document.getElementById('editProductName').value = name;
+    function showUpdateHoneyModal(id, name, apiary_id) {
+        document.getElementById('editHoneyId').value = id;
+        document.getElementById('editHoneyName').value = name;
         document.getElementById('editApiarySelect').value = apiary_id;
-        document.getElementById('editProductForm').action = '/dashboard/update/' + id;
+        document.getElementById('editHoneyForm').action = '/dashboard/updateHoney/' + id;
 
-        document.getElementById('editProductModal').classList.remove('hidden');
+        document.getElementById('editHoneyModal').classList.remove('hidden');
     }
 
-    function hideEditModal() {
-        document.getElementById('editProductModal').classList.add('hidden');
+    function hideUpdateHoneyModal() {
+        document.getElementById('editHoneyModal').classList.add('hidden');
     }
 
-    // --------------------------------------------------------------------------------------------
-
-    function showProductModal() {
+    function showStoreProductModal() {
         const modal = document.getElementById('productModal');
         modal.classList.remove('hidden');
     }
 
-    function hideProductModal() {
+    function hideStoreProductModal() {
         const modal = document.getElementById('productModal');
         modal.classList.add('hidden');
     }
 
-    function showEditProduct(id, name) {
-            document.getElementById('editProductModal2').classList.remove('hidden');
-            document.getElementById('editProductId2').value = id;
-            document.getElementById('editProductName2').value = name;
-            document.getElementById('editProductForm2').action = '/dashboard/product/updateProduct/' + id;
-        }
-
-    function hideEditProduct() {
-        document.getElementById('editProductModal2').classList.add('hidden');
+    function showUpdateProductModal(id, name) {
+        document.getElementById('editProductModal').classList.remove('hidden');
+        document.getElementById('editProductId').value = id;
+        document.getElementById('editProductName').value = name;
+        document.getElementById('editProductForm').action = '/dashboard/product/updateProduct/' + id;
     }
+
+    function hideUpdateProductModal() {
+        document.getElementById('editProductModal').classList.add('hidden');
+    }
+    
     </script>
 </x-app-layout>

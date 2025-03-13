@@ -41,7 +41,7 @@
                                     View File
                                 </a>
                             </p>
-                            <form action="{{ route('analysis.deleteAnalysis', ['id' => $honeyInfo->id]) }}" method="POST">
+                            <form action="{{ route('analysis.destroyAnalysis', ['id' => $honeyInfo->id]) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="mt-2 px-4 py-2 bg-gray-500 text-white rounded-full">
@@ -93,7 +93,7 @@
                             <button class="bg-gray-500 text-white px-3 py-1 rounded-full mb-4" onclick="showModalTraceability({{ $trace->id }})">
                                 Edit
                             </button>
-                            <form action="{{ route('traceability.destroyTraceability', $trace->id) }}" method="POST" class="inline">
+                            <form action="{{ route('traceability.destroyTraceabilityHoney', $trace->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="bg-gray-500 text-white px-3 py-1 rounded-full">
@@ -111,7 +111,7 @@
     <div id="addModalTraceability" class="fixed inset-0 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg w-1/3">
             <h2 class="text-lg font-semibold mb-4">Add Traceability Record</h2>
-            <form action="{{ route('traceability.storeTraceability', ['honey_id' => $honeyInfo->id]) }}" method="POST">
+            <form action="{{ route('traceability.storeTraceabilityHoney', ['honey_id' => $honeyInfo->id]) }}" method="POST">
                 @csrf
                 <input type="hidden" name="honey_id" value="{{ $honeyInfo->id }}">
 
@@ -131,6 +131,15 @@
 
 
     <script>
+        
+    function showModalTraceability() {
+        document.getElementById('addModalTraceability').classList.remove('hidden');
+    }
+
+    function closeModalTraceability() {
+        document.getElementById('addModalTraceability').classList.add('hidden');
+    }
+    
     let map, marker, geocoder;
 
     function initMap() {
@@ -189,14 +198,6 @@
         });
     }
 
-
-    function showModalTraceability() {
-        document.getElementById('addModalTraceability').classList.remove('hidden');
-    }
-
-    function closeModalTraceability() {
-        document.getElementById('addModalTraceability').classList.add('hidden');
-    }
     </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBoCstylgREVj_Kd4Ji08ah5Vp8YlkBe8s&libraries=places,marker&callback=initMap"></script>
 </x-app-layout>

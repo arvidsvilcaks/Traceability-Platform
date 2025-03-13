@@ -18,20 +18,25 @@ class WholesalerController extends Controller
     {
         $user = Auth::user();
 
-        $traceability = Traceability::getAll_2($product_id);
         $processesWholesaler = Processes::where('product_id', $product_id)
         ->where('user_id', $user->id)
         ->get();
+
         $qualityWholesaler = Quality::where('product_id', $product_id)
         ->where('user_id', $user->id)
         ->get();
+
+        $traceability = Traceability::getAll_2($product_id);
+
         $market = Markets::where('product_id', $product_id)->get();
+        
         $honeyInfo = Products::where('id', $product_id)->latest()->first();
+
         $packaging = User::where('role', 'Packaging company')->get();
 
         return view('roles.wholesaler', data: compact('processesWholesaler', 'qualityWholesaler', 'market', 'honeyInfo', 'packaging', 'traceability'));
     }
-    // Store new traceability record
+    
     public function storeTraceabilityProduct(Request $request)
     {
         $request->validate([
@@ -45,7 +50,7 @@ class WholesalerController extends Controller
 
         return redirect()->back()->with('success', 'Traceability record added successfully.');
     }
-    // Update traceability record
+
     public function updateTraceabilityProduct(Request $request, $id)
     {
         $request->validate([
@@ -61,13 +66,13 @@ class WholesalerController extends Controller
         return redirect()->back()->with('success', 'Traceability record updated successfully.');
     }
     
-    // Delete traceability record
     public function destroyTraceabilityProduct($id)
     {
         Traceability::findOrFail($id)->delete();
         return redirect()->back()->with('success', 'Traceability record deleted successfully.');
     }
-    public function update(Request $request)
+
+    public function assignPackaging(Request $request)
     {
         $request->validate([
             'product_id' => 'required|exists:products,id',

@@ -107,7 +107,7 @@
           <td class="px-6 py-4 border">
             <button onclick="editModalQuality({{ json_encode($qualityWholesaler) }})" class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full">Edit</button>
             
-            <form action="{{ route('qualityWholesaler.destroyHoneyQuality', $qualityWholesaler->id) }}" method="POST" style="display:inline;">
+            <form action="{{ route('qualityWholesaler.destroyQuality', $qualityWholesaler->id) }}" method="POST" style="display:inline;">
               @csrf
               @method('DELETE')
               <button class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full">Delete</button>
@@ -123,7 +123,7 @@
       <div class="bg-white p-6 rounded-lg shadow-lg w-96">
           <h2 class="text-lg font-semibold mb-4">Add Quality Standard</h2>
 
-          <form id="addQualityForm" action="{{ route('qualityWholesaler.storeHoneyQuality', ['product_id' => $honeyInfo->id]) }}" method="POST" enctype="multipart/form-data">
+          <form id="addQualityForm" action="{{ route('qualityWholesaler.storeQuality', ['product_id' => $honeyInfo->id]) }}" method="POST" enctype="multipart/form-data">
               @csrf
               <input type="hidden" id="qualityId" name="id">
               <input type="hidden" name="product_id" value="{{ $honeyInfo->id }}">
@@ -144,7 +144,7 @@
   <div id="editModalQuality" class="fixed inset-0 flex items-center justify-center hidden">
       <div class="bg-white p-6 rounded-lg shadow-lg w-96">
           <h2 class="text-lg font-semibold mb-4">Edit Quality Standard</h2>
-          <form id="editQualityForm" action="{{ route('qualityWholesaler.updateHoneyQuality', ':id') }}" method="POST" enctype="multipart/form-data">
+          <form id="editQualityForm" action="{{ route('qualityWholesaler.updateQuality', ':id') }}" method="POST" enctype="multipart/form-data">
               @csrf
               @method('PUT')
               <input type="hidden" id="edit_qualityId" name="id">
@@ -345,7 +345,7 @@
   <div id="assignPackagingModal" class="fixed inset-0 flex items-center justify-center hidden">
       <div class="bg-white p-6 rounded-lg shadow-lg w-96">
           <h2 class="text-xl font-bold mb-4">Assign Packaging Company</h2>
-          <form action="{{ route('wholesaler.update') }}" method="POST">
+          <form action="{{ route('wholesaler.assignPackaging') }}" method="POST">
               @csrf
               <input type="hidden" name="product_id" value="{{ $honeyInfo->id }}">
 
@@ -368,6 +368,15 @@
   </div>
 
   <script>
+
+    function showModalTraceability() {
+        document.getElementById('addModalTraceability').classList.remove('hidden');
+    }
+
+    function closeModalTraceability() {
+        document.getElementById('addModalTraceability').classList.add('hidden');
+    }
+
     function showModalPackaging() {
         document.getElementById('assignPackagingModal').classList.remove('hidden');
     }
@@ -489,15 +498,6 @@
                 console.error('Geocoding failed:', status);
             }
         });
-    }
-
-
-    function showModalTraceability() {
-        document.getElementById('addModalTraceability').classList.remove('hidden');
-    }
-
-    function closeModalTraceability() {
-        document.getElementById('addModalTraceability').classList.add('hidden');
     }
 
     </script>

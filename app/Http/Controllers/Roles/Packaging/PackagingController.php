@@ -39,32 +39,26 @@ class PackagingController extends Controller
         
         $value = route('consumerPackage', ['package_id' => $packages->id]);
 
-        // Create new PDF document
         $pdf = new TCPDF();
         $pdf->SetCreator(PDF_CREATOR);
         $pdf->SetAuthor('Arvids');
         $pdf->SetTitle('Package QR Code PDF');
         $pdf->SetSubject('QR Code');
 
-        // Remove default header/footer
         $pdf->setPrintHeader(false);
         $pdf->setPrintFooter(false);
 
-        // Add a page
         $pdf->AddPage();
 
-        // Set font
         $pdf->SetFont('helvetica', '', 12);
 
-        // Add Title
         $pdf->Cell(0, 10, 'QR Code', 0, 1, 'C');
 
-        // Generate and embed QR Code
         $pdf->write2DBarcode($value, 'QRCODE,H', 80, 40, 50, 50, [], 'N');
 
-        // Output the PDF in browser
         $pdf->Output('qrCodePackage.pdf', 'I');
     }
+
     public function storePackage(Request $request, $product_id)
     {
         $request->validate([
@@ -87,7 +81,6 @@ class PackagingController extends Controller
 
         return redirect()->route('packaging.index', ['product_id' => $product_id])->with('success', 'Package added successfully.');
     }
-    
 
     public function updatePackage(Request $request, $id)
     {
@@ -110,7 +103,6 @@ class PackagingController extends Controller
         return redirect()->route('packaging.index', ['product_id' => $packages->product_id])->with('success', 'Package updated successfully.');
     }
     
-
     public function destroyPackage($id)
     {
         $packages = Packages::findOrFail($id);

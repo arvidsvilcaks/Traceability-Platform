@@ -12,7 +12,7 @@ class UserController extends Controller
     use AuthorizesRequests;
     public function updateStatus(Request $request, User $user)
     {
-        $this->authorize('update', $user); // Ensure only authorized users can enable/disable
+        $this->authorize('update', $user);
 
         $user->update([
             'is_enabled' => $request->is_enabled

@@ -23,4 +23,8 @@ class Apiary extends Model
     {
         return $this->belongsTo(User::class, 'beekeeper_id');
     }
+    public function honeys()
+    {
+        return $this->hasMany(Honey::class); // One apiary can have many honeys
+    }       
 }

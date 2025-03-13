@@ -29,7 +29,6 @@ class Traceability extends Model
         return $this->belongsTo(Honey::class, 'product_id');
     }
 
-    // Static function to fetch all records, optionally filtering by honey_id
     public static function getAll($honey_id = null)
     {
         $query = self::query();
@@ -51,39 +50,32 @@ class Traceability extends Model
         return $query->get();
     }
 
-
-    // Static function to create a new traceability record
     public static function createTraceability($data)
     {
         return self::create($data);
     }
 
-    // Static function to update a record
     public static function updateTraceability($id, $data)
     {
         $traceability = self::findOrFail($id);
         return $traceability->update($data);
     }
 
-    // Static function to delete a record
     public static function deleteTraceability($id)
     {
         return self::findOrFail($id)->delete();
     }
-    // Static function to create a new traceability record
     public static function createTraceabilityProduct($data)
     {
         return self::create($data);
     }
 
-    // Static function to update a record
     public static function updateTraceabilityProduct($id, $data)
     {
         $traceability = self::findOrFail($id);
         return $traceability->update($data);
     }
 
-    // Static function to delete a record
     public static function deleteTraceabilityProduct($id)
     {
         return self::findOrFail($id)->delete();

@@ -2,7 +2,7 @@
     <div class="overflow-x-auto shadow-md sm:rounded-lg w-full mb-6 mt-6">
         <h3 class="text-lg font-semibold flex justify-center">Documents about Beekeeping Practices</h3>
         <div class="flex justify-center mb-6">
-            <button id="showFormButton" class="justify-center bg-gray-500 text-white px-4 py-2 rounded-full mt-4">Add New Row</button>
+            <button id="showDocumentsFormButton" class="justify-center bg-gray-500 text-white px-4 py-2 rounded-full mt-4">Add New Row</button>
         </div>
         <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -20,8 +20,8 @@
                         @endif
                     </td>
                     <td class="border border-gray-300 px-4 py-2">
-                    <button onclick='editDocument(@json($beekeepingDocuments))' class="bg-gray-500 text-white rounded-full px-2 py-1 mb-4">Edit</button>
-                    <form action="{{ route('beekeepingDocuments.deleteDocument', $beekeepingDocuments->id) }}" method="POST" class="inline">
+                    <button onclick='showUpdateDocumentModal(@json($beekeepingDocuments))' class="bg-gray-500 text-white rounded-full px-2 py-1 mb-4">Edit</button>
+                    <form action="{{ route('beekeepingDocuments.destroyDocument', $beekeepingDocuments->id) }}" method="POST" class="inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="bg-gray-500 text-white px-2 py-1 rounded-full">Delete</button>
@@ -36,14 +36,14 @@
     <div id="modalBackdrop" class="fixed inset-0 bg-opacity-50 hidden flex items-center justify-center">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-lg font-semibold mb-4">Add New Document</h2>
-            <form action="{{ route('beekeepingDocuments.addDocument', ['honey_id' => $honeyInfo->id]) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('beekeepingDocuments.storeDocument', ['honey_id' => $honeyInfo->id]) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="honey_id" value="{{ $honeyInfo->id }}">
 
                 <input type="file" id="add_beekeeping_documents" name="add_beekeeping_documents" accept=".pdf,.docx" class="mb-4">
                 <div class="flex justify-end gap-2">
                     <button type="submit" class="bg-gray-500 text-white px-4 py-2 rounded-full">Add</button>    
-                    <button type="button" id="closeModalButton" class="bg-gray-500 text-white px-4 py-2 rounded-full">Cancel</button>
+                    <button type="button" id="closeDocumentsFormButton" class="bg-gray-500 text-white px-4 py-2 rounded-full">Cancel</button>
                 </div>
             </form>
         </div>
@@ -57,7 +57,7 @@
                 <input type="hidden" name="id" id="editDocumentId">
                 <input type="file" name="add_beekeeping_documents" id="editDocumentInput" class="border p-2 w-full" accept=".pdf,.docx">
                 <button type="submit" class="bg-gray-500 text-white px-4 py-2 mt-2 rounded-full">Update</button>
-                <button type="button" onclick="closeEditModal()" class="bg-gray-500 text-white px-4 py-2 mt-2 rounded-full">Cancel</button>
+                <button type="button" onclick="closeUpdateDocumentModal()" class="bg-gray-500 text-white px-4 py-2 mt-2 rounded-full">Cancel</button>
             </form>
         </div>
     </div>
@@ -80,17 +80,17 @@
                     <td class="border border-gray-300 px-4 py-2">{{ $honeyInfo->honey_type }}</td>
                     <td class="border border-gray-300 px-4 py-2">{{ $honeyInfo->quantity }}</td>
                     <td class="border border-gray-300 px-4 py-2">
-                        <button class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full" onclick="editHoney({{ $honeyInfo->id }}, '{{ $honeyInfo->date_of_production }}', '{{ $honeyInfo->honey_type }}', {{ $honeyInfo->quantity }})">Add product info</button>
+                        <button class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full" onclick="showUpdateHoneyInfoModal({{ $honeyInfo->id }}, '{{ $honeyInfo->date_of_production }}', '{{ $honeyInfo->honey_type }}', {{ $honeyInfo->quantity }})">Add product info</button>
                     </td>
                 </tr> 
             </tbody>
         </table>
     </div>
 
-    <div id="modalBackdrop2" class="fixed inset-0 hidden flex items-center justify-center">
+    <div id="modalBackdropHoneyInfo" class="fixed inset-0 hidden flex items-center justify-center">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-lg font-semibold mb-4">Add New Honey Info</h2>
-            <form action="{{ route('honey.addHoney') }}" method="POST">
+            <form action="{{ route('honey.storeHoneyInfo') }}" method="POST">
                 @csrf
                 <input type="date" name="date_of_production" class="border p-2 w-full mb-2" required>
                 <input type="text" name="honey_type" placeholder="Honey Type" class="border p-2 w-full mb-2" required>
@@ -114,7 +114,7 @@
                 <input type="text" name="honey_type" id="editHoneyType" class="border p-2 w-full">
                 <input type="number" name="quantity" id="editHoneyQuantity" class="border p-2 w-full">
                 <button type="submit" class="bg-gray-500 text-white px-4 py-2 mt-2 rounded-full">Update</button>
-                <button type="button" onclick="closeHoneyModal()" class="bg-gray-500 text-white px-4 py-2 mt-2 rounded-full">Cancel</button>
+                <button type="button" onclick="closeUpdateHoneyInfoModal()" class="bg-gray-500 text-white px-4 py-2 mt-2 rounded-full">Cancel</button>
             </form>
         </div>
     </div>
@@ -214,7 +214,7 @@
                             <button class="bg-gray-500 text-white px-3 py-1 rounded-full mb-4" onclick="showModalTraceability({{ $trace->id }})">
                                 Edit
                             </button>
-                            <form action="{{ route('traceability.destroyTraceability', $trace->id) }}" method="POST" class="inline">
+                            <form action="{{ route('traceability.destroyTraceabilityHoney', $trace->id) }}" method="POST" class="inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="bg-gray-500 text-white px-3 py-1 rounded-full">
@@ -232,7 +232,7 @@
     <div id="addModalTraceability" class="fixed inset-0 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg w-1/3">
             <h2 class="text-lg font-semibold mb-4">Add Traceability Record</h2>
-            <form action="{{ route('traceability.storeTraceability', ['honey_id' => $honeyInfo->id]) }}" method="POST">
+            <form action="{{ route('traceability.storeTraceabilityHoney', ['honey_id' => $honeyInfo->id]) }}" method="POST">
                 @csrf
                 <input type="hidden" name="honey_id" value="{{ $honeyInfo->id }}">
 
@@ -272,7 +272,7 @@
     <div id="assignLaboratoryModal" class="fixed inset-0 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-xl font-bold mb-4">Assign Laboratory Company</h2>
-            <form action="{{ route('beekeeper.update') }}" method="POST">
+            <form action="{{ route('beekeeper.assignLaboratoryAndWholesaler') }}" method="POST">
                 @csrf
                 <input type="hidden" name="honey_id" value="{{ $honeyInfo->id }}">
 
@@ -297,7 +297,7 @@
     <div id="assignWholesalerModal" class="fixed inset-0 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-xl font-bold mb-4">Assign Wholesaler Company</h2>
-            <form action="{{ route('beekeeper.update') }}" method="POST">
+            <form action="{{ route('beekeeper.assignLaboratoryAndWholesaler') }}" method="POST">
                 @csrf
                 <input type="hidden" name="honey_id" value="{{ $honeyInfo->id }}">
 
@@ -320,6 +320,14 @@
     </div>
 
     <script>
+        
+        function showModalTraceability() {
+            document.getElementById('addModalTraceability').classList.remove('hidden');
+        }
+
+        function closeModalTraceability() {
+            document.getElementById('addModalTraceability').classList.add('hidden');
+        }
             
         function showModalLaboratory() {
             document.getElementById('assignLaboratoryModal').classList.remove('hidden');
@@ -337,31 +345,15 @@
             document.getElementById('assignWholesalerModal').classList.add('hidden');
         }
 
-        function showModal() {
+        function showStoreDocumentsModal() {
             document.getElementById('modalBackdrop').classList.remove('hidden');
         }
-        function closeModal() {
+
+        function closeStoreDocumentsModal() {
             document.getElementById('modalBackdrop').classList.add('hidden');
-        }    
-        function showModal2() {
-            document.getElementById('modalBackdrop2').classList.remove('hidden');
         }
-        function closeModal2() {
-            document.getElementById('modalBackdrop2').classList.add('hidden');
-        }            
-        // function showModal3(modalId) {
-        //     document.getElementById(modalId).classList.remove('hidden');
-        // }
-        // function closeModal3(modalId) {
-        //     document.getElementById(modalId).classList.add('hidden');
-        // }
-        // function showModal4(modalId) {
-        //     document.getElementById(modalId).classList.remove('hidden');
-        // }
-        // function closeModal4(modalId) {
-        //     document.getElementById(modalId).classList.add('hidden');
-        // }        
-        function editDocument(beekeepingDocuments) {
+
+        function showUpdateDocumentModal(beekeepingDocuments) {
 
             let docData = beekeepingDocuments;
 
@@ -374,49 +366,39 @@
             document.getElementById("editDocumentModal").classList.remove("hidden");
         }
 
-        function closeEditModal() {
+        function closeUpdateDocumentModal() {
             document.getElementById('editDocumentModal').classList.add('hidden');
         }
 
-        function editHoney(id, date, type, quantity) {
+        function setupModalEventListeners() {
+            document.getElementById('showDocumentsFormButton').addEventListener('click', showStoreDocumentsModal);
+            document.getElementById('closeDocumentsFormButton').addEventListener('click', closeStoreDocumentsModal);
+
+            document.getElementById('modalBackdrop').addEventListener('click', function(event) {
+                if (event.target === this) {
+                    closeStoreDocumentsModal();
+                }
+            });
+        }
+        document.addEventListener('DOMContentLoaded', setupModalEventListeners);
+
+        function showUpdateHoneyInfoModal(id, date, type, quantity) {
             document.getElementById('editHoneyId').value = id;
             document.getElementById('editHoneyDate').value = date;
             document.getElementById('editHoneyType').value = type;
             document.getElementById('editHoneyQuantity').value = quantity;
-            document.getElementById('editHoneyForm').action = `/beekeeper/updateHoney/${id}`;
+            document.getElementById('editHoneyForm').action = `/beekeeper/updateHoneyInfo/${id}`;
             document.getElementById('editHoneyModal').classList.remove('hidden');
         }
-
-        function closeHoneyModal() {
+        function closeUpdateHoneyInfoModal() {
             document.getElementById('editHoneyModal').classList.add('hidden');
         }
-
-        function setupModalEventListeners() {
-            document.getElementById('showFormButton').addEventListener('click', showModal);
-            document.getElementById('closeModalButton').addEventListener('click', closeModal);
-
-            document.getElementById('modalBackdrop').addEventListener('click', function(event) {
-                if (event.target === this) {
-                    closeModal();
-                }
-            });
+        function showStoreHoneyInfoModal() {
+            document.getElementById('modalBackdropHoneyInfo').classList.remove('hidden');
         }
-
-        // function editModal(apiary) {
-        //     document.getElementById('edit_apiaryId').value = apiary.id;
-
-        //     const form = document.getElementById('editApiaryForm');
-        //     form.action = form.action.replace(':id', apiary.id);
-
-        //     document.getElementById('edit_description').value = apiary.description;
-        //     document.getElementById('edit_location').value = apiary.location;
-        //     document.getElementById('edit_floral_composition').value = apiary.floral_composition;
-        //     document.getElementById('edit_specifics_of_environment').value = apiary.specifics_of_environment;
-
-        //     showModal4('editModal');
-        // }
-        document.addEventListener('DOMContentLoaded', setupModalEventListeners);
-
+        function closeStoreHoneyInfoModal() {
+            document.getElementById('modalBackdropHoneyInfo').classList.add('hidden');
+        } 
 
         let map, marker, geocoder;
 
@@ -475,13 +457,7 @@
                 }
             });
         }
-        function showModalTraceability() {
-            document.getElementById('addModalTraceability').classList.remove('hidden');
-        }
 
-        function closeModalTraceability() {
-            document.getElementById('addModalTraceability').classList.add('hidden');
-        }
         </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBoCstylgREVj_Kd4Ji08ah5Vp8YlkBe8s&libraries=places,marker&callback=initMap"></script>
 </x-app-layout>

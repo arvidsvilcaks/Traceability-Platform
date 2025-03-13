@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 class HoneyController extends Controller
 {
-    public function addHoney(Request $request)
+    public function storeHoneyInfo(Request $request)
     {
         $request->validate([
             'date_of_production' => 'required|date',
@@ -33,7 +33,7 @@ class HoneyController extends Controller
         return redirect()->back()->with('success', 'Product info added successfully');
     }
 
-    public function updateHoney(Request $request, $id)
+    public function updateHoneyInfo(Request $request, $id)
     {
         $honeyInfo = Honey::findOrFail($id);
 
@@ -60,7 +60,7 @@ class HoneyController extends Controller
         return redirect()->back()->with('success', 'Product info updated successfully');
     }
 
-    public function deleteHoney($id)
+    public function destroyHoneyInfo($id)
     {
         $honeyInfo = Honey::findOrFail($id);
 

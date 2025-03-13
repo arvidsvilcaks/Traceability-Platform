@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Roles\Beekeeper;
 
 use App\Http\Controllers\Controller;
-use App\Models\Apiary;
 use App\Models\Honey;
 use App\Models\BeekeepingDocuments;
 use App\Models\Traceability;
@@ -40,7 +39,7 @@ class BeekeeperController extends Controller
         return view('roles.beekeeper', compact( 'beekeepingDocuments', 'honeyInfo', 'traceability', 'laboratoryEmployees', 'wholesalers', 'honey'));
     }
 
-    public function update(Request $request)
+    public function assignLaboratoryAndWholesaler(Request $request)
     {
         $request->validate([
             'honey_id' => 'required|exists:honey,id',
@@ -61,8 +60,7 @@ class BeekeeperController extends Controller
     
         return redirect()->back()->with('success', 'Product info updated successfully');
     }
-    // Store new traceability record
-    public function storeTraceability(Request $request)
+    public function storeTraceabilityHoney(Request $request)
     {
         $request->validate([
             'address' => 'required|string|max:255',
@@ -76,8 +74,7 @@ class BeekeeperController extends Controller
         return redirect()->back()->with('success', 'Traceability record added successfully.');
     }
     
-    // Update traceability record
-    public function updateTraceability(Request $request, $id)
+    public function updateTraceabilityHoney(Request $request, $id)
     {
         $request->validate([
             'address' => 'required|string|max:255',
@@ -92,8 +89,7 @@ class BeekeeperController extends Controller
         return redirect()->back()->with('success', 'Traceability record updated successfully.');
     }
     
-    // Delete traceability record
-    public function destroyTraceability($id)
+    public function destroyTraceabilityHoney($id)
     {
         Traceability::findOrFail($id)->delete();
         return redirect()->back()->with('success', 'Traceability record deleted successfully.');

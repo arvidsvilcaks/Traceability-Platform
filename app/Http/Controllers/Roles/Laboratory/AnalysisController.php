@@ -47,7 +47,7 @@ class AnalysisController extends Controller
         return redirect()->route('laboratory.index', ['honey_id' => $id])->with('success', 'Analysis info updated successfully.');
     }
 
-    public function deleteAnalysis($id)
+    public function destroyAnalysis($id)
     {
         $honeyInfo = Honey::findOrFail($id);
 

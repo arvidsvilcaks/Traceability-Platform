@@ -16,7 +16,6 @@ class Products extends Model
         'packaging_id',
         'wholesaler_id'
     ];
-
     public function packaging()
     {
         return $this->belongsTo(User::class, 'packaging_id');
@@ -28,5 +27,17 @@ class Products extends Model
     public function honeys()
     {
         return $this->belongsToMany(Honey::class, 'honey_products', 'product_id', 'honey_id');
+    }
+    public function quality()
+    {
+        return $this->hasMany(Quality::class, 'product_id');
+    }
+    public function processes()
+    {
+        return $this->hasMany(Processes::class, 'product_id');
+    }
+    public function traceability()
+    {
+        return $this->hasMany(Traceability::class, 'product_id');
     }
 }

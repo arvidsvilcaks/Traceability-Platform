@@ -28,14 +28,4 @@ class Packages extends Model
     {
         return $this->belongsTo(Products::class, 'product_id');
     }
-    // protected static function boot()
-    // {
-    //     parent::boot();
-
-    //     static::creating(function ($package) {
-    //         if (empty($package->qr_code)) {
-    //             $package->qr_code = Str::uuid()->toString();
-    //         }
-    //     });
-    // }
 }

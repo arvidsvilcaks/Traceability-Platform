@@ -15,4 +15,8 @@ class BeekeepingDocuments extends Model
         'add_beekeeping_documents',
         'honey_id'
     ];
+    public function honey()
+    {
+        return $this->belongsTo(Honey::class, 'honey_id');
+    }
 }
