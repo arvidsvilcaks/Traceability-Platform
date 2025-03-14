@@ -54,7 +54,7 @@
                     </div>
                     <div class="flex justify-center">
                         <img src="{{ asset('storage/honey_product_traceability_welcome.png') }}" 
-                            alt="description of myimage" 
+                            alt="Logo" 
                             class="w-auto max-w-full h-auto">
                     </div>
                 </main>
