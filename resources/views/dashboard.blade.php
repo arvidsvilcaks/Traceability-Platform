@@ -66,11 +66,11 @@
                             <p>{{ $honey->beekeeper->company ?? 'Unknown' }}</p>
                         @endif
                     </td>
-                    <td>
-                        @if(auth()->user()->role == 'Wholesaler' && $honey->wholesaler_id == auth()->user()->id)
+                    @if(auth()->user()->role == 'Wholesaler' && $honey->wholesaler_id == auth()->user()->id)
+                    <td class="px-6 py-4 border">
                             <p>{{ $honey->quantity }}</p>
-                        @endif
                     </td>
+                    @endif
                 </tr>
             @endforeach
             </tbody>
@@ -371,10 +371,6 @@
                     <div class="mb-4">
                         <label for="editProductName" class="block text-sm font-medium text-gray-700">Product Name</label>
                         <input type="text" id="editProductName" name="name" class="w-full px-4 py-2 border border-gray-300 rounded-md" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="editProductId" class="block text-sm font-medium text-gray-700">Product ID</label>
-                        <input type="text" id="editProductId" name="id" class="w-full px-4 py-2 border border-gray-300 rounded-md" readonly>
                     </div>
                     <div class="flex justify-between">
                         <button type="button" onclick="hideUpdateProductModal()" class="bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400">Cancel</button>

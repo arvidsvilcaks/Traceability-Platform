@@ -256,7 +256,7 @@
               <td class="px-6 py-4 border">{{ $package->package_weight }} kg</td>
               <td class="px-6 py-4 border">{{ $package->type }}</td>
               <td class="px-6 py-4 border">{{ $package->market ? $package->market->name : 'N/A' }}</td>
-              <td class="px-6 py-4">
+              <td class="px-6 py-4 border">
                     <a href="{{ route('qr_code_Package', ['qr_code' => $package->qr_code]) }}" 
                     target="_blank" 
                     class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-white rounded-full">

@@ -18,18 +18,6 @@ use App\Http\Controllers\Roles\Packaging\QualityPackagingController;
 use App\Http\Controllers\Roles\UserController;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/consumerHoney/{honey_id}', function () {
-//     return view('roles.consumerHoney');
-// })->name('consumerHoney');
-
-// Route::get('/consumerProduct/{product_id}', function () {
-//     return view('roles.consumerProduct');
-// })->name('consumerProduct');
-
-// Route::get('/consumerPackage/{package_id}', function () {
-//     return view('roles.consumerPackage');
-// })->name('consumerPackage');
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -39,12 +27,12 @@ Route::get('/disabled-account', function () {
 });
 
 Route::get('/qr_code_Honey/{qr_code?}', [DashboardController::class, 'qrCodeHoney'])->name('qr_code_Honey');
-
 Route::get('/qr_code_Product/{qr_code?}', [DashboardController::class, 'qrCodeProduct'])->name('qr_code_Product');
-
 Route::get('/qr_code_Package/{qr_code?}', [PackagingController::class, 'qrCodePackage'])->name('qr_code_Package');
 
-Route::get('/consumerPackage/{package_id}', [TraceabilityController::class, 'index'])->name('consumerPackage');
+Route::get('/consumerHoney/{honey_id}', [TraceabilityController::class, 'indexHoney'])->name('consumerHoney');
+Route::get('/consumerProduct/{product_id}', [TraceabilityController::class, 'indexProduct'])->name('consumerProduct');
+Route::get('/consumerPackage/{package_id}', [TraceabilityController::class, 'indexPackage'])->name('consumerPackage');
 
 Route::middleware(['auth', 'verified', 'enabled'])->group(function () {
 
