@@ -12,6 +12,7 @@
                     <th class="px-6 py-3 border">Date of Production</th>
                     <th class="px-6 py-3 border">Apiary</th>
                     <th class="px-6 py-3 border">Beekeeper</th>
+                    <th class="px-6 py-3 border">Analysis results</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,7 +21,14 @@
                     <td class="px-6 py-4 border">{{ $honey->honey_type }}</td>
                     <td class="px-6 py-4 border">{{ $honey->date_of_production }}</td>
                     <td class="px-6 py-4 border">{{ $honey->apiary ? $honey->apiary->location : 'N/A' }}</td>
-                    <td class="px-6 py-4 border">{{ $honey->beekeeper ? $honey->beekeeper->name : 'N/A' }}</td>
+                    <td class="px-6 py-4 border">{{ $honey->beekeeper ? $honey->beekeeper->company : 'N/A' }}</td>
+                    <td class="px-6 py-4 border">
+                        <a href="{{ asset('storage/' . $honey->add_analysis_results) }}" 
+                        class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-white rounded-full" 
+                        target="_blank">
+                            View
+                        </a>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -64,7 +72,11 @@
                 <tbody>
                     @foreach ($beekeepingDocuments as $document)
                         <tr>
-                            <td class="px-6 py-4 border">{{ $document->add_beekeeping_documents }}</td>
+                            <td class="px-6 py-4 border">
+                                @if($document->add_beekeeping_documents)
+                                    <a href="{{ asset('storage/' . $document->add_beekeeping_documents) }}" target="_blank" class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-white rounded-full">View</a>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

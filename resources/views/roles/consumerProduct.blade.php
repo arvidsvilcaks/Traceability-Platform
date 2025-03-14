@@ -2,27 +2,31 @@
     <h1 class="flex justify-center text-lg font-semibold mt-6">Product Overview</h1>
 
     {{-- Package Details --}}
-    <div class="overflow-x-auto shadow-md sm:rounded-lg mt-6 mb-6">
-        <h1 class="flex justify-center text-lg font-semibold mb-4">Package Details</h1>
-        <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 border">Quantity</th>
-                    <th class="px-6 py-3 border">Package Weight</th>
-                    <th class="px-6 py-3 border">Type</th>
-                    <th class="px-6 py-3 border">Market</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="px-6 py-4 border">{{ $product->packaging->quantity ?? 'N/A' }}</td>
-                    <td class="px-6 py-4 border">{{ $product->packaging->package_weight ?? 'N/A' }} kg</td>
-                    <td class="px-6 py-4 border">{{ $product->packaging->type ?? 'N/A' }}</td>
-                    <td class="px-6 py-4 border">{{ $product->packaging->market->name ?? 'N/A' }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    @if ($product)
+        <div class="overflow-x-auto shadow-md sm:rounded-lg mt-6 mb-6">
+            <h1 class="flex justify-center text-lg font-semibold mb-4">Package Details</h1>
+            <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 border">Quantity</th>
+                        <th class="px-6 py-3 border">Package Weight</th>
+                        <th class="px-6 py-3 border">Type</th>
+                        <th class="px-6 py-3 border">Market</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($product->packagingProduct as $packaging)
+                        <tr>
+                            <td class="px-6 py-4 border">{{ $packaging->quantity ?? 'N/A' }}</td>
+                            <td class="px-6 py-4 border">{{ $packaging->package_weight ?? 'N/A' }} kg</td>
+                            <td class="px-6 py-4 border">{{ $packaging->type ?? 'N/A' }}</td>
+                            <td class="px-6 py-4 border">{{ optional($packaging->market)->name ?? 'N/A' }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    @endif
 
     {{-- Product Details --}}
     @if ($product)
@@ -56,6 +60,7 @@
                 <tr>
                     <th class="px-6 py-3 border">Process</th>
                     <th class="px-6 py-3 border">Description</th>
+                    <th class="px-6 py-3 border">Visual materials</th>
                 </tr>
             </thead>
             <tbody>
@@ -63,6 +68,11 @@
                     <tr>
                         <td class="px-6 py-4 border">{{ $process->process }}</td>
                         <td class="px-6 py-4 border">{{ $process->description }}</td>
+                        <td class="px-6 py-4 border">
+                            @if($process->add_visual_materials)
+                                <a href="{{ asset('storage/' . $process->add_visual_materials) }}" target="_blank" class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-white rounded-full">View</a>
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

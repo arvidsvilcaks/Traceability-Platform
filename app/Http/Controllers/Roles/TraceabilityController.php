@@ -44,7 +44,8 @@ class TraceabilityController extends Controller
             'processes',
             'traceability',
             'packaging',
-            'wholesaler'
+            'wholesaler',
+            'packagingProduct'
         ])->find($product_id);
     
         return view('roles.consumerProduct', compact('product'));

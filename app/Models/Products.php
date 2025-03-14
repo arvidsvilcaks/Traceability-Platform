@@ -20,6 +20,10 @@ class Products extends Model
     {
         return $this->belongsTo(User::class, 'packaging_id');
     }
+    public function packagingProduct()
+    {
+        return $this->hasMany(Packages::class, 'product_id');
+    }
     public function wholesaler()
     {
         return $this->belongsTo(User::class, 'wholesaler_id');

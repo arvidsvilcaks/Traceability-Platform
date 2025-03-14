@@ -33,7 +33,7 @@
         </table>
     </div>
 
-    <div id="modalBackdrop" class="fixed inset-0 bg-opacity-50 hidden flex items-center justify-center">
+    <div id="modalBackdrop" class="fixed inset-0 hidden flex items-center justify-center">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
             <h2 class="text-lg font-semibold mb-4">Add New Document</h2>
             <form action="{{ route('beekeepingDocuments.storeDocument', ['honey_id' => $honeyInfo->id]) }}" method="POST" enctype="multipart/form-data">
@@ -48,7 +48,7 @@
             </form>
         </div>
     </div>
-    <div id="editDocumentModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+    <div id="editDocumentModal" class="hidden fixed inset-0 flex justify-center items-center">
         <div class="bg-white p-6 rounded shadow-lg">
             <h2 class="text-xl font-semibold">Edit Document</h2>
             <form id="editDocumentForm" method="POST" enctype="multipart/form-data">
@@ -74,7 +74,6 @@
                 </tr>
             </thead>
             <tbody>
-                
                 <tr>
                     <td class="border border-gray-300 px-4 py-2">{{ $honeyInfo->date_of_production }}</td>
                     <td class="border border-gray-300 px-4 py-2">{{ $honeyInfo->honey_type }}</td>
@@ -103,7 +102,7 @@
         </div>
     </div>
 
-    <div id="editHoneyModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+    <div id="editHoneyModal" class="hidden fixed inset-0 flex justify-center items-center">
         <div class="bg-white p-6 rounded shadow-lg">
             <h2 class="text-xl font-semibold">Edit Honey Info</h2>
             <form id="editHoneyForm" method="POST">

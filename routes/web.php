@@ -30,8 +30,6 @@ Route::get('/qr_code_Honey/{qr_code?}', [DashboardController::class, 'qrCodeHone
 Route::get('/qr_code_Product/{qr_code?}', [DashboardController::class, 'qrCodeProduct'])->name('qr_code_Product');
 Route::get('/qr_code_Package/{qr_code?}', [PackagingController::class, 'qrCodePackage'])->name('qr_code_Package');
 
-Route::get('/consumerHoney/{honey_id}', [TraceabilityController::class, 'indexHoney'])->name('consumerHoney');
-Route::get('/consumerProduct/{product_id}', [TraceabilityController::class, 'indexProduct'])->name('consumerProduct');
 Route::get('/consumerPackage/{package_id}', [TraceabilityController::class, 'indexPackage'])->name('consumerPackage');
 
 Route::middleware(['auth', 'verified', 'enabled'])->group(function () {
@@ -43,6 +41,9 @@ Route::middleware(['auth', 'verified', 'enabled'])->group(function () {
     Route::get('/administrator', [UserController::class, 'indexAdministrator'])->middleware('role:Administrator')->name('administrator.indexAdministrator');
 
     Route::get('/association', [UserController::class, 'indexAssociation'])->middleware('role:Beekeeping association')->name('association.indexAssociation');
+
+    Route::get('/consumerHoney/{honey_id}', [TraceabilityController::class, 'indexHoney'])->name('consumerHoney');
+    Route::get('/consumerProduct/{product_id}', [TraceabilityController::class, 'indexProduct'])->name('consumerProduct');
 
     Route::post('/dashboard/storeHoney/', [DashboardController::class, 'storeHoney'])->name('dashboard.storeHoney');
     Route::put('/dashboard/updateHoney/{id}', [DashboardController::class, 'updateHoney'])->name('dashboard.updateHoney');

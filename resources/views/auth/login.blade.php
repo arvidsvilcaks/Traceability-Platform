@@ -3,6 +3,10 @@
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <form method="POST" action="{{ route('login') }}">
+        <div class="flex justify-center">
+        <img src="{{ asset('storage/honey_product_traceability_welcome.png') }}" alt="Logo" class="h-20 w-auto">
+        </div>
+
         <h1 class="text-xl flex justify-center">Log In</h1>
 
         @csrf

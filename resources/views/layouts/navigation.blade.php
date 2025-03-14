@@ -28,6 +28,8 @@
                 </div>
             </div>
 
+            <img src="{{ asset('storage/honey_product_traceability_navbar.png') }}" alt="Logo" class="h-12 w-auto">
+
             <!-- Right Section: User Settings -->
             @if (Auth::check())
                 <div class="hidden sm:flex sm:items-center space-x-6">

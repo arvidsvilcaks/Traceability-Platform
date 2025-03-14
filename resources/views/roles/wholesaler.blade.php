@@ -29,7 +29,7 @@
               <form action="{{ route('processesWholesaler.destroyProcess', $processesWholesaler->id) }}" method="POST" style="display:inline;">
                   @csrf
                   @method('DELETE')
-                  <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded-full">Delete</button>
+                  <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-2 rounded-full">Delete</button>
               </form>            
             </td>          
           </tr>

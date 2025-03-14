@@ -27,6 +27,7 @@
                 <header class="grid justify-items-center py-10 w-full shadow-md" style="background-color: #eef20a">
                     @if (Route::has('login'))
                         <nav class="flex flex-1 justify-end">
+
                             @auth
                                 <a href="{{ url('/dashboard') }}" class="text-xl">
                                     Dashboard
@@ -47,9 +48,14 @@
                 </header>
 
                 <!-- Main Content -->
-                <main class="flex justify-center py-10">
-                    <div class="text-2xl font-semibold text-center">
+                <main class="flex flex-col items-center py-10">
+                    <div class="text-2xl font-semibold text-center mb-4">
                         Traceability Platform
+                    </div>
+                    <div class="flex justify-center">
+                        <img src="{{ asset('storage/honey_product_traceability_welcome.png') }}" 
+                            alt="description of myimage" 
+                            class="w-auto max-w-full h-auto">
                     </div>
                 </main>
             </div>

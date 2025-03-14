@@ -41,12 +41,13 @@
                     <td class="px-6 py-4 border">{{ $honey->apiary->description ?? 'No Apiary Assigned' }}</td>
                     <td class="px-6 py-4 border">
                         @if(auth()->user()->role == 'Beekeeper' && $honey->beekeeper_id == auth()->user()->id)
-                            <a href="{{ route('beekeeper.index', ['honey_id' => $honey->id]) }}" 
-                            class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
-                                View Beekeeper Data
-                            </a>
-                            <div class="ml-6">
-                                <button onclick="showUpdateHoneyModal({{ $honey->id }}, '{{ $honey->name }}', '{{ $honey->apiary_id }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-4">
+
+                            <div>
+                                <a href="{{ route('beekeeper.index', ['honey_id' => $honey->id]) }}" 
+                                class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
+                                    View Beekeeper Data
+                                </a>
+                                <button onclick="showUpdateHoneyModal({{ $honey->id }}, '{{ $honey->name }}', '{{ $honey->apiary_id }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 ml-1 mt-4">
                                     Edit
                                 </button>
                                 <form action="{{ route('dashboard.destroyHoney', $honey->id) }}" method="POST" style="display:inline-block;">
