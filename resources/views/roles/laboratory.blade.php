@@ -38,7 +38,7 @@
                                 Uploaded file: 
                                 <a href="{{ asset('storage/' . $honeyInfo->add_analysis_results) }}" 
                                 class="text-blue-500 underline" target="_blank">
-                                    View File
+                                    View
                                 </a>
                             </p>
                             <form action="{{ route('analysis.destroyAnalysis', ['id' => $honeyInfo->id]) }}" method="POST">

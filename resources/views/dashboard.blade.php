@@ -53,7 +53,7 @@
                                 <form action="{{ route('dashboard.destroyHoney', $honey->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
+                                    <button type="submit" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-4">
                                         Delete
                                     </button>
                                 </form>
@@ -170,7 +170,7 @@
                         <td class="px-6 py-4 border">{{ $apiary->specifics_of_environment }}</td>
                         <td class="px-6 py-4 border">
                             @if($apiary->add_visual_materials)
-                                <a href="{{ asset('storage/' . $apiary->add_visual_materials) }}" target="_blank" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">View File</a>
+                                <a href="{{ asset('storage/' . $apiary->add_visual_materials) }}" target="_blank" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">View</a>
                             @else
                                 <span class="text-gray-500">No File</span>
                             @endif
