@@ -45,7 +45,7 @@
                             <div>
                                 <a href="{{ route('beekeeper.index', ['honey_id' => $honey->id]) }}" 
                                 class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
-                                    View Beekeeper Data
+                                    View
                                 </a>
                                 <button onclick="showUpdateHoneyModal({{ $honey->id }}, '{{ $honey->name }}', '{{ $honey->apiary_id }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 ml-1 mt-4">
                                     Edit
@@ -296,7 +296,7 @@
                                 </button>
                                 <a href="{{ route('wholesaler.index', ['product_id' => $products->id]) }}" 
                                 class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
-                                    View Product
+                                    View
                                 </a>
                                 </form>
                             </div>
