@@ -1,5 +1,5 @@
 <x-app-layout>
-    <h1 class="flex justify-center text-lg font-semibold mt-6">Package Overview</h1>
+    <h1 class="flex justify-center text-2xl font-semibold mt-6">Package Overview</h1>
 
     {{-- Package Details --}}
     <div class="overflow-x-auto shadow-md sm:rounded-lg mt-6 mb-6">
@@ -11,6 +11,7 @@
                     <th class="px-6 py-3 border">Package Weight</th>
                     <th class="px-6 py-3 border">Type</th>
                     <th class="px-6 py-3 border">Market</th>
+                    <th class="px-6 py-3 border">Delivery Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -19,6 +20,7 @@
                     <td class="px-6 py-4 border">{{ $package->package_weight }} kg</td>
                     <td class="px-6 py-4 border">{{ $package->type }}</td>
                     <td class="px-6 py-4 border">{{ $package->market ? $package->market->name : 'N/A' }}</td>
+                    <td class="px-6 py-4 border font-bold">{{ $packaging->is_delivered ?? 'N/A' }}</td>
                 </tr>
             </tbody>
         </table>
@@ -105,6 +107,7 @@
                         <th class="px-6 py-3 border">Date of Production</th>
                         <th class="px-6 py-3 border">Apiary</th>
                         <th class="px-6 py-3 border">Beekeeper</th>
+                        <th class="px-6 py-3 border">Laboratory</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -115,6 +118,7 @@
                             <td class="px-6 py-4 border">{{ $honey->date_of_production }}</td>
                             <td class="px-6 py-4 border">{{ $honey->apiary ? $honey->apiary->location : 'N/A' }}</td>
                             <td class="px-6 py-4 border">{{ $honey->beekeeper ? $honey->beekeeper->name : 'N/A' }}</td>
+                            <td class="px-6 py-4 border">{{ $honey->laboratoryEmployee ? $honey->laboratoryEmployee->name : 'N/A' }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -151,8 +155,6 @@
         </div>
     @endif
 
-
-
     {{-- Traceability --}}
     @if ($package->product->traceability->isNotEmpty() || $package->product->honeys->flatMap->traceability->isNotEmpty())
         <div class="overflow-x-auto shadow-md sm:rounded-lg mt-6 mb-6">
@@ -160,20 +162,22 @@
             <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 border">Date Collected</th>
+                        <th class="px-6 py-3 border">Produce Name</th>
+                        <th class="px-6 py-3 border">Date Shipped</th>
                         <th class="px-6 py-3 border">Stage</th>
                         <th class="px-6 py-3 border">Address</th>
-                        <th class="px-6 py-3 border">Location on map</th>
+                        <th class="px-6 py-3 border">Shipped From (Location)</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($package->product->traceability as $trace)
                         <tr>
+                            <td class="px-6 py-4 border">{{ $trace->product?->name }}</td>
                             <td class="px-6 py-4 border">{{ $trace->created_at }}</td>
                             <td class="px-6 py-4 border">{{ $trace->stage }}</td>
                             <td class="px-6 py-4 border">{{ $trace->address }}</td>
                             <td class="px-6 py-4 border">
-                                <div id="map-{{ $trace->id }}" class="w-full h-32 mb-4" style="height: 300px;"
+                                <div id="map-{{ $trace->id }}" class="w-full h-32 mb-4" style="height: 200px;"
                                     data-lat="{{ $trace->latitude }}" 
                                     data-lng="{{ $trace->longitude }}">
                                 </div>
@@ -184,11 +188,12 @@
                     @foreach ($package->product->honeys as $honey)
                         @foreach ($honey->traceability as $trace)
                             <tr>
+                                <td class="px-6 py-4 border">{{ $trace->honey?->name }}</td>
                                 <td class="px-6 py-4 border">{{ $trace->created_at }}</td>
                                 <td class="px-6 py-4 border">{{ $trace->stage }}</td>
                                 <td class="px-6 py-4 border">{{ $trace->address }}</td>
                                 <td class="px-6 py-4 border">
-                                    <div id="map-{{ $trace->id }}" class="w-full h-32 mb-4" style="height: 300px;"
+                                    <div id="map-{{ $trace->id }}" class="w-full h-32 mb-4" style="height: 200px;"
                                         data-lat="{{ $trace->latitude }}" 
                                         data-lng="{{ $trace->longitude }}">
                                     </div>
@@ -200,8 +205,6 @@
             </table>
         </div>
     @endif
-
-
 
     <script>
     let geocoder;

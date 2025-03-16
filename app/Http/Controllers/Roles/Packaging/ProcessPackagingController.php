@@ -15,7 +15,7 @@ class ProcessPackagingController extends Controller
         $request->validate([
             'process' => 'required|string',
             'description' => 'required|string',
-            'add_visual_materials' => 'nullable|mimes:pdf,docx|max:2048'
+            'add_visual_materials' => 'nullable|mimes:pdf,docx,jpg,png,jpeg|max:2048'
         ]);
 
         $filePath = null;
@@ -41,7 +41,7 @@ class ProcessPackagingController extends Controller
         $request->validate([
             'process' => 'required|string',
             'description' => 'required|string',
-            'add_visual_materials' => 'nullable|mimes:pdf,docx|max:2048'
+            'add_visual_materials' => 'nullable|mimes:pdf,docx,jpg,png,jpeg|max:2048'
         ]);
 
         if ($request->hasFile('add_visual_materials')) {

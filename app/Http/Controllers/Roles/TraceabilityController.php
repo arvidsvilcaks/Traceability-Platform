@@ -24,6 +24,8 @@ class TraceabilityController extends Controller
             'product.quality',
             'product.processes',
             'product.traceability',
+            'product.traceability.honey',
+            'product.traceability.product',
             'product.packaging',
             'product.wholesaler'
         ])->find($package_id);
@@ -43,6 +45,7 @@ class TraceabilityController extends Controller
             'quality',
             'processes',
             'traceability',
+            'traceability.product',
             'packaging',
             'wholesaler',
             'packagingProduct'
@@ -54,6 +57,7 @@ class TraceabilityController extends Controller
     {
         $honey = Honey::with([
             'traceability',
+            'traceability.honey',
             'apiary.beekeeper',
             'beekeeper',
             'laboratoryEmployee',

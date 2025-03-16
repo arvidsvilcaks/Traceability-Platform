@@ -67,7 +67,7 @@
         <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
-                    <th class="border border-gray-300 px-4 py-2">Date</th>
+                    <th class="border border-gray-300 px-4 py-2">Date collected</th>
                     <th class="border border-gray-300 px-4 py-2">Honey Type</th>
                     <th class="border border-gray-300 px-4 py-2">Quantity (kg)</th>
                     <th class="border border-gray-300 px-4 py-2">Actions</th>
@@ -108,10 +108,10 @@
             <form id="editHoneyForm" method="POST">
                 @csrf
                 @method('PUT')
-                <input type="hidden" name="id" id="editHoneyId">
-                <input type="date" name="date_of_production" id="editHoneyDate" class="border p-2 w-full">
-                <input type="text" name="honey_type" id="editHoneyType" class="border p-2 w-full">
-                <input type="number" name="quantity" id="editHoneyQuantity" class="border p-2 w-full">
+                <input type="hidden" name="id" id="editHoneyId" required>
+                <input type="date" name="date_of_production" id="editHoneyDate" class="border p-2 w-full" required>
+                <input type="text" name="honey_type" id="editHoneyType" class="border p-2 w-full" required>
+                <input type="number" name="quantity" id="editHoneyQuantity" class="border p-2 w-full" required>
                 <button type="submit" class="bg-gray-500 text-white px-4 py-2 mt-2 rounded-full">Update</button>
                 <button type="button" onclick="closeUpdateHoneyInfoModal()" class="bg-gray-500 text-white px-4 py-2 mt-2 rounded-full">Cancel</button>
             </form>
@@ -210,7 +210,7 @@
                         </td>
 
                         <td class="px-6 py-4 border">
-                            <button class="bg-gray-500 text-white px-3 py-1 rounded-full mb-4" onclick="showModalTraceability({{ $trace->id }})">
+                            <button class="bg-gray-500 text-white px-3 py-1 rounded-full mb-4" onclick="showEditModalTraceability({{ $trace->id }})">
                                 Edit
                             </button>
                             <form action="{{ route('traceability.destroyTraceabilityHoney', $trace->id) }}" method="POST" class="inline">
@@ -248,7 +248,7 @@
             </form>
         </div>
     </div>
-
+    
     <div class="flex justify-center mb-4">
         <button onclick="showModalLaboratory()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">
             Assign Laboratory company for analysis
@@ -319,7 +319,7 @@
     </div>
 
     <script>
-        
+
         function showModalTraceability() {
             document.getElementById('addModalTraceability').classList.remove('hidden');
         }

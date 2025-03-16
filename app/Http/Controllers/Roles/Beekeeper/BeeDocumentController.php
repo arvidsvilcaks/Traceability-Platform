@@ -12,7 +12,7 @@ class BeeDocumentController extends Controller
     public function storeDocument(Request $request, $honey_id)
     {
         $request->validate([
-            'add_beekeeping_documents' => 'nullable|mimes:pdf,docx|max:2048',
+            'add_beekeeping_documents' => 'nullable|mimes:pdf,docx,jpg,png,jpeg|max:2048',
         ]);
 
         $filePath2 = null;
@@ -33,7 +33,7 @@ class BeeDocumentController extends Controller
         $beekeepingDocuments = BeekeepingDocuments::findOrFail($id);
 
         $request->validate([
-            'add_beekeeping_documents' => 'nullable|mimes:pdf,docx|max:2048',
+            'add_beekeeping_documents' => 'nullable|mimes:pdf,docx,jpg,png,jpeg|max:2048',
         ]);
 
         if ($request->hasFile('add_beekeeping_documents')) {

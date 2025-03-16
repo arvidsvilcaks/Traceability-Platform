@@ -12,7 +12,7 @@ class AnalysisController extends Controller
     public function storeAnalysis(Request $request)
     {
         $request->validate([
-            'add_analysis_results' => 'nullable|mimes:pdf,docx|max:2048'
+            'add_analysis_results' => 'nullable|mimes:pdf,docx,jpg,png,jpeg|max:2048'
         ]);
 
         $filePath3 = null;
@@ -32,7 +32,7 @@ class AnalysisController extends Controller
         $analysis = Honey::findOrFail($id);
 
         $request->validate([
-            'add_analysis_results' => 'nullable|mimes:pdf,docx|max:2048'
+            'add_analysis_results' => 'nullable|mimes:pdf,docx,jpg,png,jpeg|max:2048'
         ]);
 
         if ($request->hasFile('add_analysis_results')) {

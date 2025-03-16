@@ -1,5 +1,5 @@
 <x-app-layout>
-    <h1 class="flex justify-center text-lg font-semibold mt-6">Product Overview</h1>
+    <h1 class="flex justify-center text-2xl font-semibold mt-6">Product Overview</h1>
 
     {{-- Package Details --}}
     @if ($product)
@@ -141,20 +141,22 @@
             <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 border">Date Collected</th>
+                        <th class="px-6 py-3 border">Product Name</th>
+                        <th class="px-6 py-3 border">Date Shipped</th>
                         <th class="px-6 py-3 border">Stage</th>
                         <th class="px-6 py-3 border">Address</th>
-                        <th class="px-6 py-3 border">Map</th>
+                        <th class="px-6 py-3 border">Shipped From (Location)</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($product->traceability as $trace)
                         <tr>
+                            <td class="px-6 py-4 border">{{ $trace->product?->name }}</td>
                             <td class="px-6 py-4 border">{{ $trace->created_at }}</td>
                             <td class="px-6 py-4 border">{{ $trace->stage }}</td>
                             <td class="px-6 py-4 border">{{ $trace->address }}</td>
                             <td class="px-6 py-4 border">
-                                <div id="map-{{ $trace->id }}" class="w-full h-32 mb-4" style="height: 300px;"
+                                <div id="map-{{ $trace->id }}" class="w-full h-32 mb-4" style="height: 200px;"
                                     data-lat="{{ $trace->latitude }}" 
                                     data-lng="{{ $trace->longitude }}">
                                 </div>
