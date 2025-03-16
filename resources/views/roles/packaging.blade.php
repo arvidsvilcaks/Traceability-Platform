@@ -295,8 +295,8 @@
                     <input type="number" name="package_weight" id="add_package_weight" placeholder="Package Weight (kg)" required class="border p-2 rounded">
                     <select name="is_delivered" id="add_is_delivered" class="border p-2 rounded" placeholder="Delivery status" required>
                         <option value="">Select Delivery status</option>
-                        <option value="In Progress" {{ $package->is_delivered == 'In Progress' ? 'selected' : '' }}>In Progress</option>
-                        <option value="Delivered" {{ $package->is_delivered == 'Delivered' ? 'selected' : '' }}>Delivered</option>
+                        <option value="In Progress" {{ $packages->is_delivered == 'In Progress' ? 'selected' : '' }}>In Progress</option>
+                        <option value="Delivered" {{ $packages->is_delivered == 'Delivered' ? 'selected' : '' }}>Delivered</option>
                     </select>
 
                     <select name="market_id" id="add_market_id" class="border p-2 rounded">
