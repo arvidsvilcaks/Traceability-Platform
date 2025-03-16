@@ -295,8 +295,9 @@
                     <input type="number" name="package_weight" id="add_package_weight" placeholder="Package Weight (kg)" required class="border p-2 rounded">
                     <select name="is_delivered" id="add_is_delivered" class="border p-2 rounded" placeholder="Delivery status" required>
                         <option value="">Select Delivery status</option>
-                        <option value="In Progress" {{ $packages->is_delivered == 'In Progress' ? 'selected' : '' }}>In Progress</option>
-                        <option value="Delivered" {{ $packages->is_delivered == 'Delivered' ? 'selected' : '' }}>Delivered</option>
+                        <option value="In Progress" {{ old('is_delivered') == 'In Progress' ? 'selected' : '' }}>In Progress</option>
+                        <option value="Delivered" {{ old('is_delivered') == 'Delivered' ? 'selected' : '' }}>Delivered</option>
+
                     </select>
 
                     <select name="market_id" id="add_market_id" class="border p-2 rounded">
@@ -329,8 +330,9 @@
                     <input type="number" name="package_weight" id="edit_package_weight" placeholder="Package Weight (kg)" required class="border p-2 rounded">
                     <select name="is_delivered" id="edit_is_delivered" placeholder="Delivery status" class="border p-2 rounded" required>
                         <option value="">Select Delivery status</option>
-                        <option value="In Progress" {{ $packages->is_delivered == 'In Progress' ? 'selected' : '' }}>In Progress</option>
-                        <option value="Delivered" {{ $packages->is_delivered == 'Delivered' ? 'selected' : '' }}>Delivered</option>
+                        <option value="In Progress" {{ isset($edit_package) && $edit_package->is_delivered == 'In Progress' ? 'selected' : '' }}>In Progress</option>
+                        <option value="Delivered" {{ isset($edit_package) && $edit_package->is_delivered == 'Delivered' ? 'selected' : '' }}>Delivered</option>
+
                     </select>
 
                     <select name="market_id" id="edit_market_id" class="border p-2 rounded">
