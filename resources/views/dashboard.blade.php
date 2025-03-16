@@ -10,7 +10,7 @@
     @if(auth()->user()->role != 'Packaging company')
 
     <!-- Honey List -->
-    <div class="container mx-auto mt-8">
+    <div class="container mx-auto overflow-x-auto">
         <h1 class="flex justify-center text-lg font-semibold mb-4 mt-4">Honey List</h1>
 
         @if(auth()->user()->role == 'Beekeeper')
@@ -47,13 +47,13 @@
                                 class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
                                     View
                                 </a>
-                                <button onclick="showUpdateHoneyModal({{ $honey->id }}, '{{ $honey->name }}', '{{ $honey->apiary_id }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 ml-1 mt-4">
+                                <button onclick="showUpdateHoneyModal({{ $honey->id }}, '{{ $honey->name }}', '{{ $honey->apiary_id }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 ml-1 mt-2">
                                     Edit
                                 </button>
                                 <form action="{{ route('dashboard.destroyHoney', $honey->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-4">
+                                    <button type="submit" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-2">
                                         Delete
                                     </button>
                                 </form>
@@ -61,7 +61,7 @@
                         @elseif(auth()->user()->role == 'Laboratory employee' && $honey->laboratory_id == auth()->user()->id)
                             <a href="{{ route('laboratory.index', ['honey_id' => $honey->id]) }}" 
                             class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
-                                View Lab Data
+                                View
                             </a>
                         @elseif(auth()->user()->role == 'Wholesaler' && $honey->wholesaler_id == auth()->user()->id)
                             <p>{{ $honey->beekeeper->company ?? 'Unknown' }}</p>
@@ -139,7 +139,7 @@
     <!-- Apiary List -->
     @if(auth()->user()->role == 'Beekeeper')
     
-    <div class="container mx-auto mt-6 mb-6">
+    <div class="container mx-auto mt-6 mb-6 overflow-x-auto">
         <h1 class="flex justify-center text-lg font-semibold mb-4 mt-4">Apiary List</h1>
 
             <div class="flex justify-center mb-4">
@@ -169,13 +169,15 @@
                         <td class="px-6 py-4 border">{{ $apiary->floral_composition }}</td>
                         <td class="px-6 py-4 border">{{ $apiary->specifics_of_environment }}</td>
                         <td class="px-6 py-4 border">
-                            @if($apiary->add_visual_materials)
-                                <a href="{{ asset('storage/' . $apiary->add_visual_materials) }}" target="_blank" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">View</a>
-                            @else
-                                <span class="text-gray-500">No File</span>
-                            @endif
+                            <div class="mt-2">
+                                @if($apiary->add_visual_materials)
+                                    <a href="{{ asset('storage/' . $apiary->add_visual_materials) }}" target="_blank" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 ">View</a>
+                                @else
+                                    <span class="text-gray-500">No File</span>
+                                @endif
+                            </div>
                         </td>
-                        <td class="px-6 py-4 border">
+                        <td class="px-6 py-4 border ">
                             @if(auth()->user()->role == 'Beekeeper' && $apiary->beekeeper_id == auth()->user()->id)
                                 <button onclick="showUpdateApiaryModal({{ $apiary->id }}, '{{ $apiary->description }}', '{{ $apiary->location }}', '{{ $apiary->floral_composition }}', '{{ $apiary->specifics_of_environment }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
                                     Edit
@@ -183,7 +185,7 @@
                                 <form action="{{ route('dashboard.destroyApiary', $apiary->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
+                                    <button type="submit" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-2">
                                         Delete
                                     </button>
                                 </form>
@@ -253,7 +255,7 @@
     @if(auth()->user()->role == 'Wholesaler' || auth()->user()->role == 'Packaging company')
 
     <!-- Product List -->
-    <div class="container">
+    <div class="container mx-auto overflow-x-auto">
         <h3 class="flex justify-center text-lg font-semibold mb-4 mt-4">Products List</h3>
         @if(auth()->user()->role == 'Wholesaler')
 
@@ -285,19 +287,19 @@
 
                         <td class="px-6 py-4 border">
                             <div>
-                                <button onclick="showUpdateProductModal({{ $products->id }}, '{{ $products->name }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-4">
+                                    <a href="{{ route('wholesaler.index', ['product_id' => $products->id]) }}" 
+                                    class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
+                                        View
+                                    </a>
+                                <button onclick="showUpdateProductModal({{ $products->id }}, '{{ $products->name }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-3 ml-1">
                                     Edit
                                 </button>
                                 <form action="{{ route('dashboard.product.destroyProduct', $products->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                <button type="submit" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
+                                <button type="submit" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700m mt-1">
                                     Delete
                                 </button>
-                                <a href="{{ route('wholesaler.index', ['product_id' => $products->id]) }}" 
-                                class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
-                                    View
-                                </a>
                                 </form>
                             </div>
                         </td>
@@ -316,7 +318,7 @@
                                 </button>
                                 <a href="{{ route('packaging.index', ['product_id' => $products->id]) }}" 
                                 class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
-                                    View Product
+                                    View
                                 </a>
                                 </form>
                             </div>

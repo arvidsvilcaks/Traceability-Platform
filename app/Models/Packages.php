@@ -18,7 +18,8 @@ class Packages extends Model
         'product_id',
         'market_id',
         'package_weight',
-        'qr_code'
+        'qr_code',
+        'is_delivered',
     ];
     public function market()
     {

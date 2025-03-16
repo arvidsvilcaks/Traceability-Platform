@@ -63,7 +63,7 @@
     </div>
 
     <div class="overflow-x-auto shadow-md sm:rounded-lg w-full mb-6 mt-6">
-        <h3 class="text-lg font-semibold flex justify-center mb-6 mt-4">Info about Produced Honey</h3>
+        <h3 class="text-lg flex justify-center mb-6 mt-4">Info about Produced Honey</h3>
         <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
@@ -183,7 +183,7 @@
         </h1>
 
         <div class="flex justify-center">
-            <button class="bg-gray-500 text-white px-4 py-2 rounded-full mb-4" onclick="showModalTraceability()">
+            <button class="bg-gray-500 text-white font-semibold px-4 py-2 rounded-full mb-4" onclick="showModalTraceability()">
                 Add New Record
             </button>
         </div>

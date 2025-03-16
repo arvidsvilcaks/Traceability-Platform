@@ -65,7 +65,8 @@ class PackagingController extends Controller
             'quantity' => 'required|integer',
             'package_weight' => 'required|numeric',
             'type' => 'required|string',
-            'market_id' => 'nullable|exists:markets,id'
+            'market_id' => 'nullable|exists:markets,id',
+            'is_delivered' => 'required|in:In Progress,Delivered',
         ]);
     
         $package = Packages::create([
@@ -73,7 +74,8 @@ class PackagingController extends Controller
             'package_weight' => $request->package_weight,
             'type' => $request->type,
             'product_id' => $product_id,
-            'market_id' => $request->market_id
+            'market_id' => $request->market_id,
+            'is_delivered' => $request->is_delivered,
         ]);
 
         $package->qr_code = urlencode(hash('sha256', $package->id . '-' . $package->type));
@@ -90,14 +92,16 @@ class PackagingController extends Controller
             'quantity' => 'required|integer',
             'package_weight' => 'required|numeric',
             'type' => 'required|string',
-            'market_id' => 'nullable|exists:markets,id'
+            'market_id' => 'nullable|exists:markets,id',
+            'is_delivered' => 'required|in:In Progress,Delivered',
         ]);
     
         $packages->update([
             'quantity' => $request->quantity,
             'package_weight' => $request->package_weight,
             'type' => $request->type,
-            'market_id' => $request->market_id
+            'market_id' => $request->market_id,
+            'is_delivered' => $request->is_delivered,
         ]);
     
         return redirect()->route('packaging.index', ['product_id' => $packages->product_id])->with('success', 'Package updated successfully.');

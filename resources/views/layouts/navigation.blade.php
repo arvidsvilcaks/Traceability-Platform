@@ -1,10 +1,8 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100" style="background-color: #eef20a">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16 items-center ">
-            <!-- Left Section: Logo + Navigation Links -->
-            <div class="flex items-center space-x-10">
-                <!-- Navigation Links -->
-                <div class="hidden sm:flex space-x-8">
+        <div class="flex justify-between items-center h-16 relative">
+            <!-- Left Section: Dashboard Link -->
+            <div class="absolute left-0 flex items-center space-x-8">
                 @if(auth()->check() && auth()->user()->role != 'Beekeeping association' && auth()->user()->role != 'Administrator')
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
@@ -24,17 +22,18 @@
                         </x-nav-link>
                     @endif
                 @endif
-
-                </div>
             </div>
 
-            <a href="{{ route('dashboard') }}">
-                <img src="{{ asset('storage/honey_product_traceability_navbar.png') }}" alt="Logo" class="h-12 w-auto">
-            </a>
-            
-            <!-- Right Section: User Settings -->
+            <!-- Center Section: Logo -->
+            <div class="flex-1 flex justify-center">
+                <a href="{{ route('dashboard') }}">
+                    <img src="{{ asset('storage/honey_product_traceability_navbar.png') }}" alt="Logo" class="h-12 w-auto">
+                </a>
+            </div>
+
+            <!-- Right Section: Profile Dropdown -->
             @if (Auth::check())
-                <div class="hidden sm:flex sm:items-center space-x-6">
+                <div class="absolute right-0 flex items-center space-x-6">
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -65,8 +64,6 @@
                     </x-dropdown>
                 </div>
             @endif
-            
         </div>
     </div>
 </nav>
-

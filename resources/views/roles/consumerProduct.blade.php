@@ -12,6 +12,7 @@
                         <th class="px-6 py-3 border">Package Weight</th>
                         <th class="px-6 py-3 border">Type</th>
                         <th class="px-6 py-3 border">Market</th>
+                        <th class="px-6 py-3 border">Delivery Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -21,6 +22,7 @@
                             <td class="px-6 py-4 border">{{ $packaging->package_weight ?? 'N/A' }} kg</td>
                             <td class="px-6 py-4 border">{{ $packaging->type ?? 'N/A' }}</td>
                             <td class="px-6 py-4 border">{{ optional($packaging->market)->name ?? 'N/A' }}</td>
+                            <td class="px-6 py-4 border">{{ $packaging->is_delivered ?? 'N/A' }}</td>
                         </tr>
                     @endforeach
                 </tbody>
