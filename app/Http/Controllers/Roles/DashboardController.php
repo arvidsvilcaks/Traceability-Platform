@@ -265,14 +265,17 @@ class DashboardController extends Controller
 
     public function updateProduct(Request $request, $id)
     {
+        $product = Products::findOrFail($id);
+
         $request->validate([
             'name' => 'required|string|max:255',
         ]);
 
-        $product = Products::findOrFail($id);
+        $product->update([
+            'name' => $request->name,
+        ]);
 
-        $product->name = $request->input('name');
-        $product->save();
+        $product->update();
 
         return redirect()->route('dashboard')->with('success', 'Product updated successfully.');
     }

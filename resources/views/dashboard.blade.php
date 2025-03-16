@@ -368,9 +368,11 @@
         <div id="editProductModal" class="fixed inset-0 flex justify-center items-center hidden">
             <div class="bg-white p-6 rounded-lg shadow-lg w-96">
                 <h3 class="text-xl font-semibold mb-4">Edit Product</h3>
-                <form id="editProductForm" method="POST">
+                <form id="editProductForm" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
+                    <input type="hidden" id="editProductId" name="id">
+
                     <div class="mb-4">
                         <label for="editProductName" class="block text-sm font-medium text-gray-700">Product Name</label>
                         <input type="text" id="editProductName" name="name" class="w-full px-4 py-2 border border-gray-300 rounded-md" required>
