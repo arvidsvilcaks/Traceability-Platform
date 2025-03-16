@@ -297,7 +297,7 @@
                                 <form action="{{ route('dashboard.product.destroyProduct', $products->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                <button type="submit" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700m mt-1">
+                                <button type="submit" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-1">
                                     Delete
                                 </button>
                                 </form>
@@ -307,19 +307,19 @@
                         @elseif(auth()->user()->role == 'Packaging company' && $products->packaging_id == auth()->user()->id)
                         <td class="px-6 py-4 border">
                             <div>
-                                <button onclick="showUpdateProductModal({{ $products->id }}, '{{ $products->name }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-4">
+                                <a href="{{ route('packaging.index', ['product_id' => $products->id]) }}" 
+                                class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
+                                    View
+                                </a>
+                                <button onclick="showUpdateProductModal({{ $products->id }}, '{{ $products->name }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-3 ml-1">
                                     Edit
                                 </button>
                                 <form action="{{ route('dashboard.product.destroyProduct', $products->id) }}" method="POST" style="display:inline-block;">
                                     @csrf
                                     @method('DELETE')
-                                <button type="submit" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
+                                <button type="submit" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700m mt-1">
                                     Delete
                                 </button>
-                                <a href="{{ route('packaging.index', ['product_id' => $products->id]) }}" 
-                                class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
-                                    View
-                                </a>
                                 </form>
                             </div>
                         </td>
