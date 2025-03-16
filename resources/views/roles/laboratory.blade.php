@@ -34,7 +34,7 @@
                     </td>
                     <td class="px-6 py-4 text-center border">
                         @if(isset($honeyInfo) && $honeyInfo->add_analysis_results)
-                            <p class="text-gray-700">
+                            <p class="text-gray-700 font-bold">
                                 Uploaded file: 
                                 <a href="{{ asset('storage/' . $honeyInfo->add_analysis_results) }}" 
                                 class="text-blue-500 underline" target="_blank">
