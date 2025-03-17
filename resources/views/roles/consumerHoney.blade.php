@@ -1,5 +1,5 @@
 <x-app-layout>
-    <h1 class="flex justify-center text-2xl font-semibold mt-6">Package Overview</h1>
+    <h1 class="flex justify-center text-2xl font-semibold mt-6">Honey Overview</h1>
 
     {{-- Honey Details --}}
     <div class="overflow-x-auto shadow-md sm:rounded-lg mt-6 mb-6">
@@ -9,7 +9,7 @@
                 <tr>
                     <th class="px-6 py-3 border">Honey Name</th>
                     <th class="px-6 py-3 border">Type</th>
-                    <th class="px-6 py-3 border">Date of Production</th>
+                    <th class="px-6 py-3 border">Date Collected</th>
                     <th class="px-6 py-3 border">Apiary</th>
                     <th class="px-6 py-3 border">Beekeeper</th>
                     <th class="px-6 py-3 border">Analysis results</th>

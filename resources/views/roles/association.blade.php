@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <h1 class="flex justify-center text-lg font-semibold mb-4 mt-6">List of Registered Beekeepers, Laboratory employees, Wholesalers, Packaging company employees</h1>
+        <h1 class="flex justify-center text-center text-lg font-semibold mb-4 mt-6">List of Registered Beekeepers, Laboratory employees, Wholesalers, Packaging company employees</h1>
         <table class="w-full text-sm text-left rtl:text-right text-gray-500">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">   
                 <tr>

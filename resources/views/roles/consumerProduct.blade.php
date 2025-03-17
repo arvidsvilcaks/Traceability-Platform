@@ -114,7 +114,7 @@
                     <tr>
                         <th class="px-6 py-3 border">Honey Name</th>
                         <th class="px-6 py-3 border">Type</th>
-                        <th class="px-6 py-3 border">Date of Production</th>
+                        <th class="px-6 py-3 border">Date Collected</th>
                         <th class="px-6 py-3 border">Apiary</th>
                         <th class="px-6 py-3 border">Beekeeper</th>
                     </tr>

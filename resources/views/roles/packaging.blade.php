@@ -1,43 +1,43 @@
 <x-app-layout>
-<div class="grid grid-cols-1 gap-4 mt-6">
-    <div class="overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-            <h1 class="flex justify-center text-lg font-semibold mb-4">Description of processes</h1>
-            <div class="flex justify-center mb-6">
-                <button onclick="showModalProcess('addModalProcess')" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">Add new row</button>
-            </div>
-            <tr>
-            <th class="px-6 py-3 border">Process</th>
-            <th class="px-6 py-3 border">Description</th>
-            <th class="px-6 py-3 border">Visual materials</th>
-            <th class="px-6 py-3 border">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($processesPackaging as $processesPackaging)
-            <tr>
-            <td class="px-6 py-4 border">{{ $processesPackaging->process }}</td>
-            <td class="px-6 py-4 border">{{ $processesPackaging->description }}</td>
-            <td class="px-6 py-4 border">
-                @if($processesPackaging->add_visual_materials)
-                    <a href="{{ asset('storage/' . $processesPackaging->add_visual_materials) }}" target="_blank" class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-white rounded-full">View</a>
-                @endif
-            </td>
-            <td class="px-6 py-4 border">
-                <button onclick="editModalProcess({{ json_encode($processesPackaging) }})" class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full">Edit</button>
-                <form action="{{ route('processesPackaging.destroyProcess', $processesPackaging->id) }}" method="POST" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-2 rounded-full">Delete</button>
-                </form>            
-            </td>          
-            </tr>
-            @endforeach
-        </tbody>
-        </table>
+    <div class="grid grid-cols-1 gap-4 mt-6">
+        <div class="overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <h1 class="flex justify-center text-lg font-semibold mb-4">Description of processes</h1>
+                <div class="flex justify-center mb-6">
+                    <button onclick="showModalProcess('addModalProcess')" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full">Add new row</button>
+                </div>
+                <tr>
+                <th class="px-6 py-3 border">Process</th>
+                <th class="px-6 py-3 border">Description</th>
+                <th class="px-6 py-3 border">Visual materials</th>
+                <th class="px-6 py-3 border">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($processesPackaging as $processesPackaging)
+                <tr>
+                <td class="px-6 py-4 border">{{ $processesPackaging->process }}</td>
+                <td class="px-6 py-4 border">{{ $processesPackaging->description }}</td>
+                <td class="px-6 py-4 border">
+                    @if($processesPackaging->add_visual_materials)
+                        <a href="{{ asset('storage/' . $processesPackaging->add_visual_materials) }}" target="_blank" class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-white rounded-full">View</a>
+                    @endif
+                </td>
+                <td class="px-6 py-4 border">
+                    <button onclick="editModalProcess({{ json_encode($processesPackaging) }})" class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full">Edit</button>
+                    <form action="{{ route('processesPackaging.destroyProcess', $processesPackaging->id) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-2 rounded-full">Delete</button>
+                    </form>            
+                </td>          
+                </tr>
+                @endforeach
+            </tbody>
+            </table>
+        </div>
     </div>
-</div>
 
     <div id="addModalProcess" class="fixed inset-0 flex items-center justify-center hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -160,77 +160,6 @@
         </div>
     </div>
 
-    <div class="overflow-x-auto shadow-md sm:rounded-lg w-full mb-6 mt-6">
-        <h1 class="flex justify-center text-lg font-semibold mb-4 mt-6">
-            Honey Tracing
-        </h1>
-
-        <div class="flex justify-center">
-            <button class="bg-gray-500 text-white font-semibold px-4 py-2 rounded-full mb-4" onclick="showModalTraceability()">
-                Add New Record
-            </button>
-        </div>
-        <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200 mb-6">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 border">Date Collected</th>
-                    <th class="px-6 py-3 border">Address</th>
-                    <th class="px-6 py-3 border">Location on Map</th>
-                    <th class="px-6 py-3 border">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($traceability->filter(fn($trace) => $trace->stage === 'packaging') as $trace)
-                    <tr>
-                        <td class="px-6 py-4 border">{{ $trace->created_at }}</td>
-                        <td class="px-6 py-4 border">{{ $trace->address }}</td>
-
-                        <td class="px-6 py-4 border">
-                            <div id="map-{{ $trace->id }}" class="w-full h-32 mb-4" style="height: 300px;"
-                                data-lat="{{ $trace->latitude }}" 
-                                data-lng="{{ $trace->longitude }}">
-                            </div>
-                        </td>
-
-                        <td class="px-6 py-4 border">
-                            <button class="bg-gray-500 text-white px-3 py-1 rounded-full mb-4" onclick="showModalTraceability({{ $trace->id }})">
-                                Edit
-                            </button>
-                            <form action="{{ route('traceability.destroyTraceabilityProduct', $trace->id) }}" method="POST" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="bg-gray-500 text-white px-3 py-1 rounded-full">
-                                    Delete
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-
-    <div id="addModalTraceability" class="fixed inset-0 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded-lg w-1/3">
-            <h2 class="text-lg font-semibold mb-4">Add Traceability Record</h2>
-            <form action="{{ route('traceability.storeTraceabilityProduct', ['product_id' => $honeyInfo->id]) }}" method="POST">
-                @csrf
-                <input type="hidden" name="product_id" value="{{ $honeyInfo->id }}">
-
-                <label>Address:</label>
-                <input type="text" id="address" name="address" class="border p-2 w-full mb-4" oninput="geocodeAddress()">
-                <div id="map" class="w-full h-64 mb-4" style="height: 300px;"></div>
-
-                <input type="hidden" name="stage" value="packaging">
-
-                <input type="hidden" name="latitude" id="latitude">
-                <input type="hidden" name="longitude" id="longitude">
-                <button type="submit" class="bg-gray-500 text-white px-4 py-2 rounded-full">Save</button>
-                <button type="button" onclick="closeModalTraceability()" class="bg-gray-500 text-white px-4 py-2 rounded-full">Cancel</button>
-            </form>
-        </div>
-    </div>
-
     <div class="overflow-x-auto shadow-md sm:rounded-lg mt-6 mb-6">
         <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
             <h1 class="flex justify-center text-lg font-semibold mb-4">Packages</h1>
@@ -348,6 +277,99 @@
         </div>
     </div>
 
+
+    <div class="overflow-x-auto shadow-md sm:rounded-lg w-full mb-6">
+        <h1 class="flex justify-center text-lg font-semibold mb-4">
+            Product Tracing
+        </h1>
+
+        <div class="flex justify-center">
+            <button class="bg-gray-500 text-white font-semibold px-4 py-2 rounded-full mb-4" onclick="showModalTraceability()">
+                Add New Record
+            </button>
+        </div>
+        <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200 mb-6">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 border">Date Shipped</th>
+                    <th class="px-6 py-3 border">Address</th>
+                    <th class="px-6 py-3 border">Shipped from (Location)</th>
+                    <th class="px-6 py-3 border">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($traceability->filter(fn($trace) => $trace->stage === 'packaging') as $trace)
+                    <tr>
+                        <td class="px-6 py-4 border">{{ $trace->created_at }}</td>
+                        <td class="px-6 py-4 border">{{ $trace->address }}</td>
+
+                        <td class="px-6 py-4 border">
+                            <div id="map-{{ $trace->id }}" class="w-full h-32 mb-4" style="height: 300px;"
+                                data-lat="{{ $trace->latitude }}" 
+                                data-lng="{{ $trace->longitude }}">
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4 border">
+                            <button class="bg-gray-500 text-white px-3 py-1 rounded-full mb-4" onclick="showEditModalTraceability({{ $trace->id }})">
+                                Edit
+                            </button>
+                            <form action="{{ route('traceability.destroyTraceabilityProduct', $trace->id) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="bg-gray-500 text-white px-3 py-1 rounded-full">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    <div id="addModalTraceability" class="fixed inset-0 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg w-1/3">
+            <h2 class="text-lg font-semibold mb-4">Add Traceability Record</h2>
+            <form action="{{ route('traceability.storeTraceabilityProduct', ['product_id' => $honeyInfo->id]) }}" method="POST">
+                @csrf
+                <input type="hidden" name="product_id" value="{{ $honeyInfo->id }}">
+
+                <label>Address:</label>
+                <input type="text" id="address" name="address" class="border p-2 w-full mb-4" oninput="geocodeAddress()">
+                <div id="map" class="w-full h-64 mb-4" style="height: 300px;"></div>
+
+                <input type="hidden" name="stage" value="packaging">
+
+                <input type="hidden" name="latitude" id="latitude">
+                <input type="hidden" name="longitude" id="longitude">
+                <button type="submit" class="bg-gray-500 text-white px-4 py-2 rounded-full">Save</button>
+                <button type="button" onclick="closeModalTraceability()" class="bg-gray-500 text-white px-4 py-2 rounded-full">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="editModalTraceability" class="fixed inset-0 flex items-center justify-center hidden">
+        <div class="bg-white p-6 rounded-lg w-1/3">
+            <h2 class="text-lg font-semibold mb-4">Edit Traceability Record</h2>
+            <form action="{{ route('traceability.updateTraceabilityHoney', ':id') }}" method="POST" id="editTraceabilityForm">
+                @csrf
+                @method('PUT')
+                
+                <label>Address:</label>
+                <input type="text" id="editAddress" name="address" class="border p-2 w-full mb-4" oninput="geocodeEditAddress()">
+                <div id="editMap" class="w-full h-64 mb-4" style="height: 300px;"></div>
+
+                <input type="hidden" name="stage" value="packaging">
+                <input type="hidden" name="latitude" id="editLatitude">
+                <input type="hidden" name="longitude" id="editLongitude">
+
+                <button type="submit" class="bg-gray-500 text-white px-4 py-2 rounded-full">Save</button>
+                <button type="button" onclick="closeEditModalTraceability()" class="bg-gray-500 text-white px-4 py-2 rounded-full">Cancel</button>
+            </form>
+        </div>
+    </div>
+
     <script>
 
     function showModalTraceability() {
@@ -356,6 +378,34 @@
 
     function closeModalTraceability() {
         document.getElementById('addModalTraceability').classList.add('hidden');
+    }
+
+    function showEditModalTraceability(id) {
+        const traceability = @json($traceability);
+        
+        const trace = traceability.find(item => item.id === id);
+        if (trace) {
+            document.getElementById('editModalTraceability').classList.remove('hidden');
+            document.getElementById('editTraceabilityForm').action = `/traceabilityHoney/${id}`;
+            document.getElementById('editAddress').value = trace.address;
+            document.getElementById('editLatitude').value = trace.latitude;
+            document.getElementById('editLongitude').value = trace.longitude;
+
+            const editMap = new google.maps.Map(document.getElementById('editMap'), {
+                center: { lat: parseFloat(trace.latitude), lng: parseFloat(trace.longitude) },
+                zoom: 12,
+                mapId: '37823448a8c4cd11'
+            });
+
+            const editMarker = new google.maps.Marker({
+                map: editMap,
+                position: { lat: parseFloat(trace.latitude), lng: parseFloat(trace.longitude) }
+            });
+        }
+    }
+
+    function closeEditModalTraceability() {
+        document.getElementById('editModalTraceability').classList.add('hidden');
     }
     
     function showModalProcess(modalId) {
@@ -463,18 +513,41 @@
             return; 
         }
 
-        geocoder.geocode({ address: address }, function (results, status) {
-            if (status === 'OK') {
-                let location = results[0].geometry.location;
-                map.setCenter(location);
-                marker.setPosition(location);
-                document.getElementById('latitude').value = location.lat();
-                document.getElementById('longitude').value = location.lng();
-            } else {
-                console.error('Geocoding failed:', status);
+    geocoder.geocode({ address: address }, function (results, status) {
+        if (status === 'OK') {
+            let location = results[0].geometry.location;
+            map.setCenter(location);
+            marker.setPosition(location);
+            document.getElementById('latitude').value = location.lat();
+            document.getElementById('longitude').value = location.lng();
+        } else {
+            console.error('Geocoding failed:', status);
+        }
+    });
+
+        function geocodeEditAddress() {
+            let address = document.getElementById('editAddress').value;
+            if (!address) return;
+
+            if (!map) { 
+                console.error('Map is not initialized'); 
+                return; 
             }
-        });
+
+            geocoder.geocode({ address: address }, function (results, status) {
+                if (status === 'OK') {
+                    let location = results[0].geometry.location;
+                    map.setCenter(location);
+                    marker.setPosition(location);
+                    document.getElementById('editLatitude').value = location.lat();
+                    document.getElementById('editLongitude').value = location.lng();
+                } else {
+                    console.error('Geocoding failed:', status);
+                }
+            });
+        }
     }
+
 
     </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBoCstylgREVj_Kd4Ji08ah5Vp8YlkBe8s&libraries=places,marker&callback=initMap"></script>

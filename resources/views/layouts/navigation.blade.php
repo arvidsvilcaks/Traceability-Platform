@@ -12,7 +12,7 @@
                 @if(Auth::check())
                     @if(Auth::user()->role === 'Beekeeping association')
                         <x-nav-link :href="route('association.indexAssociation')" :active="request()->routeIs('association.indexAssociation')">
-                            {{ __('Beekeeping Association') }}
+                            {{ __('Association') }}
                         </x-nav-link>
                     @endif
 
