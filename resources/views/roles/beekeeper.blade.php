@@ -524,11 +524,9 @@
                 if (status === 'OK') {
                     let location = results[0].geometry.location;
                     
-                    // Update Edit Map & Marker
                     editMap.setCenter(location);
                     editMarker.setPosition(location);
 
-                    // Update Hidden Fields
                     document.getElementById('editLatitude').value = location.lat();
                     document.getElementById('editLongitude').value = location.lng();
                 } else {

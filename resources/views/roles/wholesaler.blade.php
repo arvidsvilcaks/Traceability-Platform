@@ -399,8 +399,8 @@
 
     function showEditModalTraceability(id) {
         const traceability = @json($traceability);
-        
         const trace = traceability.find(item => item.id === id);
+
         if (trace) {
             document.getElementById('editModalTraceability').classList.remove('hidden');
             document.getElementById('editTraceabilityForm').action = `/traceabilityHoney/${id}`;
@@ -408,15 +408,20 @@
             document.getElementById('editLatitude').value = trace.latitude;
             document.getElementById('editLongitude').value = trace.longitude;
 
-            const editMap = new google.maps.Map(document.getElementById('editMap'), {
+            editMap = new google.maps.Map(document.getElementById('editMap'), {
                 center: { lat: parseFloat(trace.latitude), lng: parseFloat(trace.longitude) },
                 zoom: 12,
                 mapId: '37823448a8c4cd11'
             });
 
-            const editMarker = new google.maps.Marker({
+            editMarker = new google.maps.Marker({
                 map: editMap,
-                position: { lat: parseFloat(trace.latitude), lng: parseFloat(trace.longitude) }
+                position: { lat: parseFloat(trace.latitude), lng: parseFloat(trace.longitude) },
+            });
+
+            google.maps.event.addListener(editMarker, function (event) {
+                document.getElementById('editLatitude').value = event.latLng.lat();
+                document.getElementById('editLongitude').value = event.latLng.lng();
             });
         }
     }
@@ -496,14 +501,25 @@
         geocoder = new google.maps.Geocoder();
 
         map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: 37.7749, lng: -122.4194 },
+            center: { lat: 56.94965, lng: 24.10518 },
             zoom: 12,
             mapId: '37823448a8c4cd11'
         });
 
         marker = new google.maps.Marker({
             map: map,
-            position: { lat: 37.7749, lng: -122.4194 }
+            position: { lat: 56.94965, lng: 24.10518 }
+        });
+
+        editMap = new google.maps.Map(document.getElementById('editMap'), {
+            center: { lat: 56.94965, lng: 24.10518 },
+            zoom: 12,
+            mapId: '37823448a8c4cd11'
+        });
+
+        editMarker = new google.maps.Marker({
+            map: editMap,
+            position: { lat: 56.94965, lng: 24.10518 }
         });
 
         document.querySelectorAll('[id^="map-"]').forEach(mapElement => {
@@ -530,44 +546,36 @@
         let address = document.getElementById('address').value;
         if (!address) return;
 
-        if (!map) { 
-            console.error('Map is not initialized'); 
-            return; 
-        }
-
-    geocoder.geocode({ address: address }, function (results, status) {
-        if (status === 'OK') {
-            let location = results[0].geometry.location;
-            map.setCenter(location);
-            marker.setPosition(location);
-            document.getElementById('latitude').value = location.lat();
-            document.getElementById('longitude').value = location.lng();
-        } else {
-            console.error('Geocoding failed:', status);
-        }
-    });
-
-    function geocodeEditAddress() {
-        let address = document.getElementById('editAddress').value;
-        if (!address) return;
-
-        if (!map) { 
-            console.error('Map is not initialized'); 
-            return; 
-        }
-
         geocoder.geocode({ address: address }, function (results, status) {
             if (status === 'OK') {
                 let location = results[0].geometry.location;
                 map.setCenter(location);
                 marker.setPosition(location);
+                document.getElementById('latitude').value = location.lat();
+                document.getElementById('longitude').value = location.lng();
+            } else {
+                console.error('Geocoding failed:', status);
+            }
+        });
+    }
+
+    function geocodeEditAddress() {
+        let address = document.getElementById('editAddress').value;
+        if (!address) return;
+
+        geocoder.geocode({ address: address }, function (results, status) {
+            if (status === 'OK') {
+                let location = results[0].geometry.location;
+                
+                editMap.setCenter(location);
+                editMarker.setPosition(location);
+
                 document.getElementById('editLatitude').value = location.lat();
                 document.getElementById('editLongitude').value = location.lng();
             } else {
                 console.error('Geocoding failed:', status);
             }
         });
-        }
     }
 
     </script>
