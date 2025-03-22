@@ -92,10 +92,10 @@
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 border">Honey Name</th>
-                        <th class="px-6 py-3 border">Date Shipped</th>
+                        <th class="px-6 py-3 border">Date</th>
                         <th class="px-6 py-3 border">Stage</th>
                         <th class="px-6 py-3 border">Address</th>
-                        <th class="px-6 py-3 border">Shipped From (Location)</th>
+                        <th class="px-6 py-3 border">Location</th>
                     </tr>
                 </thead>
                 <tbody>

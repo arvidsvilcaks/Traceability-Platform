@@ -114,7 +114,7 @@ class DashboardController extends Controller
             'location' => 'required|string',
             'floral_composition' => 'required|string',
             'specifics_of_environment' => 'required|string',
-            'add_visual_materials' => 'nullable|mimes:pdf,docx|max:2048',
+            'add_visual_materials' => 'nullable|mimes:pdf,docx,jpg,png,jpeg|max:2048',
             'beekeeper_id' => 'nullable|exists:users,id',
         ]);
 

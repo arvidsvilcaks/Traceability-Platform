@@ -21,7 +21,7 @@
             </div>
         @endif
 
-        <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
+        <table class="w-full text-sm text-center text-gray-500 border-separate border-2 border-gray-200">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
                     <th class="px-6 py-3 border">Name</th>
@@ -148,7 +148,7 @@
                 </button>
             </div>
 
-            <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
+            <table class="w-full text-sm text-center text-gray-500 border-separate border-2 border-gray-200">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 border">Description</th>
@@ -265,8 +265,8 @@
             </button>
         </div>
         @endif
-        <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200 mb-6">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+        <table class="w-full text-sm text-center text-gray-500 border-separate border-2 border-gray mb-6">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
                     <th class="px-6 py-3 border">Name</th>
                     <th class="px-6 py-3 border">Bleneded Honey's</th>
@@ -311,16 +311,6 @@
                                 class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
                                     View
                                 </a>
-                                <button onclick="showUpdateProductModal({{ $products->id }}, '{{ $products->name }}')" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 mt-3 ml-1">
-                                    Edit
-                                </button>
-                                <form action="{{ route('dashboard.product.destroyProduct', $products->id) }}" method="POST" style="display:inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                <button type="submit" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700m mt-1">
-                                    Delete
-                                </button>
-                                </form>
                             </div>
                         </td>
                         @endif

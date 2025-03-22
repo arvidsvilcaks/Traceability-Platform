@@ -70,9 +70,9 @@
         <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200 mb-6">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
-                    <th class="px-6 py-3 border">Date Shipped</th>
+                    <th class="px-6 py-3 border">Date Received</th>
                     <th class="px-6 py-3 border">Address</th>
-                    <th class="px-6 py-3 border">Shipped from (Location)</th>
+                    <th class="px-6 py-3 border">Laboratory Location</th>
                     <th class="px-6 py-3 border">Actions</th>
                 </tr>
             </thead>
