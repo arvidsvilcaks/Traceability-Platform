@@ -20,7 +20,7 @@
                     <td class="px-6 py-4 border">{{ $package->package_weight }} kg</td>
                     <td class="px-6 py-4 border">{{ $package->type }}</td>
                     <td class="px-6 py-4 border">{{ $package->market ? $package->market->name : 'N/A' }}</td>
-                    <td class="px-6 py-4 border font-bold">{{ $packaging->is_delivered ?? 'N/A' }}</td>
+                    <td class="px-6 py-4 border font-bold">{{ $package->is_delivered ?? 'N/A' }}</td>
                 </tr>
             </tbody>
         </table>
