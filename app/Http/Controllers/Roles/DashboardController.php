@@ -113,6 +113,9 @@ class DashboardController extends Controller
             'description' => 'required|string',
             'location' => 'required|string',
             'floral_composition' => 'required|string',
+            'hives_count' => 'required|integer',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
             'specifics_of_environment' => 'required|string',
             'add_visual_materials' => 'nullable|mimes:pdf,docx,jpg,png,jpeg|max:2048',
             'beekeeper_id' => 'nullable|exists:users,id',
@@ -130,6 +133,9 @@ class DashboardController extends Controller
             'location' => $request->location,
             'floral_composition' => $request->floral_composition,
             'specifics_of_environment' => $request->specifics_of_environment,
+            'hives_count' => $request->hives_count,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
             'add_visual_materials' => $filePath,
             'beekeeper_id' => $beekeeper_id,
         ]);
@@ -146,7 +152,10 @@ class DashboardController extends Controller
             'location' => 'required|string',
             'floral_composition' => 'required|string',
             'specifics_of_environment' => 'required|string',
-            'add_visual_materials' => 'nullable|mimes:pdf,docx|max:2048'
+            'hives_count' => 'required|integer',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'add_visual_materials' => 'nullable|mimes:pdf,docx,jpg,png,jpeg|max:2048'
         ]);
 
         if ($request->hasFile('add_visual_materials')) {
@@ -159,8 +168,11 @@ class DashboardController extends Controller
         $apiary->update([
             'description' => $request->description,
             'location' => $request->location,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
             'floral_composition' => $request->floral_composition,
-            'specifics_of_environment' => $request->specifics_of_environment
+            'specifics_of_environment' => $request->specifics_of_environment,
+            'hives_count' => $request->hives_count
         ]);
 
         return redirect()->route('dashboard')->with('success', 'Apiary added successfully!');

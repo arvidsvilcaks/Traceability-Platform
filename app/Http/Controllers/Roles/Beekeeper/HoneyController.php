@@ -15,7 +15,7 @@ class HoneyController extends Controller
             'date_of_production' => 'required|date',
             'honey_type' => 'required|string',
             'quantity' => 'required|integer',
-            'add_analysis_results' => 'nullable|mimes:pdf,docx|max:2048',
+            'add_analysis_results' => 'nullable|mimes:pdf,docx,jpg,png,jpeg|max:2048',
         ]);
 
         $filePath = null;
@@ -41,7 +41,7 @@ class HoneyController extends Controller
             'date_of_production' => 'required|date',
             'honey_type' => 'required|string',
             'quantity' => 'required|numeric',
-            'add_analysis_results' => 'nullable|mimes:pdf,docx|max:2048',
+            'add_analysis_results' => 'nullable|mimes:pdf,docx,jpg,png,jpeg|max:2048',
         ]);
 
         if ($request->hasFile('add_analysis_results')) {

@@ -51,7 +51,7 @@
                 <div class="flex flex-col space-y-2">
                     <input type="text" name="process" id="add_process" placeholder="Process" required class="border p-2 rounded">
                     <input type="text" name="description" id="add_description" placeholder="Description" required class="border p-2 rounded">
-                    <input type="file" name="add_visual_materials" accept=".pdf,.docx" class="border p-2 rounded">
+                    <input type="file" name="add_visual_materials" accept=".pdf,.docx,.jpg,.png,.jpeg" class="border p-2 rounded">
                     
                     <div class="flex justify-between mt-4">
                         <button type="submit" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-full">Save</button>
@@ -73,7 +73,7 @@
                 <div class="flex flex-col space-y-2">
                     <input type="text" name="process" id="add_process" placeholder="Process" class="border p-2 rounded" required>
                     <input type="text" name="description" id="add_description" placeholder="Description" class="border p-2 rounded" required>
-                    <input type="file" name="add_visual_materials" accept=".pdf,.docx" class="border p-2 rounded">
+                    <input type="file" name="add_visual_materials" accept=".pdf,.docx,.jpg,.png,.jpeg" class="border p-2 rounded">
         
                     <div class="flex justify-between mt-4">
                         <button type="submit" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-full">Save</button>
@@ -283,11 +283,14 @@
             Product Tracing
         </h1>
 
-        <div class="flex justify-center">
-            <button class="bg-gray-500 text-white font-semibold px-4 py-2 rounded-full mb-4" onclick="showModalTraceability()">
-                Add New Record
-            </button>
-        </div>
+        @if($traceability->where('stage', 'packaging')->count() == 0)
+            <div class="flex justify-center">
+                <button class="bg-gray-500 text-white font-semibold px-4 py-2 rounded-full mb-4" onclick="showModalTraceability()">
+                    Add New Record
+                </button>
+            </div>
+        @endif
+
         <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200 mb-6">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>

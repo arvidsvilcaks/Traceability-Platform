@@ -40,7 +40,7 @@
                 @csrf
                 <input type="hidden" name="honey_id" value="{{ $honeyInfo->id }}">
 
-                <input type="file" id="add_beekeeping_documents" name="add_beekeeping_documents" accept=".pdf,.docx" class="mb-4">
+                <input type="file" id="add_beekeeping_documents" name="add_beekeeping_documents" accept=".pdf,.docx,.jpg,.png,.jpeg" class="mb-4">
                 <div class="flex justify-end gap-2">
                     <button type="submit" class="bg-gray-500 text-white px-4 py-2 rounded-full">Add</button>    
                     <button type="button" id="closeDocumentsFormButton" class="bg-gray-500 text-white px-4 py-2 rounded-full">Cancel</button>
@@ -55,7 +55,7 @@
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="id" id="editDocumentId">
-                <input type="file" name="add_beekeeping_documents" id="editDocumentInput" class="border p-2 w-full" accept=".pdf,.docx">
+                <input type="file" name="add_beekeeping_documents" id="editDocumentInput" class="border p-2 w-full" accept=".pdf,.docx,.jpg,.png,.jpeg">
                 <button type="submit" class="bg-gray-500 text-white px-4 py-2 mt-2 rounded-full">Update</button>
                 <button type="button" onclick="closeUpdateDocumentModal()" class="bg-gray-500 text-white px-4 py-2 mt-2 rounded-full">Cancel</button>
             </form>
@@ -181,11 +181,14 @@
             Honey Tracing
         </h1>
 
-        <div class="flex justify-center">
-            <button class="bg-gray-500 text-white font-semibold px-4 py-2 rounded-full mb-4" onclick="showModalTraceability()">
-                Add New Record
-            </button>
-        </div>
+        @if($traceability->where('stage', 'beekeeper')->count() == 0)
+            <div class="flex justify-center">
+                <button class="bg-gray-500 text-white font-semibold px-4 py-2 rounded-full mb-4" onclick="showModalTraceability()">
+                    Add New Record
+                </button>
+            </div>
+        @endif
+
         <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200 mb-6">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
@@ -500,20 +503,20 @@
         }
 
         function geocodeAddress() {
-            let address = document.getElementById('address').value;
-            if (!address) return;
+        let address = document.getElementById('address').value;
+        if (!address) return;
 
-            geocoder.geocode({ address: address }, function (results, status) {
-                if (status === 'OK') {
-                    let location = results[0].geometry.location;
-                    map.setCenter(location);
-                    marker.setPosition(location);
-                    document.getElementById('latitude').value = location.lat();
-                    document.getElementById('longitude').value = location.lng();
-                } else {
-                    console.error('Geocoding failed:', status);
-                }
-            });
+        geocoder.geocode({ address: address }, function (results, status) {
+            if (status === 'OK') {
+                let location = results[0].geometry.location;
+                map.setCenter(location);
+                marker.setPosition(location);
+                document.getElementById('latitude').value = location.lat();
+                document.getElementById('longitude').value = location.lng();
+            } else {
+                console.error('Geocoding failed:', status);
+            }
+        });
         }
 
         function geocodeEditAddress() {

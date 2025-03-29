@@ -23,7 +23,7 @@
                                     Upload Honey Analysis Results
                                 </label>
                                 <input type="file" name="add_analysis_results" id="add_analysis_results" 
-                                    class="mb-2 border p-2" accept=".pdf,.docx">
+                                    class="mb-2 border p-2" accept=".pdf,.docx,.jpg,.png,.jpeg">
                                 <button type="submit" class="px-4 py-2 bg-gray-500 text-white rounded-full">
                                     Upload
                                 </button>
@@ -62,11 +62,14 @@
             Honey Tracing
         </h1>
 
-        <div class="flex justify-center">
-            <button class="bg-gray-500 text-white font-semibold px-4 py-2 rounded-full mb-4" onclick="showModalTraceability()">
-                Add New Record
-            </button>
-        </div>
+        @if($traceability->where('stage', 'laboratory')->count() == 0)
+            <div class="flex justify-center">
+                <button class="bg-gray-500 text-white font-semibold px-4 py-2 rounded-full mb-4" onclick="showModalTraceability()">
+                    Add New Record
+                </button>
+            </div>
+        @endif
+
         <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200 mb-6">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>

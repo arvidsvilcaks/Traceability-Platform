@@ -17,6 +17,9 @@ class Apiary extends Model
         'floral_composition',
         'specifics_of_environment',
         'add_visual_materials',
+        'longitude',
+        'latitude',
+        'hives_count',
         'beekeeper_id'
     ];
     public function beekeeper()

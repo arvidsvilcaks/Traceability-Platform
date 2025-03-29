@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::table('packages', function (Blueprint $table) {
             $table->integer('package_weight')->nullable();
-
         });
     }
 
