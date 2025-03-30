@@ -194,6 +194,18 @@ class DashboardController extends Controller
 
     }
     
+    public function destroyVisualMaterial($id)
+    {
+        $apiary = Apiary::findOrFail($id);
+
+        if ($apiary->add_visual_materials) {
+            Storage::disk('public')->delete($apiary->add_visual_materials);
+            $apiary->update(['add_visual_materials' => null]);
+        }
+
+        return redirect()->route('dashboard')->with('success', 'Visual material deleted successfully.');
+    }
+
     public function storeHoney(Request $request)
     {
         $request->validate([

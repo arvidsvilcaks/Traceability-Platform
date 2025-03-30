@@ -117,8 +117,8 @@
                             <td class="px-6 py-4 border">{{ $honey->honey_type }}</td>
                             <td class="px-6 py-4 border">{{ $honey->date_of_production }}</td>
                             <td class="px-6 py-4 border">{{ $honey->apiary ? $honey->apiary->location : 'N/A' }}</td>
-                            <td class="px-6 py-4 border">{{ $honey->beekeeper ? $honey->beekeeper->name : 'N/A' }}</td>
-                            <td class="px-6 py-4 border">{{ $honey->laboratoryEmployee ? $honey->laboratoryEmployee->name : 'N/A' }}</td>
+                            <td class="px-6 py-4 border">{{ $honey->beekeeper ? $honey->beekeeper->company : 'N/A' }}</td>
+                            <td class="px-6 py-4 border">{{ $honey->laboratoryEmployee ? $honey->laboratoryEmployee->company : 'N/A' }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -135,8 +135,10 @@
                     <tr>
                         <th class="px-6 py-3 border">Description</th>
                         <th class="px-6 py-3 border">Location</th>
+                        <th class="px-6 py-3 border">Map</th>
                         <th class="px-6 py-3 border">Floral Composition</th>
                         <th class="px-6 py-3 border">Specifics of Environment</th>
+                        <th class="px-6 py-3 border">Hive Count</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -145,8 +147,15 @@
                         <tr>
                             <td class="px-6 py-4 border">{{ $honey->apiary->description }}</td>
                             <td class="px-6 py-4 border">{{ $honey->apiary->location }}</td>
+                            <td class="px-6 py-4 border">
+                                <div id="map-{{ $honey->apiary->id }}" class="w-full h-32 mb-4" style="height: 300px; width: 200px;"
+                                    data-lat="{{ $honey->apiary->latitude }}" 
+                                    data-lng="{{ $honey->apiary->longitude }}">
+                                </div>
+                            </td>
                             <td class="px-6 py-4 border">{{ $honey->apiary->floral_composition }}</td>
                             <td class="px-6 py-4 border">{{ $honey->apiary->specifics_of_environment }}</td>
+                            <td class="px-6 py-4 border">{{ $honey->apiary->hives_count }}</td>
                         </tr>
                     @endif
                 @endforeach

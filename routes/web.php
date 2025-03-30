@@ -48,6 +48,7 @@ Route::middleware(['auth', 'verified', 'enabled'])->group(function () {
     Route::post('/dashboard/storeHoney/', [DashboardController::class, 'storeHoney'])->name('dashboard.storeHoney');
     Route::put('/dashboard/updateHoney/{id}', [DashboardController::class, 'updateHoney'])->name('dashboard.updateHoney');
     Route::delete('/dashboard/destroyHoney/{id}', [DashboardController::class, 'destroyHoney'])->name('dashboard.destroyHoney');    
+    Route::delete('/dashboard/destroyVisualMaterial/{id}', [DashboardController::class, 'destroyVisualMaterial'])->name('dashboard.destroyVisualMaterial');    
     Route::post('/dashboard/product/storeProduct', [DashboardController::class, 'storeProduct'])->name('dashboard.product.storeProduct');
     Route::put('/dashboard/product/updateProduct/{id}', [DashboardController::class, 'updateProduct'])->name('dashboard.product.updateProduct');
     Route::delete('/dashboard/product/destroyProduct/{id}', [DashboardController::class, 'destroyProduct'])->name('dashboard.product.destroyProduct');
@@ -74,6 +75,7 @@ Route::middleware(['auth', 'verified', 'enabled'])->group(function () {
     Route::post('/wholesaler/storeProcess/{product_id}', [ProcessWholesalerController::class, 'storeProcess'])->name('processesWholesaler.storeProcess');
     Route::put('/wholesaler/updateProcess/{id}', [ProcessWholesalerController::class, 'updateProcess'])->name('processesWholesaler.updateProcess');
     Route::delete('/wholesaler/destroyProcess/{id}', [ProcessWholesalerController::class, 'destroyProcess'])->name('processesWholesaler.destroyProcess');
+    Route::delete('/wholesaler/destroyVisualMaterial/{id}', [ProcessWholesalerController::class, 'destroyVisualMaterial'])->name('processesWholesaler.destroyVisualMaterial');
     Route::post('/wholesaler/storeQuality/{product_id}', [QualityWholesalerController::class, 'storeQuality'])->name('qualityWholesaler.storeQuality');
     Route::put('/wholesaler/updateQuality/{id}', [QualityWholesalerController::class, 'updateQuality'])->name('qualityWholesaler.updateQuality');
     Route::delete('/wholesaler/destroyQuality/{id}', [QualityWholesalerController::class, 'destroyQuality'])->name('qualityWholesaler.destroyQuality');
@@ -85,6 +87,7 @@ Route::middleware(['auth', 'verified', 'enabled'])->group(function () {
     Route::post('/packaging/storeProcess/{product_id}', [ProcessPackagingController::class, 'storeProcess'])->name('processesPackaging.storeProcess');
     Route::put('/packaging/updateProcess/{id}', [ProcessPackagingController::class, 'updateProcess'])->name('processesPackaging.updateProcess');
     Route::delete('/packaging/destroyProcess/{id}', [ProcessPackagingController::class, 'destroyProcess'])->name('processesPackaging.destroyProcess');
+    Route::delete('/packaging/destroyVisualMaterial/{id}', [ProcessPackagingController::class, 'destroyVisualMaterial'])->name('processesPackaging.destroyVisualMaterial');
     Route::post('/packaging/storeQuality/{product_id}', [QualityPackagingController::class, 'storeQuality'])->name('qualityPackaging.storeQuality');
     Route::put('/packaging/updateQuality/{id}', [QualityPackagingController::class, 'updateQuality'])->name('qualityPackaging.updateQuality');
     Route::delete('/packaging/destroyQuality/{id}', [QualityPackagingController::class, 'destroyQuality'])->name('qualityPackaging.destroyQuality');

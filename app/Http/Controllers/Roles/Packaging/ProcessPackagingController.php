@@ -70,4 +70,16 @@ class ProcessPackagingController extends Controller
         $processesPackaging->delete();
         return redirect()->route('packaging.index', ['product_id' => $processesPackaging->product_id])->with('success', 'Process info deleted successfully.');
     }
+    public function destroyVisualMaterial($id)
+    {
+        $processesPackaging = Processes::findOrFail($id);
+
+        if ($processesPackaging->add_visual_materials) {
+            Storage::disk('public')->delete($processesPackaging->add_visual_materials);
+            $processesPackaging->update(['add_visual_materials' => null]);
+        }
+
+        return redirect()->route('packaging.index', ['product_id' => $processesPackaging->product_id])
+            ->with('success', 'Visual material deleted successfully.');
+    }
 }

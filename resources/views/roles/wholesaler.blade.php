@@ -22,7 +22,16 @@
                 <td class="px-6 py-4 border">
                     @if($processesWholesaler->add_visual_materials)
                         <a href="{{ asset('storage/' . $processesWholesaler->add_visual_materials) }}" target="_blank" class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-white rounded-full">View</a>
+                    @else
+                        <p>No file uploaded</p>
                     @endif
+                    <div class="mt-4">
+                        <form action="{{ route('processesWholesaler.destroyVisualMaterial', $processesWholesaler->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-2 rounded-full">Delete</button>
+                        </form>   
+                    </div>
                 </td>
                 <td class="px-6 py-4 border">
                     <button onclick="editModalProcess({{ json_encode($processesWholesaler) }})" class="bg-gray-500 text-white px-2 py-1 mb-4 rounded-full">Edit</button>

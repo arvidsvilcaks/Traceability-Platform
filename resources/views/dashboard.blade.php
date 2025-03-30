@@ -53,8 +53,17 @@
                                 @if($apiary->add_visual_materials)
                                     <a href="{{ asset('storage/' . $apiary->add_visual_materials) }}" target="_blank" class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700 ">View</a>
                                 @else
-                                    <span class="text-gray-500">No File</span>
+                                    <span class="text-gray-500">No file uploaded</span>
                                 @endif
+                                <div class="mt-4">
+                                    <form action="{{ route('dashboard.destroyVisualMaterial', $apiary->id) }}" method="POST" style="display:inline-block;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="bg-gray-500 hover:bg-gray-700 text-white py-1 px-2 rounded-full">
+                                            Delete
+                                        </button>
+                                    </form>                                    
+                                </div>
                             </div>
                         </td>
                         <td class="px-6 py-4 border ">
@@ -142,7 +151,7 @@
     @if(auth()->user()->role != 'Packaging company')
 
     <!-- Honey List -->
-    <div class="container mx-auto overflow-x-auto">
+    <div class="container mx-auto overflow-x-auto mb-4">
         <h1 class="flex justify-center text-lg font-semibold mb-4 mt-4">Honey List</h1>
 
         @if(auth()->user()->role == 'Beekeeper')

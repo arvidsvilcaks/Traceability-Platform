@@ -70,4 +70,15 @@ class ProcessWholesalerController extends Controller
         $processesWholesaler->delete();
         return redirect()->route('wholesaler.index', ['product_id' => $processesWholesaler->product_id])->with('success', 'Process info deleted successfully.');
     }
+    public function destroyVisualMaterial($id)
+    {
+        $processesWholesaler = Processes::findOrFail($id);
+
+        if ($processesWholesaler->add_visual_materials) {
+            Storage::disk('public')->delete($processesWholesaler->add_visual_materials);
+            $processesWholesaler->update(['add_visual_materials' => null]);
+        }
+
+        return redirect()->route('wholesaler.index', ['product_id' => $processesWholesaler->product_id])->with('success', 'Visual material deleted successfully.');
+    }
 }
