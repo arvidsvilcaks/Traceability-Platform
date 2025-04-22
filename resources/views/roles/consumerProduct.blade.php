@@ -126,7 +126,7 @@
                             <td class="px-6 py-4 border">{{ $honey->name }}</td>
                             <td class="px-6 py-4 border">{{ $honey->honey_type }}</td>
                             <td class="px-6 py-4 border">{{ $honey->date_of_production }}</td>
-                            <td class="px-6 py-4 border">{{ $honey->apiary->location ?? 'N/A' }}</td>
+                            <td class="px-6 py-4 border">{{ $honey->apiary->description ?? 'N/A' }}</td>
                             <td class="px-6 py-4 border">{{ $honey->beekeeper->company ?? 'N/A' }}</td>
                             <td class="px-6 py-4 border">{{ $honey->laboratoryEmployee->company ?? 'N/A' }}</td>
                         </tr>
@@ -181,9 +181,8 @@
             <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 border">Product Name</th>
-                        <th class="px-6 py-3 border">Date</th>
                         <th class="px-6 py-3 border">Stage</th>
+                        <th class="px-6 py-3 border">Date</th>
                         <th class="px-6 py-3 border">Address</th>
                         <th class="px-6 py-3 border">Location</th>
                     </tr>
@@ -191,9 +190,8 @@
                 <tbody>
                     @foreach ($product->traceability as $trace)
                         <tr>
-                            <td class="px-6 py-4 border">{{ $trace->product?->name }}</td>
+                            <td class="px-6 py-4 border font-bold uppercase">{{ $trace->stage }}</td>
                             <td class="px-6 py-4 border">{{ $trace->created_at }}</td>
-                            <td class="px-6 py-4 border">{{ $trace->stage }}</td>
                             <td class="px-6 py-4 border">{{ $trace->address }}</td>
                             <td class="px-6 py-4 border">
                                 <div id="map-{{ $trace->id }}" class="w-full h-32 mb-4" style="height: 200px;"

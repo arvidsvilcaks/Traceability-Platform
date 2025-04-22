@@ -100,9 +100,8 @@
             <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 border">Honey Name</th>
-                        <th class="px-6 py-3 border">Date</th>
                         <th class="px-6 py-3 border">Stage</th>
+                        <th class="px-6 py-3 border">Date</th>
                         <th class="px-6 py-3 border">Address</th>
                         <th class="px-6 py-3 border">Location</th>
                     </tr>
@@ -110,9 +109,8 @@
                 <tbody>
                     @foreach ($honey->traceability as $trace)
                         <tr>
-                            <td class="px-6 py-4 border">{{ $trace->honey?->name }}</td>    
+                            <td class="px-6 py-4 border font-bold uppercase">{{ $trace->stage }}</td>
                             <td class="px-6 py-4 border">{{ $trace->created_at }}</td>
-                            <td class="px-6 py-4 border">{{ $trace->stage }}</td>
                             <td class="px-6 py-4 border">{{ $trace->address }}</td>
                             <td class="px-6 py-4 border">
                                 <div id="map-{{ $trace->id }}" class="w-full h-32 mb-4" 
