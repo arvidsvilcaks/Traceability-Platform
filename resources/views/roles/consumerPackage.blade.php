@@ -1,30 +1,50 @@
 <x-app-layout>
     <h1 class="flex justify-center text-2xl font-semibold mt-6">Package Overview</h1>
 
-    {{-- Package Details --}}
-    <div class="overflow-x-auto shadow-md sm:rounded-lg mt-6 mb-6">
-        <h1 class="flex justify-center text-lg font-semibold mb-4">Package Details</h1>
-        <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                <tr>
-                    <th class="px-6 py-3 border">Quantity</th>
-                    <th class="px-6 py-3 border">Package Weight</th>
-                    <th class="px-6 py-3 border">Type</th>
-                    <th class="px-6 py-3 border">Market</th>
-                    <th class="px-6 py-3 border">Delivery Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="px-6 py-4 border">{{ $package->quantity }}</td>
-                    <td class="px-6 py-4 border">{{ $package->package_weight }} kg</td>
-                    <td class="px-6 py-4 border">{{ $package->type }}</td>
-                    <td class="px-6 py-4 border">{{ $package->market ? $package->market->name : 'N/A' }}</td>
-                    <td class="px-6 py-4 border font-bold">{{ $package->is_delivered ?? 'N/A' }}</td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="flex justify-between gap-6 mt-6">
+        <div class="overflow-x-auto shadow-md sm:rounded-lg w-full md:w-1/2">
+            <h1 class="flex justify-center text-lg font-semibold mb-4">Package Details</h1>
+            <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 border">Package Weight</th>
+                        <th class="px-6 py-3 border">Type</th>
+                        <th class="px-6 py-3 border">Delivery Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="px-6 py-4 border">{{ $package->package_weight }} kg</td>
+                        <td class="px-6 py-4 border">{{ $package->type }}</td>
+                        <td class="px-6 py-4 border font-bold">{{ $package->is_delivered ?? 'N/A' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        {{-- Market --}}
+        @if ($package->market)
+        <div class="overflow-x-auto shadow-md sm:rounded-lg w-full md:w-1/2">
+            <h1 class="flex justify-center text-lg font-semibold mb-4">Market</h1>
+            <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 border">Market Name</th>
+                        <th class="px-6 py-3 border">Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="px-6 py-4 border">{{ $package->market->name }}</td>
+                        <td class="px-6 py-4 border">{{ $package->market->address }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        @endif
     </div>
+
+
 
     {{-- Product Details --}}
     @if ($package->product)
@@ -108,6 +128,7 @@
                         <th class="px-6 py-3 border">Apiary</th>
                         <th class="px-6 py-3 border">Beekeeper</th>
                         <th class="px-6 py-3 border">Laboratory</th>
+                        <th class="px-6 py-3 border">Analysis results</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -119,6 +140,13 @@
                             <td class="px-6 py-4 border">{{ $honey->apiary ? $honey->apiary->description : 'N/A' }}</td>
                             <td class="px-6 py-4 border">{{ $honey->beekeeper ? $honey->beekeeper->company : 'N/A' }}</td>
                             <td class="px-6 py-4 border">{{ $honey->laboratoryEmployee ? $honey->laboratoryEmployee->company : 'N/A' }}</td>
+                            <td class="px-6 py-4 border">
+                                <a href="{{ asset('storage/' . $honey->add_analysis_results) }}" 
+                                class="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-white rounded-full" 
+                                target="_blank">
+                                    View
+                                </a>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -173,7 +201,6 @@
                     <tr>
                         <th class="px-6 py-3 border">Stage</th>
                         <th class="px-6 py-3 border">Produce Name</th>
-                        <th class="px-6 py-3 border">Date</th>
                         <th class="px-6 py-3 border">Address</th>
                         <th class="px-6 py-3 border">Location</th>
                     </tr>
@@ -183,7 +210,6 @@
                         <tr>
                             <td class="px-6 py-4 border font-bold uppercase">{{ $trace->stage }}</td>
                             <td class="px-6 py-4 border">{{ $trace->product?->name }}</td>
-                            <td class="px-6 py-4 border">{{ $trace->created_at }}</td>
                             <td class="px-6 py-4 border">{{ $trace->address }}</td>
                             <td class="px-6 py-4 border">
                                 <div id="map-{{ $trace->id }}" class="w-full h-32 mb-4" style="height: 200px;"
@@ -207,7 +233,6 @@
                     <tr>
                         <th class="px-6 py-3 border">Stage</th>
                         <th class="px-6 py-3 border">Honey Name</th>
-                        <th class="px-6 py-3 border">Date</th>
                         <th class="px-6 py-3 border">Address</th>
                         <th class="px-6 py-3 border">Location</th>
                     </tr>
@@ -218,7 +243,6 @@
                             <tr>
                                 <td class="px-6 py-4 border font-bold uppercase">{{ $trace->stage }}</td>
                                 <td class="px-6 py-4 border">{{ $trace->honey?->name }}</td>
-                                <td class="px-6 py-4 border">{{ $trace->created_at }}</td>
                                 <td class="px-6 py-4 border">{{ $trace->address }}</td>
                                 <td class="px-6 py-4 border">
                                     <div id="map-{{ $trace->id }}" class="w-full h-32 mb-4" style="height: 200px;"

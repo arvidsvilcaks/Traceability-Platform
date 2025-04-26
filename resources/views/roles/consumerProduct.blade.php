@@ -105,6 +105,29 @@
         </div>
     @endif
 
+    {{-- Markets --}}
+    @if ($product->markets->isNotEmpty())
+    <div class="overflow-x-auto shadow-md sm:rounded-lg mt-6 mb-6">
+        <h1 class="flex justify-center text-lg font-semibold mb-4">Markets where the product will be sold</h1>
+        <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 border">Market Name</th>
+                    <th class="px-6 py-3 border">Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($product->markets as $market)
+                    <tr>
+                        <td class="px-6 py-4 border">{{ $market->name }}</td>
+                        <td class="px-6 py-4 border">{{ $market->address }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+    @endif
+
     {{-- Honeys --}}
     @if ($product->honeys->isNotEmpty())
         <div class="overflow-x-auto shadow-md sm:rounded-lg mt-6 mb-6">

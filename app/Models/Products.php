@@ -40,6 +40,10 @@ class Products extends Model
     {
         return $this->hasMany(Processes::class, 'product_id');
     }
+    public function markets()
+    {
+        return $this->hasMany(Markets::class, 'product_id');
+    }
     public function traceability()
     {
         return $this->hasMany(Traceability::class, 'product_id');

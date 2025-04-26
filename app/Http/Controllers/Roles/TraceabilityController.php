@@ -41,6 +41,7 @@ class TraceabilityController extends Controller
             'honeys.beekeeper',
             'honeys.laboratoryEmployee',
             'honeys.wholesaler',
+            'markets',
             'honeys',
             'quality',
             'processes',
