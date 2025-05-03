@@ -1,7 +1,7 @@
 <x-app-layout>
     <h1 class="flex justify-center text-2xl font-semibold mt-6">Package Overview</h1>
 
-    <div class="flex justify-between gap-6 mt-6">
+    <div class="flex justify-between gap-2 mt-6">
         <div class="overflow-x-auto shadow-md sm:rounded-lg w-full md:w-1/2">
             <h1 class="flex justify-center text-lg font-semibold mb-4">Package Details</h1>
             <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
@@ -25,7 +25,7 @@
         {{-- Market --}}
         @if ($package->market)
         <div class="overflow-x-auto shadow-md sm:rounded-lg w-full md:w-1/2">
-            <h1 class="flex justify-center text-lg font-semibold mb-4">Market</h1>
+            <h1 class="flex justify-center text-lg font-semibold mb-4">Place of Sale (Market)</h1>
             <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
@@ -71,7 +71,8 @@
     
     {{-- Processes --}}
     @if ($package->product->processes->isNotEmpty())
-    <div class="overflow-x-auto shadow-md sm:rounded-lg mt-6 mb-6">
+    <div class="flex justify-between gap-2 mt-6">
+    <div class="overflow-x-auto shadow-md sm:rounded-lg w-full md:w-1/2">
         <h1 class="flex justify-center text-lg font-semibold mb-4">Processes for This product</h1>
         <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -94,7 +95,7 @@
 
     {{-- Quality --}}
     @if ($package->product->quality->isNotEmpty())
-        <div class="overflow-x-auto shadow-md sm:rounded-lg mt-6 mb-6">
+        <div class="overflow-x-auto shadow-md sm:rounded-lg w-full md:w-1/2">
             <h1 class="flex justify-center text-lg font-semibold mb-4">Quality Metrics for This product</h1>
             <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -114,6 +115,8 @@
             </table>
         </div>
     @endif
+    </div>
+
 
     {{-- Honey Details --}}
     @if ($package->product->honeys->isNotEmpty())
@@ -163,7 +166,7 @@
                     <tr>
                         <th class="px-6 py-3 border">Description</th>
                         <th class="px-6 py-3 border">Location</th>
-                        <th class="px-6 py-3 border">Map</th>
+                        <th class="px-6 py-3 border">Location on Map</th>
                         <th class="px-6 py-3 border">Floral Composition</th>
                         <th class="px-6 py-3 border">Specifics of Environment</th>
                         <th class="px-6 py-3 border">Hive Count</th>
@@ -176,9 +179,11 @@
                             <td class="px-6 py-4 border">{{ $honey->apiary->description }}</td>
                             <td class="px-6 py-4 border">{{ $honey->apiary->location }}</td>
                             <td class="px-6 py-4 border">
-                                <div id="map-{{ $honey->apiary->id }}" class="w-full h-32 mb-4" style="height: 300px; width: 200px;"
-                                    data-lat="{{ $honey->apiary->latitude }}" 
-                                    data-lng="{{ $honey->apiary->longitude }}">
+                                <div class="flex justify-center">
+                                    <div id="map-{{ $honey->apiary->id }}" style="height: 200px; width: 300px;"
+                                        data-lat="{{ $honey->apiary->latitude }}" 
+                                        data-lng="{{ $honey->apiary->longitude }}">
+                                    </div>
                                 </div>
                             </td>
                             <td class="px-6 py-4 border">{{ $honey->apiary->floral_composition }}</td>
@@ -212,9 +217,11 @@
                             <td class="px-6 py-4 border">{{ $trace->product?->name }}</td>
                             <td class="px-6 py-4 border">{{ $trace->address }}</td>
                             <td class="px-6 py-4 border">
-                                <div id="map-{{ $trace->id }}" class="w-full h-32 mb-4" style="height: 200px;"
-                                    data-lat="{{ $trace->latitude }}" 
-                                    data-lng="{{ $trace->longitude }}">
+                                <div class="flex justify-center">
+                                    <div id="map-{{ $trace->id }}" style="height: 200px; width: 300px;"
+                                        data-lat="{{ $trace->latitude }}" 
+                                        data-lng="{{ $trace->longitude }}">
+                                    </div>
                                 </div>
                             </td>
                         </tr>
@@ -245,9 +252,11 @@
                                 <td class="px-6 py-4 border">{{ $trace->honey?->name }}</td>
                                 <td class="px-6 py-4 border">{{ $trace->address }}</td>
                                 <td class="px-6 py-4 border">
-                                    <div id="map-{{ $trace->id }}" class="w-full h-32 mb-4" style="height: 200px;"
-                                        data-lat="{{ $trace->latitude }}" 
-                                        data-lng="{{ $trace->longitude }}">
+                                    <div class="flex justify-center">
+                                        <div id="map-{{ $trace->id }}" style="height: 200px; width: 300px;"
+                                            data-lat="{{ $trace->latitude }}" 
+                                            data-lng="{{ $trace->longitude }}">
+                                        </div>
                                     </div>
                                 </td>
                             </tr>

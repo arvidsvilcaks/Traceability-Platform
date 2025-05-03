@@ -173,6 +173,10 @@
                         <th class="px-6 py-3 border">Beekeeper (Producer)</th>
                         <th class="px-6 py-3 border">Quantity (kg)</th>
                     @endif
+
+                    @if(auth()->user()->role == 'Beekeeper')
+                        <th class="px-6 py-3 border">Used in Product</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
@@ -182,7 +186,6 @@
                     <td class="px-6 py-4 border">{{ $honey->apiary->description ?? 'No Apiary Assigned' }}</td>
                     <td class="px-6 py-4 border">
                         @if(auth()->user()->role == 'Beekeeper' && $honey->beekeeper_id == auth()->user()->id)
-
                             <div>
                                 <a href="{{ route('beekeeper.index', ['honey_id' => $honey->id]) }}" 
                                 class="bg-gray-500 text-white rounded-full px-4 py-2 hover:bg-gray-700">
@@ -209,16 +212,25 @@
                         @endif
                     </td>
                     @if(auth()->user()->role == 'Wholesaler' && $honey->wholesaler_id == auth()->user()->id)
-                    <td class="px-6 py-4 border">
+                        <td class="px-6 py-4 border">
                             <p>{{ $honey->quantity }}</p>
-                    </td>
+                        </td>
+                    @endif
+
+                    @if(auth()->user()->role == 'Beekeeper')
+                        <td class="px-6 py-4 border">
+                            @if($honey->products->isNotEmpty())
+                                <a href="{{ route('consumerProduct', ['product_id' => $honey->products->first()->id]) }}" class="text-blue-500 hover:underline">View Product</a>
+                            @else
+                                N/A
+                            @endif
+                        </td>
                     @endif
                 </tr>
             @endforeach
             </tbody>
         </table>
     </div>
-
     @endif
 
     @if(auth()->user()->role == 'Beekeeper')
@@ -276,9 +288,6 @@
     </div>
 
     @endif
-
-
-
 
     @if(auth()->user()->role == 'Wholesaler' || auth()->user()->role == 'Packaging company')
 

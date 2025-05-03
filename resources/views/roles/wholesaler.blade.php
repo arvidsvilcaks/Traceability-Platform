@@ -295,9 +295,11 @@
                         <td class="px-6 py-4 border">{{ $trace->address }}</td>
 
                         <td class="px-6 py-4 border">
-                            <div id="map-{{ $trace->id }}" class="w-full h-32 mb-4" style="height: 300px;"
-                                data-lat="{{ $trace->latitude }}" 
-                                data-lng="{{ $trace->longitude }}">
+                            <div class="flex justify-center">
+                                <div id="map-{{ $trace->id }}" style="height: 300px; width: 300px;"
+                                    data-lat="{{ $trace->latitude }}" 
+                                    data-lng="{{ $trace->longitude }}">
+                                </div>
                             </div>
                         </td>
 
