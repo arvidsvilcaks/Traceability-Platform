@@ -1,50 +1,46 @@
 <x-app-layout>
     <h1 class="flex justify-center text-2xl font-semibold mt-6">Package Overview</h1>
 
-    <div class="flex justify-between gap-2 mt-6">
-        <div class="overflow-x-auto shadow-md sm:rounded-lg w-full md:w-1/2">
-            <h1 class="flex justify-center text-lg font-semibold mb-4">Package Details</h1>
-            <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 border">Package Weight</th>
-                        <th class="px-6 py-3 border">Type</th>
-                        <th class="px-6 py-3 border">Delivery Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="px-6 py-4 border">{{ $package->package_weight }} kg</td>
-                        <td class="px-6 py-4 border">{{ $package->type }}</td>
-                        <td class="px-6 py-4 border font-bold">{{ $package->is_delivered ?? 'N/A' }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        {{-- Market --}}
-        @if ($package->market)
-        <div class="overflow-x-auto shadow-md sm:rounded-lg w-full md:w-1/2">
-            <h1 class="flex justify-center text-lg font-semibold mb-4">Place of Sale (Market)</h1>
-            <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 border">Market Name</th>
-                        <th class="px-6 py-3 border">Address</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="px-6 py-4 border">{{ $package->market->name }}</td>
-                        <td class="px-6 py-4 border">{{ $package->market->address }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        @endif
+    <div class="verflow-x-auto shadow-md sm:rounded-lg mt-6 mb-6">
+        <h1 class="flex justify-center text-lg font-semibold mb-4">Package Details</h1>
+        <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 border">Package Weight</th>
+                    <th class="px-6 py-3 border">Type</th>
+                    <th class="px-6 py-3 border">Delivery Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="px-6 py-4 border">{{ $package->package_weight }} kg</td>
+                    <td class="px-6 py-4 border">{{ $package->type }}</td>
+                    <td class="px-6 py-4 border font-bold">{{ $package->is_delivered ?? 'N/A' }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
-
+    {{-- Market --}}
+    @if ($package->market)
+    <div class="verflow-x-auto shadow-md sm:rounded-lg mt-6 mb-6">
+        <h1 class="flex justify-center text-lg font-semibold mb-4">Place of Sale (Market)</h1>
+        <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th class="px-6 py-3 border">Market Name</th>
+                    <th class="px-6 py-3 border">Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="px-6 py-4 border">{{ $package->market->name }}</td>
+                    <td class="px-6 py-4 border">{{ $package->market->address }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    @endif
 
     {{-- Product Details --}}
     @if ($package->product)
@@ -71,8 +67,7 @@
     
     {{-- Processes --}}
     @if ($package->product->processes->isNotEmpty())
-    <div class="flex justify-between gap-2 mt-6">
-    <div class="overflow-x-auto shadow-md sm:rounded-lg w-full md:w-1/2">
+    <div class="overflow-x-auto shadow-md sm:rounded-lg mt-6 mb-6">
         <h1 class="flex justify-center text-lg font-semibold mb-4">Processes for This product</h1>
         <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -95,7 +90,7 @@
 
     {{-- Quality --}}
     @if ($package->product->quality->isNotEmpty())
-        <div class="overflow-x-auto shadow-md sm:rounded-lg w-full md:w-1/2">
+        <div class="overflow-x-auto shadow-md sm:rounded-lg mt-6 mb-6">
             <h1 class="flex justify-center text-lg font-semibold mb-4">Quality Metrics for This product</h1>
             <table class="w-full text-sm text-center text-gray-500 border-separate border border-gray-200">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
@@ -115,8 +110,6 @@
             </table>
         </div>
     @endif
-    </div>
-
 
     {{-- Honey Details --}}
     @if ($package->product->honeys->isNotEmpty())
