@@ -322,7 +322,7 @@
     </div>
 
     <div id="addModalTraceability" class="fixed inset-0 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded-lg w-1/3">
+        <div class="bg-white p-6 rounded-lg max-w-md" style="width: 500px;">
             <h2 class="text-lg font-semibold mb-4">Add Traceability Record</h2>
             <form action="{{ route('traceability.storeTraceabilityProduct', ['product_id' => $honeyInfo->id]) }}" method="POST">
                 @csrf
@@ -343,7 +343,7 @@
     </div>
 
     <div id="editModalTraceability" class="fixed inset-0 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded-lg w-1/3">
+        <div class="bg-white p-6 rounded-lg max-w-md" style="width: 500px;">
             <h2 class="text-lg font-semibold mb-4">Edit Traceability Record</h2>
             <form action="{{ route('traceability.updateTraceabilityHoney', ':id') }}" method="POST" id="editTraceabilityForm">
                 @csrf

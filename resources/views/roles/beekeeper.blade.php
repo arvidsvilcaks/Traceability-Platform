@@ -104,14 +104,14 @@
 
     <div id="editHoneyModal" class="hidden fixed inset-0 flex justify-center items-center">
         <div class="bg-white p-6 rounded shadow-lg">
-            <h2 class="text-xl font-semibold">Edit Honey Info</h2>
+            <h2 class="text-xl mb-2 font-semibold">Edit Honey Info</h2>
             <form id="editHoneyForm" method="POST">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="id" id="editHoneyId" required>
-                <input type="date" name="date_of_production" id="editHoneyDate" class="border p-2 w-full" required>
-                <input type="text" name="honey_type" id="editHoneyType" class="border p-2 w-full" required>
-                <input type="number" name="quantity" id="editHoneyQuantity" class="border p-2 w-full" required>
+                <input type="date" name="date_of_production" id="editHoneyDate" class="border mb-2 p-2 w-full" required>
+                <input type="text" name="honey_type" id="editHoneyType" class="border mb-2 p-2 w-full" required>
+                <input type="number" name="quantity" id="editHoneyQuantity" class="border mb-2 p-2 w-full" required>
                 <button type="submit" class="bg-gray-500 text-white px-4 py-2 mt-2 rounded-full">Update</button>
                 <button type="button" onclick="closeUpdateHoneyInfoModal()" class="bg-gray-500 text-white px-4 py-2 mt-2 rounded-full">Cancel</button>
             </form>
@@ -233,7 +233,7 @@
     </div>
 
     <div id="addModalTraceability" class="fixed inset-0 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded-lg w-1/3">
+        <div class="bg-white p-6 rounded-lg max-w-md" style="width: 500px;">
             <h2 class="text-lg font-semibold mb-4">Add Traceability Record</h2>
             <form action="{{ route('traceability.storeTraceabilityHoney', ['honey_id' => $honeyInfo->id]) }}" method="POST">
                 @csrf
@@ -253,7 +253,7 @@
     </div>
 
     <div id="editModalTraceability" class="fixed inset-0 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded-lg w-1/3">
+        <div class="bg-white p-6 rounded-lg max-w-md" style="width: 500px;">
             <h2 class="text-lg font-semibold mb-4">Edit Traceability Record</h2>
             <form action="{{ route('traceability.updateTraceabilityHoney', ':id') }}" method="POST" id="editTraceabilityForm">
                 @csrf
