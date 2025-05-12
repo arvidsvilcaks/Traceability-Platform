@@ -136,8 +136,8 @@
                 <input type="hidden" name="product_id" value="{{ $honeyInfo->id }}">
 
                 <div class="flex flex-col space-y-2">
-                    <input type="text" name="metric" id="add_metric" placeholder="Quality metric" required class="border p-2 rounded">
-                    <input type="text" name="value" id="add_value" placeholder="Description" required class="border p-2 rounded">
+                    <input type="text" name="metric" id="add_metric" placeholder="Metric" required class="border p-2 rounded">
+                    <input type="text" name="value" id="add_value" placeholder="Value" required class="border p-2 rounded">
                     
                     <div class="flex justify-between mt-4">
                         <button type="submit" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-full">Save</button>
@@ -157,7 +157,7 @@
                 <input type="hidden" id="edit_qualityId" name="id">
 
                 <div class="flex flex-col space-y-2">
-                    <input type="text" name="metric" id="add_metric" placeholder="Quality metric" class="border p-2 rounded" required>
+                    <input type="text" name="metric" id="add_metric" placeholder="Metric" class="border p-2 rounded" required>
                     <input type="text" name="value" id="add_value" placeholder="Value" class="border p-2 rounded" required>
         
                     <div class="flex justify-between mt-4">

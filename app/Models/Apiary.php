@@ -28,6 +28,6 @@ class Apiary extends Model
     }
     public function honeys()
     {
-        return $this->hasMany(Honey::class); // One apiary can have many honeys
+        return $this->hasMany(Honey::class);
     }       
 }
